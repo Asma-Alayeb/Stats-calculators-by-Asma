@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+        header {
+            background-color: #6a0dad; /* Purple */
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+            flex-shrink: 0;
+            width: 100%;
+            position: relative;
+            border-bottom: 5px solid #a67c00; /* Dark golden lip */
+        }
+        nav {
+            background-color: #8a2be2; /* Lighter purple */
+            padding: 10px;
+            position: fixed;
+            width: 250px; /* Wider width for the sidebar */
+            height: calc(100vh - 20px); /* Full height of the viewport minus header and footer */
+            overflow: auto;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            top: 0; /* Flush with the header */
+            left: 0;
+            bottom: 0; /* Stretch to the bottom */
+            z-index: 100; /* Ensure it is above other content */
+            border-right: 5px solid #a67c00; /* Dark golden lip */
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        nav ul li {
+            margin-bottom: 10px;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+            display: block;
+            padding: 8px;
+            border-radius: 4px;
+        }
+        nav a:hover {
+            background-color: #6a0dad; /* Lighter purple */
+        }
+        main {
+            margin-left: 270px; /* Adjust based on the width of the nav */
+            padding: 15px;
+            background-color: #f3e6f5; /* Light purple background */
+            text-align: center;
+            flex: 1;
+        }
+        h1 {
+            margin-top: 0;
+            font-size: 24px;
+        }
+        .welcome-message {
+            background-color: #e6dff5; /* Light purple background for the welcome message */
+            padding: 20px;
+            font-size: 18px;
+            font-family: Verdana, sans-serif;
+            border-radius: 8px;
+            margin: 0 auto;
+            display: inline-block;
+            max-width: 60%;
+            line-height: 2; 
+        }
+        footer {
+            background-color: #6a0dad;
+            color: #fff;
+            padding: 2px;
+            text-align: center;
+            font-size: 16px;
+            position: fixed;
+            width: calc(100% - 250px); /* Adjust based on the width of the nav */
+            bottom: 0;
+            margin-left: 250px; /* Adjust based on the width of the nav */
+            box-sizing: border-box;
+            border-top: 5px solid #a67c00; /* Dark golden lip */
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1> Statistics Calculators</h1>
+</header>
+
+<nav>
+    <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="page1.html">T Estimate of a Mean/Sample Size</a></li>
+        <li><a href="page2.html">Z Estimate of a Proportion/Sample Size</a></li>
+        <li><a href="page3.html">T Test of a Mean</a></li>
+        <li><a href="page4.html">Z Test of a Proportion</a></li>
+        <li><a href="page5.html">Z Test-Z Estimate , Difference of Proportions</a></li>
+        <li><a href="page6.html">T Test-T Estimate, Difference of Means </a></li>
+         <li><a href="page7.html">Vowel Counter</a></li>
+        <li><a href="page8.html">Dice Roller</a></li>
+    </ul>
+</nav>
+
+<main>
+    <div class="welcome-message">
+Welcome to Statistics Calculators! <br>
+
+Whether you're working through hypothesis testing, confidence intervals, or other statistical concepts, these calculators are designed to assist in solving problems and understanding the processes involved.
+
+Use the navigation bar to explore the various calculators. Select the one that suits your needs and follow the steps provided for your calculations.
+
+Best of luck with your learning journey!
+
+    </div>
+</main>
+
+<footer>
+    <p>&copy; 2024 Asma S. Alayeb</p>
+</footer>
+
+</body>
+</html>

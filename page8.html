@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dice Roller</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #6a0dad; /* Purple */
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000; /* Ensure it is above other content */
+            border-bottom: 5px solid #b8860b; /* Dark Goldenrod border */
+        }
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        nav {
+            background-color: #800080; /* Darker purple */
+            padding: 10px;
+            text-align: center;
+            position: fixed;
+            width: 100%;
+            top: 50px; /* Below the header */
+            left: 0;
+            z-index: 999; /* Ensure it is above main content but below header */
+            border-top: 5px solid #b8860b; /* Dark Goldenrod border */
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        nav ul li {
+            display: inline;
+            margin-right: 15px;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        main {
+            padding: 15px;
+            max-width: 900px;
+            margin: 0 auto;
+            padding-top: 80px; /* Space for fixed header and nav */
+        }
+        section {
+            margin-bottom: 12px;
+        }
+        .calculator {
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center; /* Center the content */
+        }
+        h2 {
+            margin-top: 0;
+            font-size: 22px;
+        }
+        p {
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #6a0dad;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #800080;
+        }
+        .dice img {
+            width: 100px; /* Increased width */
+            height: 100px; /* Increased height */
+            margin: 10px; /* Adjusted margin */
+        }
+        footer {
+            background-color: #6a0dad;
+            color: #fff;
+            padding: 2px; /* Reduced padding */
+            text-align: center;
+            font-size: 12px;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            border-top: 5px solid #b8860b; /* Dark Goldenrod border */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 >Dice Roller</h1>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section class="calculator">
+            <h2>Dice Roller</h2>
+            <p>Click the button below to roll two dice and see the results.</p>
+            <button onclick="rollDice()">Roll Dice</button>
+            <div id="diceResults" class="dice"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Asma S. Alayeb</p>
+    </footer>
+
+    <script>
+        function rollDice() {
+            const die1 = Math.floor(Math.random() * 6) + 1;
+            const die2 = Math.floor(Math.random() * 6) + 1;
+
+            // Define the dice image paths
+            const diceImages = {
+                1: 'images/dice1.png',
+                2: 'images/dice2.png',
+                3: 'images/dice3.png',
+                4: 'images/dice4.png',
+                5: 'images/dice5.png',
+                6: 'images/dice6.png'
+            };
+
+            // Get image paths for the rolled dice
+            const die1Image = diceImages[die1];
+            const die2Image = diceImages[die2];
+
+            // Update the dice results display
+            document.getElementById('diceResults').innerHTML = `
+                <img src="${die1Image}" alt="Die 1">
+                <img src="${die2Image}" alt="Die 2">
+                <br><br>
+                Die 1: ${die1}, Die 2: ${die2}
+            `;
+        }
+    </script>
+</body>
+</html>

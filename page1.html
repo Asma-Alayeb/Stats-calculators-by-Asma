@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confidence Intervals For The Mean</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #6a0dad; /* Purple */
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000; /* Ensure it is above other content */
+            border-bottom: 5px solid #b8860b; /* Dark Goldenrod border */
+        }
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        nav {
+            background-color: #800080; /* Darker purple */
+            padding: 10px;
+            text-align: center;
+            position: fixed;
+            width: 100%;
+            top: 50px; /* Below the header */
+            left: 0;
+            z-index: 999; /* Ensure it is above main content but below header */
+            border-top: 5px solid #b8860b; /* Dark Goldenrod border */
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        nav ul li {
+            display: inline;
+            margin-right: 15px;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        main {
+            padding: 15px;
+            max-width: 900px;
+            margin: 0 auto;
+            padding-top: 80px; /* Space for fixed header and nav */
+        }
+        section {
+            margin-bottom: 12px;
+        }
+        .calculator {
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            margin-top: 0;
+            font-size: 22px;
+        }
+        p {
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        input[type="text"] {
+            padding: 8px;
+            font-size: 16px;
+            width: 100%;
+            max-width: 300px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #6a0dad;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #800080;
+        }
+        footer {
+            background-color: #6a0dad;
+            color: #fff;
+            padding: 2px; /* Reduced padding */
+            text-align: center;
+            font-size: 12px;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            border-top: 5px solid #b8860b; /* Dark Goldenrod border */
+        }
+    </style>
+    <!-- MathJax script to render math symbols -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+
+<header>
+    <h1>T Estimate of a Mean</h1>
+</header>
+
+<nav>
+    <ul>
+        <li><a href="index.html">Home</a></li>
+    </ul>
+</nav>
+
+<main>
+    <section id="confidenceInterval" class="calculator">
+        <h2>Confidence Interval Calculator</h2>
+        <form id="ciForm">
+            <p>Sample Mean (\(\bar{x}\)): <input type="text" id="mean" required></p>
+            <p>Sample Standard Deviation (\(s\)): <input type="text" id="stdDev" required></p>
+            <p>Sample Size (\(n\)): <input type="text" id="sampleSize" required></p>
+            <p>Confidence Level (%): <input type="text" id="confidenceLevel" required></p>
+            <button type="button" onclick="calculateConfidenceInterval()">Calculate Confidence Interval</button>
+        </form>
+        <p id="ciResult"></p>
+    </section>
+
+    <section id="sampleSizeCalculator" class="calculator">
+        <h2>Sample Size Calculator</h2>
+        <form id="ssForm">
+            <p>Estimated Margin of Error (%) (\(E\)): <input type="text" id="marginError" required></p>
+            <p>Confidence Level (%): <input type="text" id="ssConfidenceLevel" required></p>
+            <p>Sample Standard Deviation (\(s\)): <input type="text" id="ssStdDev" required></p>
+            <button type="button" onclick="calculateSampleSize()">Calculate Sample Size</button>
+        </form>
+        <p id="ssResult"></p>
+    </section>
+</main>
+
+<footer>
+    <p>&copy;2024 Asma S. Alayeb</p>
+</footer>
+
+<script>
+    function calculateConfidenceInterval() {
+        const mean = parseFloat(document.getElementById('mean').value);
+        const stdDev = parseFloat(document.getElementById('stdDev').value);
+        const sampleSize = parseInt(document.getElementById('sampleSize').value);
+        const confidenceLevel = parseFloat(document.getElementById('confidenceLevel').value) / 100;
+
+        if (isNaN(mean) || isNaN(stdDev) || isNaN(sampleSize) || isNaN(confidenceLevel) || sampleSize <= 0) {
+            alert("Please enter valid numbers.");
+            return;
+        }
+
+        const tValue = jStat.studentt.inv(1 - (1 - confidenceLevel) / 2, sampleSize - 1);
+        const marginOfError = tValue * (stdDev / Math.sqrt(sampleSize));
+        const lowerBound = mean - marginOfError;
+        const upperBound = mean + marginOfError;
+
+    document.getElementById('ciResult').innerHTML = `
+    Lower Bound: ${lowerBound.toFixed(4)}<br>
+    <br>
+    Upper Bound: ${upperBound.toFixed(4)}<br>
+    <br>
+    Confidence Interval: ${mean} ± ${marginOfError.toFixed(4)}<br>
+    <br>
+    Confidence Interval: [${lowerBound.toFixed(4)}, ${upperBound.toFixed(4)}]`;
+
+    }
+
+    function calculateSampleSize() {
+        const marginErrorPercent = parseFloat(document.getElementById('marginError').value); // Input as percentage
+        const confidenceLevel = parseFloat(document.getElementById('ssConfidenceLevel').value) / 100; // Convert to decimal
+        const stdDev = parseFloat(document.getElementById('ssStdDev').value);
+
+        // Convert margin error from percentage to decimal
+        const marginError = marginErrorPercent / 100;
+
+        // Validate inputs
+        if (isNaN(marginError) || isNaN(confidenceLevel) || isNaN(stdDev) || marginError <= 0 || confidenceLevel <= 0 || confidenceLevel >= 1) {
+            alert("Please enter valid numbers.");
+            return;
+        }
+
+        // Calculate the zValue for the given confidence level
+        const zValue = jStat.normal.inv(1 - (1 - confidenceLevel) / 2, 0, 1);
+
+        // Calculate the sample size using the correct formula
+        const sampleSize = Math.ceil(Math.pow(zValue * stdDev / marginError, 2));
+
+        // Display the result
+        document.getElementById('ssResult').innerHTML = `Required Sample Size: ${sampleSize}`;
+
+        
+    }
+    
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.4/jstat.min.js"></script>
+</body>
+</html>
