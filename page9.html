@@ -13,27 +13,27 @@
             padding: 0;
         }
         header {
-            background-color: #6a0dad;
+            background-color: #6a0dad; /* Purple */
             color: #fff;
             padding: 10px 0;
             text-align: center;
             position: fixed;
             width: 100%;
             top: 0;
-            border-bottom: 5px solid #b8860b;
+            border-bottom: 5px solid #b8860b; /* Dark Goldenrod border */
         }
         header h1 {
             margin: 0;
             font-size: 24px;
         }
         nav {
-            background-color: #800080;
+            background-color: #800080; /* Darker purple */
             padding: 10px;
             text-align: center;
             position: fixed;
             width: 100%;
-            top: 50px;
-            border-top: 5px solid #b8860b;
+            top: 50px; /* Below the header */
+            border-top: 5px solid #b8860b; /* Dark Goldenrod border */
         }
         nav ul {
             list-style: none;
@@ -57,14 +57,14 @@
             padding: 15px;
             max-width: 900px;
             margin: 0 auto;
-            padding-top: 100px;
+            padding-top: 100px; /* Space for fixed header and nav */
         }
         .calculator {
             padding: 20px;
             background-color: #fff;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
+            text-align: center; /* Center the content */
         }
         h2 {
             margin-top: 0;
@@ -88,9 +88,11 @@
         }
         input, select {
             margin: 5px;
-            padding: 8px;
+            padding: 12px; /* Increased padding for larger boxes */
+            font-size: 16px; /* Increased font size */
             border: 1px solid #ccc;
             border-radius: 4px;
+            width: 300px; /* Set a fixed width */
         }
         footer {
             background-color: #6a0dad;
@@ -101,7 +103,7 @@
             position: fixed;
             width: 100%;
             bottom: 0;
-            border-top: 5px solid #b8860b;
+            border-top: 5px solid #b8860b; /* Dark Goldenrod border */
         }
     </style>
 </head>
@@ -124,7 +126,7 @@
                 <option value="normal">Normal Distribution</option>
                 <option value="t">Student's t-Distribution</option>
             </select><br>
-            <input type="number" id="confidenceLevel" placeholder="Confidence Level (e.g., 0.95)" step="0.01"><br>
+            <input type="number" id="confidenceLevel" placeholder="Confidence Level (%)" step="0.01"><br>
             <input type="number" id="degreesOfFreedom" placeholder="Degrees of Freedom (for t-distribution)" step="1"><br>
             <button onclick="calculateCriticalValue()">Calculate</button>
             <p id="result"></p>
@@ -138,7 +140,7 @@
     <script>
         function calculateCriticalValue() {
             const distributionType = document.getElementById('distributionType').value;
-            const confidenceLevel = parseFloat(document.getElementById('confidenceLevel').value);
+            const confidenceLevel = parseFloat(document.getElementById('confidenceLevel').value) / 100; // Convert percentage to proportion
             const degreesOfFreedom = parseInt(document.getElementById('degreesOfFreedom').value);
             let criticalValue;
 
