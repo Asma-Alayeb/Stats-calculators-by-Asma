@@ -3,13 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Critical Value Calculator</title>
-    <link rel="stylesheet" href="style.css">
-    <style><!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
     <style>
         body {
@@ -118,7 +111,7 @@
         <li><a href="page6.html">T Test-T Estimate, Difference of Means </a></li>
          <li><a href="page7.html">Vowel Counter</a></li>
         <li><a href="page8.html">Dice Roller</a></li>
-        <li><a href="page9.html">Critical Value Calculator</a></li>
+        <li> <a href="page9.html">Critical Value Calculator</a></li>
     </ul>
 </nav>
 
@@ -139,161 +132,5 @@ Best of luck with your learning journey!
     <p>&copy; 2024 Asma S. Alayeb</p>
 </footer>
 
-</body>
-</html>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-        }
-        header {
-            background-color: #6a0dad; /* Purple */
-            color: #fff;
-            padding: 10px 0;
-            text-align: center;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            border-bottom: 5px solid #b8860b; /* Dark Goldenrod border */
-        }
-        header h1 {
-            margin: 0;
-            font-size: 24px;
-        }
-        nav {
-            background-color: #800080; /* Darker purple */
-            padding: 10px;
-            text-align: center;
-            position: fixed;
-            width: 100%;
-            top: 50px; /* Below the header */
-            border-top: 5px solid #b8860b; /* Dark Goldenrod border */
-        }
-        nav ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        nav ul li {
-            display: inline;
-            margin-right: 15px;
-        }
-        nav a {
-            color: #fff;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 16px;
-        }
-        nav a:hover {
-            text-decoration: underline;
-        }
-        main {
-            padding: 15px;
-            max-width: 900px;
-            margin: 0 auto;
-            padding-top: 100px; /* Space for fixed header and nav */
-        }
-        .calculator {
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center; /* Center the content */
-        }
-        h2 {
-            margin-top: 0;
-            font-size: 22px;
-        }
-        p {
-            margin-bottom: 10px;
-            font-size: 16px;
-        }
-        button {
-            padding: 10px 15px;
-            background-color: #6a0dad;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        button:hover {
-            background-color: #800080;
-        }
-        input, select {
-            margin: 5px;
-            padding: 12px; /* Increased padding for larger boxes */
-            font-size: 16px; /* Increased font size */
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            width: 300px; /* Set a fixed width */
-        }
-        footer {
-            background-color: #6a0dad;
-            color: #fff;
-            padding: 2px;
-            text-align: center;
-            font-size: 12px;
-            position: fixed;
-            width: 100%;
-            bottom: 0;
-            border-top: 5px solid #b8860b; /* Dark Goldenrod border */
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <h1>Critical Value Calculator</h1>
-    </header>
-
-    <nav>
-        <ul>
-            <li><a href="index.html">Home</a></li>
-        </ul>
-    </nav>
-
-    <main>
-        <section class="calculator">
-            <h2>Compute Critical Values</h2>
-            <p>Select the distribution type, confidence level, and degrees of freedom if applicable.</p>
-            <select id="distributionType">
-                <option value="normal">Normal Distribution</option>
-                <option value="t">Student's t-Distribution</option>
-            </select><br>
-            <input type="number" id="confidenceLevel" placeholder="Confidence Level (%)" step="0.01"><br>
-            <input type="number" id="degreesOfFreedom" placeholder="Degrees of Freedom (for t-distribution)" step="1"><br>
-            <button onclick="calculateCriticalValue()">Calculate</button>
-            <p id="result"></p>
-        </section>
-    </main>
-
-    <footer>
-        <p>&copy; 2024 Asma S. Alayeb</p>
-    </footer>
-
-    <script>
-        function calculateCriticalValue() {
-            const distributionType = document.getElementById('distributionType').value;
-            const confidenceLevel = parseFloat(document.getElementById('confidenceLevel').value) / 100; // Convert percentage to proportion
-            const degreesOfFreedom = parseInt(document.getElementById('degreesOfFreedom').value);
-            let criticalValue;
-
-            if (distributionType === "normal") {
-                // Using the normal distribution (Z) for critical value
-                criticalValue = jStat.normal.inv((1 + confidenceLevel) / 2, 0, 1);
-            } else if (distributionType === "t") {
-                if (isNaN(degreesOfFreedom) || degreesOfFreedom <= 0) {
-                    document.getElementById('result').innerText = "Please enter valid degrees of freedom for the t-distribution.";
-                    return;
-                }
-                // Using Student's t-distribution for critical value
-                criticalValue = jStat.studentt.inv((1 + confidenceLevel) / 2, degreesOfFreedom);
-            }
-
-            document.getElementById('result').innerText = `The critical value is: ${criticalValue.toFixed(4)}`;
-        }
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.4/jstat.min.js"></script>
 </body>
 </html>
