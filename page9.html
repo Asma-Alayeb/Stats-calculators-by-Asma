@@ -153,7 +153,7 @@
                     return;
                 }
                 // Using Student's t-distribution for critical value
-                criticalValue = jStat.studentt.inv((1 + confidenceLevel) / 2, degreesOfFreedom);
+                criticalValue = jStat.studentt.inv((1 - confidenceLevel) / 2, degreesOfFreedom);
             }
 
             document.getElementById('result').innerText = `The critical value is: ${criticalValue.toFixed(4)}`;
