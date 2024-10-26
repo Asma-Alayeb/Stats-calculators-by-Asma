@@ -145,7 +145,7 @@
         <form id="ssForm">
             <p>Estimated Margin of Error (%) (\(E\)): <input type="text" id="marginError" required></p>
             <p>Confidence Level (%): <input type="text" id="ssConfidenceLevel" required></p>
-            <p>Sample Standard Deviation (\(s\)): <input type="text" id="ssStdDev" required></p>
+            <p>Standard Deviation (\(sigma\)): <input type="text" id="ssStdDev" required></p>
             <button type="button" onclick="calculateSampleSize()">Calculate Sample Size</button>
         </form>
         <p id="ssResult"></p>
@@ -199,11 +199,16 @@
         }
 
         // Calculate the zValue for the given confidence level
-        const zValue = jStat.normal.inv(1 - (1 - confidenceLevel) / 2, 0, 1);
+       // const zValue = jStat.normal.inv(1 - (1 - confidenceLevel) / 2, 0, 1);
 
         // Calculate the sample size using the correct formula
-        const sampleSize = Math.ceil(Math.pow(zValue * stdDev / marginError, 2));
+       // const sampleSize = Math.ceil(Math.pow(zValue * stdDev / marginError, 2));
+const zScore = jStat.normal.inv(1 - (1 - confidenceLevel) / 2, 0, 1);
+    const roundedZScore = parseFloat(zScore.toFixed(3)); // Round to three decimal places
 
+    // Calculate the required sample size
+    const numerator = Math.pow(roundedZScore * sigma, 2);
+    const sampleSize = Math.ceil(numerator / Math.pow(marginOfError, 2));
         // Display the result
         document.getElementById('ssResult').innerHTML = `Required Sample Size: ${sampleSize}`;
 
