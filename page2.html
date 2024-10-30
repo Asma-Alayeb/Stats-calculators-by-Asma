@@ -185,13 +185,13 @@
         upperBound = parseFloat(upperBound.toFixed(4));
 
         document.getElementById("ci_confidence_interval_result").innerHTML = `
-    Lower Bound: ${lowerBound.toFixed(4)}<br>
+    Lower Bound: ${lowerBound.toFixed(6)}<br>
     <br>
-    Upper Bound: ${upperBound.toFixed(4)}<br>
+    Upper Bound: ${upperBound.toFixed(6)}<br>
     <br>
-    Confidence Interval: ${p_hat.toFixed(4)} ± ${marginOfError.toFixed(4)}<br>
+    Confidence Interval: ${p_hat.toFixed(6)} ± ${marginOfError.toFixed(6)}<br>
     <br>
-   Confidence Interval: [${lowerBound.toFixed(4)}, ${upperBound.toFixed(4)}]
+   Confidence Interval: [${lowerBound.toFixed(6)}, ${upperBound.toFixed(6)}]
 `;
 
        // document.getElementById("ci_confidence_interval_result").innerHTML = "The confidence interval is 
