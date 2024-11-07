@@ -206,7 +206,7 @@ function performBinomialTest() {
 
     // Show results with LaTeX rendering for significance level and p-value
     document.getElementById("result").innerHTML = `
-        Significance Level \\( \\alpha = ${alpha.toFixed(2)} \\) <br>
+        Significance Level \\( \\alpha = ${alpha.toFixed(4)} \\) <br>
         Computed \\( p \\text{-value} = ${pValue.toFixed(5)} \\)
     `;
     MathJax.typeset();  // Re-render MathJax for new content
