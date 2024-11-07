@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Binomial Test for Proportions</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #6a0dad;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            border-bottom: 5px solid #b8860b;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        nav {
+            background-color: #800080;
+            padding: 10px;
+            text-align: center;
+            position: fixed;
+            width: 100%;
+            top: 50px;
+            left: 0;
+            z-index: 999;
+            border-top: 5px solid #b8860b;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        nav ul li {
+            display: inline;
+            margin-right: 15px;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        main {
+            padding: 15px;
+            max-width: 900px;
+            margin: 0 auto;
+            padding-top: 100px;
+        }
+        .calculator {
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            margin-top: 0;
+            font-size: 22px;
+        }
+        p {
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        input[type="text"], input[type="number"] {
+            padding: 8px;
+            font-size: 16px;
+            width: 100%;
+            max-width: 300px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #6a0dad;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #800080;
+        }
+        footer {
+            background-color: #6a0dad;
+            color: #fff;
+            padding: 2px;
+            text-align: center;
+            font-size: 12px;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            border-top: 5px solid #b8860b;
+        }
+    </style>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+
+<header>
+    <h1>Binomial Test for Proportions</h1>
+</header>
+
+<nav>
+    <ul>
+        <li><a href="index.html">Home</a></li>
+    </ul>
+</nav>
+
+<main>
+
+<h2>Binomial Test for Proportions</h2>
+<form id="binomialForm">
+    <label for="x">Number of Successes \( x \):</label>
+    <input type="number" id="x" required>
+    <br><br>
+    <label for="n">Sample Size \( n \):</label>
+    <input type="number" id="n" required>
+    <br><br>
+    <label for="p0">Hypothesized Proportion \( p_0 \):</label>
+    <input type="number" id="p0" step="0.01" required>
+    <br><br>
+    <label for="alpha">Significance Level \( \alpha \):</label>
+    <input type="number" id="alpha" step="0.01" min="0" max="1" required>
+    <br><br>
+    <label for="testType">Test Type:</label>
+    <select id="testType">
+        <option value="left">Left-Tail Test</option>
+        <option value="right">Right-Tail Test</option>
+        <option value="two">Two-Tail Test</option>
+    </select>
+    <br><br>
+    <button type="button" onclick="performBinomialTest()">Compute P-Value</button>
+</form>
+
+<p id="result"></p>
+
+<script>
+// Function to compute the binomial coefficient "n choose k"
+function binomialCoefficient(n, k) {
+    if (k > n) return 0;
+    if (k === 0 || k === n) return 1;
+    let result = 1;
+    for (let i = 1; i <= k; i++) {
+        result *= (n - i + 1) / i;
+    }
+    return result;
+}
+
+// Function to compute the probability of exactly k successes in n trials for a given success probability p
+function binomialProbability(n, k, p) {
+    return binomialCoefficient(n, k) * Math.pow(p, k) * Math.pow(1 - p, n - k);
+}
+
+// Function to compute cumulative probability for left or right tail in the binomial distribution
+function cumulativeBinomial(n, x, p, type) {
+    let cumulativeProbability = 0;
+    if (type === "left") {
+        for (let i = 0; i <= x; i++) {
+            cumulativeProbability += binomialProbability(n, i, p);
+        }
+    } else if (type === "right") {
+        for (let i = x; i <= n; i++) {
+            cumulativeProbability += binomialProbability(n, i, p);
+        }
+    }
+    return cumulativeProbability;
+}
+
+// Function to perform the binomial test and calculate the p-value
+function performBinomialTest() {
+    const x = parseInt(document.getElementById("x").value);
+    const n = parseInt(document.getElementById("n").value);
+    const p0 = parseFloat(document.getElementById("p0").value);
+    const alpha = parseFloat(document.getElementById("alpha").value);
+    const testType = document.getElementById("testType").value;
+    let pValue;
+
+    if (testType === "left") {
+        pValue = cumulativeBinomial(n, x, p0, "left");
+    } else if (testType === "right") {
+        pValue = cumulativeBinomial(n, x, p0, "right");
+    } else if (testType === "two") {
+        // Calculate the two-tailed p-value
+        const observedProbability = binomialProbability(n, x, p0);
+        pValue = cumulativeBinomial(n, x, p0, "left") + cumulativeBinomial(n, x, p0, "right") - observedProbability;
+        if (pValue > 1) pValue = 1;  // Ensure p-value does not exceed 1
+    }
+
+    // Show results with LaTeX rendering for significance level and p-value
+    document.getElementById("result").innerHTML = `
+        Significance Level \\( \\alpha = ${alpha.toFixed(2)} \\) <br>
+        Computed \\( p \\text{-value} = ${pValue.toFixed(5)} \\)
+    `;
+    MathJax.typeset();  // Re-render MathJax for new content
+}
+</script>
+
+</main>
+
+<footer>
+    <p>&copy; 2024 Statistics Calculator</p>
+</footer>
+
+</body>
+</html>
