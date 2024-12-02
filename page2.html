@@ -175,7 +175,7 @@
             alert("Please provide either the number of successes (x) or the sample proportion (\(\hat{p}\)).");
             return;
         }
-
+const zAlphaOver2 = jStat.normal.inv(1 - (1 - confidenceLevel) / 2, 0, 1);
         var marginOfError = jStat.normal.inv(1 - (1 - confidenceLevel) / 2, 0, 1) * Math.sqrt((p_hat * (1 - p_hat)) / sampleSize);
         marginOfError = parseFloat(marginOfError.toFixed(4));
 
@@ -191,8 +191,11 @@
     <br>
     Confidence Interval: ${p_hat.toFixed(6)} ± ${marginOfError.toFixed(6)}<br>
     <br>
-   Confidence Interval: [${lowerBound.toFixed(6)}, ${upperBound.toFixed(6)}]
-`;
+   Confidence Interval: [${lowerBound.toFixed(6)}, ${upperBound.toFixed(6)}]<br>
+  <br>
+ \( z_{\\alpha/2} \): ${zAlphaOver2.toFixed(4)}
+        `;
+
 
        // document.getElementById("ci_confidence_interval_result").innerHTML = "The confidence interval is 
     }
