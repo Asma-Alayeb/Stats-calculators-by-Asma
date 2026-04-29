@@ -3,27 +3,77 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Statistics Calculator</title>
+<title>Asma's Statistics Calculators</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.1/jstat.min.js"></script>
 
 <style>
-body { font-family: Arial; background:#f4f4f4; margin:0;}
-header, footer {
-    background:#6a0dad; color:white; text-align:center; padding:10px;
+body { font-family: Arial; margin:0; background:#f4f4f4; }
+
+header {
+    background:#6a0dad;
+    color:white;
+    text-align:center;
+    padding:15px;
 }
-main { padding:20px; max-width:900px; margin:auto;}
+
+nav {
+    background:#800080;
+    text-align:center;
+    padding:10px;
+}
+
+nav button {
+    background:none;
+    border:none;
+    color:white;
+    font-size:16px;
+    margin:0 10px;
+    cursor:pointer;
+}
+
+nav button:hover { text-decoration: underline; }
+
+main {
+    max-width:900px;
+    margin:auto;
+    padding:20px;
+}
+
 .calculator {
-    background:white; padding:20px; border-radius:8px;
+    display:none;
+    background:white;
+    padding:20px;
+    border-radius:8px;
     box-shadow:0 0 10px rgba(0,0,0,0.1);
-    margin-bottom:20px;
 }
+
+.active { display:block; }
+
 input, select {
-    padding:8px; width:100%; max-width:250px;
+    padding:8px;
+    width:100%;
+    max-width:250px;
 }
-button {
-    background:#6a0dad; color:white; padding:10px;
-    border:none; cursor:pointer;
+
+button.calc {
+    background:#6a0dad;
+    color:white;
+    padding:10px;
+    border:none;
+    margin-top:10px;
+    cursor:pointer;
+}
+
+.result p {
+    margin:5px 0;
+}
+
+footer {
+    text-align:center;
+    background:#6a0dad;
+    color:white;
+    padding:10px;
 }
 </style>
 </head>
@@ -31,151 +81,150 @@ button {
 <body>
 
 <header>
-<h1>Statistics Calculator</h1>
+<h1>Asma's Statistics Calculators</h1>
 </header>
+
+<nav>
+<button onclick="showTab('test')">Z Test</button>
+<button onclick="showTab('ci')">Confidence Interval</button>
+<button onclick="showTab('sample')">Sample Size</button>
+</nav>
 
 <main>
 
-<div class="calculator">
-<h2>Two Proportion Z Test</h2>
+<!-- Z TEST -->
+<div id="test" class="calculator active">
+<h2>Two-Proportion Z Test</h2>
 
-<select id="inputMethod" onchange="toggleInputFields()">
-<option value="successes">Successes</option>
-<option value="proportions">Proportions</option>
-</select>
-
-<div id="successesInput">
-<p>x₁: <input type="number" id="x1"></p>
-<p>n₁: <input type="number" id="n1"></p>
-<p>x₂: <input type="number" id="x2"></p>
-<p>n₂: <input type="number" id="n2"></p>
-</div>
-
-<div id="proportionsInput" style="display:none;">
 <p>p₁: <input type="number" step="any" id="p1"></p>
-<p>n₁: <input type="number" id="n1p"></p>
+<p>n₁: <input type="number" id="n1"></p>
 <p>p₂: <input type="number" step="any" id="p2"></p>
-<p>n₂: <input type="number" id="n2p"></p>
-</div>
-
+<p>n₂: <input type="number" id="n2"></p>
 <p>α: <input type="number" step="any" id="alpha"></p>
 
-<select id="testType">
+<select id="type">
 <option value="left">Left</option>
 <option value="right">Right</option>
 <option value="two">Two Tail</option>
 </select>
 
-<br><br>
-<button onclick="runTest()">Calculate</button>
+<br>
+<button class="calc" onclick="runTest()">Calculate</button>
 
-<p id="pooled"></p>
-<p id="se"></p>
-<p id="z"></p>
-<p id="crit"></p>
-<p id="pval"></p>
+<div class="result">
+<p id="z_pool"></p>
+<p id="z_se"></p>
+<p id="z_stat"></p>
+<p id="z_crit"></p>
+<p id="z_p"></p>
+</div>
+</div>
 
+<!-- CI -->
+<div id="ci" class="calculator">
+<h2>Confidence Interval</h2>
+
+<p>p₁: <input type="number" step="any" id="ci_p1"></p>
+<p>n₁: <input type="number" id="ci_n1"></p>
+<p>p₂: <input type="number" step="any" id="ci_p2"></p>
+<p>n₂: <input type="number" id="ci_n2"></p>
+<p>Confidence (%): <input type="number" id="ci_level"></p>
+
+<button class="calc" onclick="runCI()">Calculate</button>
+
+<div class="result">
+<p id="ci_out"></p>
+<p id="ci_me"></p>
+</div>
+</div>
+
+<!-- SAMPLE SIZE -->
+<div id="sample" class="calculator">
+<h2>Sample Size</h2>
+
+<p>p₁: <input type="number" step="any" id="ss_p1"></p>
+<p>p₂: <input type="number" step="any" id="ss_p2"></p>
+<p>Confidence (%): <input type="number" id="ss_conf"></p>
+<p>Margin Error (%): <input type="number" id="ss_me"></p>
+
+<button class="calc" onclick="runSample()">Calculate</button>
+
+<div class="result">
+<p id="ss_out"></p>
+</div>
 </div>
 
 </main>
 
-<footer>© Asma Alayeb</footer>
+<footer>© 2026 Asma Alayeb</footer>
 
 <script>
 
-function toggleInputFields(){
-    let m = document.getElementById("inputMethod").value;
-    document.getElementById("successesInput").style.display = m==="successes"?"block":"none";
-    document.getElementById("proportionsInput").style.display = m==="proportions"?"block":"none";
+// navigation
+function showTab(id){
+    document.querySelectorAll(".calculator").forEach(c=>c.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
 }
 
+// Z TEST
 function runTest(){
+let p1=+p1.value, p2=+p2.value, n1=+n1.value, n2=+n2.value, alpha=+alpha.value;
+let type=document.getElementById("type").value;
 
-let method = document.getElementById("inputMethod").value;
+if([p1,p2,n1,n2,alpha].some(v=>isNaN(v))) return alert("Fill all fields");
 
-let p1,p2,n1,n2,x1,x2;
+let ppool=(p1*n1+p2*n2)/(n1+n2);
+let se=Math.sqrt(ppool*(1-ppool)*(1/n1+1/n2));
+let z=(p1-p2)/se;
 
-if(method==="successes"){
-    x1 = parseFloat(x1=document.getElementById("x1").value);
-    x2 = parseFloat(document.getElementById("x2").value);
-    n1 = parseFloat(document.getElementById("n1").value);
-    n2 = parseFloat(document.getElementById("n2").value);
+let critL,critU,pval;
 
-    if([x1,x2,n1,n2].some(v=>isNaN(v)||v<=0)){
-        alert("Enter valid values");
-        return;
-    }
-
-    p1 = x1/n1;
-    p2 = x2/n2;
-
-}else{
-    p1 = parseFloat(document.getElementById("p1").value);
-    p2 = parseFloat(document.getElementById("p2").value);
-    n1 = parseFloat(document.getElementById("n1p").value);
-    n2 = parseFloat(document.getElementById("n2p").value);
-
-    if([p1,p2,n1,n2].some(v=>isNaN(v)||n1<=0||n2<=0)){
-        alert("Enter valid values");
-        return;
-    }
-
-    if(p1<0||p1>1||p2<0||p2>1){
-        alert("Proportions must be between 0 and 1");
-        return;
-    }
-
-    x1 = p1*n1;
-    x2 = p2*n2;
-}
-
-// pooled estimate
-let ppool = (x1+x2)/(n1+n2);
-
-// standard error
-let se = Math.sqrt(ppool*(1-ppool)*(1/n1+1/n2));
-
-// test stat
-let z = (p1-p2)/se;
-
-// alpha
-let alpha = parseFloat(document.getElementById("alpha").value);
-let type = document.getElementById("testType").value;
-
-if(isNaN(alpha)||alpha<=0||alpha>=1){
-    alert("Invalid alpha");
-    return;
-}
-
-let critL=null, critU=null, pval;
-
-// critical + pvalue
 if(type==="left"){
-    critL = jStat.normal.inv(alpha,0,1);
-    pval = jStat.normal.cdf(z,0,1);
+critL=jStat.normal.inv(alpha,0,1);
+pval=jStat.normal.cdf(z,0,1);
 }
 else if(type==="right"){
-    critU = jStat.normal.inv(1-alpha,0,1);
-    pval = 1 - jStat.normal.cdf(z,0,1);
+critU=jStat.normal.inv(1-alpha,0,1);
+pval=1-jStat.normal.cdf(z,0,1);
 }
 else{
-    critL = jStat.normal.inv(alpha/2,0,1);
-    critU = jStat.normal.inv(1-alpha/2,0,1);
-    pval = 2*(1 - jStat.normal.cdf(Math.abs(z),0,1));
+critL=jStat.normal.inv(alpha/2,0,1);
+critU=jStat.normal.inv(1-alpha/2,0,1);
+pval=2*(1-jStat.normal.cdf(Math.abs(z),0,1));
 }
 
-// display
-document.getElementById("pooled").innerHTML = "Pooled: " + ppool.toFixed(5);
-document.getElementById("se").innerHTML = "Standard Error: " + se.toFixed(5);
-document.getElementById("z").innerHTML = "Z: " + z.toFixed(5);
+z_pool.innerHTML="Pooled: "+ppool.toFixed(5);
+z_se.innerHTML="SE: "+se.toFixed(5);
+z_stat.innerHTML="Z: "+z.toFixed(5);
+z_crit.innerHTML=type==="two"?
+`Critical: [${critL.toFixed(5)}, ${critU.toFixed(5)}]`:
+`Critical: ${(critL??critU).toFixed(5)}`;
+z_p.innerHTML="P-value: "+pval.toFixed(5);
+}
 
-document.getElementById("crit").innerHTML =
-(type==="two") ?
-"Critical: ["+critL.toFixed(5)+", "+critU.toFixed(5)+"]" :
-"Critical: "+(critL??critU).toFixed(5);
+// CI
+function runCI(){
+let p1=+ci_p1.value, p2=+ci_p2.value, n1=+ci_n1.value, n2=+ci_n2.value;
+let level=+ci_level.value/100;
 
-document.getElementById("pval").innerHTML = "P-value: " + pval.toFixed(5);
+let z=jStat.normal.inv(1-(1-level)/2,0,1);
+let se=Math.sqrt(p1*(1-p1)/n1 + p2*(1-p2)/n2);
+let me=z*se;
 
+ci_out.innerHTML=`CI: [${(p1-p2-me).toFixed(5)}, ${(p1-p2+me).toFixed(5)}]`;
+ci_me.innerHTML="Margin Error: "+me.toFixed(5);
+}
+
+// Sample Size
+function runSample(){
+let p1=+ss_p1.value, p2=+ss_p2.value;
+let conf=+ss_conf.value/100;
+let me=+ss_me.value/100;
+
+let z=jStat.normal.inv(1-(1-conf)/2,0,1);
+let n=(p1*(1-p1)+p2*(1-p2))*z*z/(me*me);
+
+ss_out.innerHTML="Required n per group: "+Math.ceil(n);
 }
 
 </script>
