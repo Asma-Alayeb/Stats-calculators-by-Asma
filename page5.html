@@ -1,396 +1,237 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hypothesis Testing on Two Samples (Proportions)</title>
-    <link rel="stylesheet" href="style.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-        }
-        header {
-            background-color: #6a0dad; /* Purple */
-            color: #fff;
-            padding: 10px 0;
-            text-align: center;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            left: 0;
-            z-index: 1000;
-            border-bottom: 5px solid #b8860b;
-        }
-        header h1 {
-            margin: 0;
-            font-size: 24px;
-        }
-        nav {
-            background-color: #800080;
-            padding: 10px;
-            text-align: center;
-            position: fixed;
-            width: 100%;
-            top: 50px;
-            left: 0;
-            z-index: 999;
-            border-top: 5px solid #b8860b;
-        }
-        nav ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        nav ul li {
-            display: inline;
-            margin-right: 15px;
-        }
-        nav a {
-            color: #fff;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 16px;
-        }
-        nav a:hover {
-            text-decoration: underline;
-        }
-        main {
-            padding: 15px;
-            max-width: 900px;
-            margin: 0 auto;
-            padding-top: 100px; /* Adjusted for fixed header and nav */
-        }
-        section {
-            margin-bottom: 20px;
-        }
-        .calculator {
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        h2 {
-            margin-top: 0;
-            font-size: 22px;
-        }
-        p {
-            margin-bottom: 10px;
-            font-size: 16px;
-        }
-        input[type="text"] {
-            padding: 8px;
-            font-size: 16px;
-            width: 100%;
-            max-width: 300px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-        }
-        button {
-            padding: 10px 15px;
-            background-color: #6a0dad;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        button:hover {
-            background-color: #800080;
-        }
-        footer {
-            background-color: #6a0dad;
-            color: #fff;
-            padding: 2px;
-            text-align: center;
-            font-size: 12px;
-            position: fixed;
-            width: 100%;
-            bottom: 0;
-            border-top: 5px solid #b8860b;
-        }
-    </style>
-    <!-- MathJax for rendering LaTeX -->
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Two Proportion Z Test & Confidence Interval</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+}
+header, footer {
+    background-color: #6a0dad;
+    color: white;
+    text-align: center;
+    padding: 10px;
+}
+main {
+    max-width: 900px;
+    margin: auto;
+    padding: 20px;
+}
+.calculator {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+input, select, button {
+    padding: 8px;
+    margin: 5px 0;
+}
+button {
+    background: #6a0dad;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.1/jstat.min.js"></script>
 </head>
+
 <body>
 
 <header>
-    <h1>Z Test- Z Estimate, Difference of Proportions</h1>
+<h1>Two Proportion Z Tools</h1>
 </header>
-
-<nav>
-    <ul>
-        <li><a href="index.html">Home</a></li>
-
-    </ul>
-</nav>
 
 <main>
 
-<section id="twoProportionTest" class="calculator">
-    <h2>Two Population Proportions Hypothesis Test</h2>
-    <form id="twoProportionForm">
-        <p>Input Method: 
-            <select id="inputMethod" onchange="toggleInputFields()">
-                <option value="successes">Number of Successes</option>
-                <option value="proportions">Sample Proportions</option>
-            </select>
-        </p>
-        <div id="successesInput">
-            <p>Number of Successes in Sample 1 (\(x_1\)): <input type="text" id="x1"></p>
-            <p>Sample Size 1 (\(n_1\)): <input type="text" id="n1" required></p>
-            <p>Number of Successes in Sample 2 (\(x_2\)): <input type="text" id="x2"></p>
-            <p>Sample Size 2 (\(n_2\)): <input type="text" id="n2" required></p>
-        </div>
-        <div id="proportionsInput" style="display: none;">
-            <p>Sample Proportion 1 (\(p_1\)): <input type="text" id="p1"></p>
-            <p>Sample Size 1 (\(n_1\)): <input type="text" id="n1_proportion" required></p>
-            <p>Sample Proportion 2 (\(p_2\)): <input type="text" id="p2"></p>
-            <p>Sample Size 2 (\(n_2\)): <input type="text" id="n2_proportion" required></p>
-        </div>
-        <p>Alpha (\(\alpha)\): <input type="text" id="alpha" required></p>
-        <p>Test Type: 
-            <select id="test_type" required>
-                <option value="left">Left Tail Test</option>
-                <option value="right">Right Tail Test</option>
-                <option value="two">Two Tail Test</option>
-            </select>
-        </p>
-        <p><button type="button" onclick="performTwoProportionTest()">Perform Hypothesis Test</button></p>
-    </form>
+<!-- ================= TEST ================= -->
+<section class="calculator">
+<h2>Hypothesis Test</h2>
 
-    <p id="pooled_estimate_result"></p>
-    <p id="test_statistic_result"></p>
-    <p id="critical_values_result"></p>
-    <p id="p_value_result"></p>
+<select id="inputMethod" onchange="toggleInput()">
+<option value="successes">Successes</option>
+<option value="proportions">Proportions</option>
+</select>
+
+<div id="successInputs">
+<p>x₁: <input id="x1"></p>
+<p>n₁: <input id="n1"></p>
+<p>x₂: <input id="x2"></p>
+<p>n₂: <input id="n2"></p>
+</div>
+
+<div id="propInputs" style="display:none;">
+<p>p₁: <input id="p1"></p>
+<p>n₁: <input id="n1p"></p>
+<p>p₂: <input id="p2"></p>
+<p>n₂: <input id="n2p"></p>
+</div>
+
+<p>α: <input id="alpha"></p>
+
+<select id="tail">
+<option value="two">Two Tail</option>
+<option value="left">Left</option>
+<option value="right">Right</option>
+</select>
+
+<br>
+<button onclick="runTest()">Run Test</button>
+
+<p id="testOut"></p>
 </section>
 
-<section id="confidenceInterval" class="calculator">
-    <h2>Confidence Interval Calculator</h2>
-    <form id="confidenceIntervalForm">
-        <p>Input Method: 
-            <select id="ciInputMethod" onchange="toggleCIInputFields()">
-                <option value="successes">Number of Successes</option>
-                <option value="proportions">Sample Proportions</option>
-            </select>
-        </p>
-        <div id="ciSuccessesInput">
-            <p>Number of Successes in Sample 1 (\(x_1\)): <input type="text" id="ci_x1" required></p>
-            <p>Sample Size 1 (\(n_1\)): <input type="text" id="ci_n1" required></p>
-            <p>Number of Successes in Sample 2 (\(x_2\)): <input type="text" id="ci_x2" required></p>
-            <p>Sample Size 2 (\(n_2\)): <input type="text" id="ci_n2" required></p>
-        </div>
-        <div id="ciProportionsInput" style="display: none;">
-            <p>Sample Proportion 1 (\(p_1\)): <input type="text" id="ci_p1" required></p>
-            <p>Sample Size 1 (\(n_1\)): <input type="text" id="ci_n1_proportion" required></p>
-            <p>Sample Proportion 2 (\(p_2\)): <input type="text" id="ci_p2" required></p>
-            <p>Sample Size 2 (\(n_2\)): <input type="text" id="ci_n2_proportion" required></p>
-        </div>
-        <p>Confidence Level (\(\%)\): <input type="text" id="ci_confidence_level" required></p>
-        <button type="button" onclick="calculateConfidenceInterval()">Calculate Confidence Interval</button>
-    </form>
+<!-- ================= CI ================= -->
+<section class="calculator">
+<h2>Confidence Interval</h2>
 
-    <p id="ci_result"></p>
-    <p id="margin_error_result"></p>
-</section>
+<select id="ciMethod" onchange="toggleCI()">
+<option value="successes">Successes</option>
+<option value="proportions">Proportions</option>
+</select>
 
-<section id="sampleSizeCalculator" class="calculator">
-    <h2>Sample Size Calculator</h2>
-    <form id="sampleSizeForm">
-        <p>Sample Proportion 1 (\(p_1\)): <input type="text" id="ss_p1" required></p>
-        <p>Sample Proportion 2 (\(p_2\)): <input type="text" id="ss_p2" required></p>
-        <p>Confidence Level (\(\%)\): <input type="text" id="ss_confidence_level" required></p>
-        <p>Margin of Error (\(\%)\): <input type="text" id="ss_margin_error" required></p>
-        <p><button type="button" onclick="calculateSampleSize()">Calculate Sample Size</button></p>
-    </form>
+<div id="ciSuccess">
+<p>x₁: <input id="cix1"></p>
+<p>n₁: <input id="cin1"></p>
+<p>x₂: <input id="cix2"></p>
+<p>n₂: <input id="cin2"></p>
+</div>
 
-    <p id="sample_size_result"></p>
+<div id="ciProp" style="display:none;">
+<p>p₁: <input id="cip1"></p>
+<p>n₁: <input id="cin1p"></p>
+<p>p₂: <input id="cip2"></p>
+<p>n₂: <input id="cin2p"></p>
+</div>
+
+<p>Confidence %: <input id="conf"></p>
+
+<button onclick="runCI()">Calculate</button>
+
+<p id="ciOut"></p>
 </section>
 
 </main>
 
 <footer>
-    <p>&copy; 2024 Asma S. Alayeb</p>
+<p>Stats Calculator</p>
 </footer>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.1/jstat.min.js"></script>
+
 <script>
-    function toggleInputFields() {
-        const inputMethod = document.getElementById('inputMethod').value;
-        document.getElementById('successesInput').style.display = inputMethod === 'successes' ? 'block' : 'none';
-        document.getElementById('proportionsInput').style.display = inputMethod === 'proportions' ? 'block' : 'none';
-    }
-
-    function toggleCIInputFields() {
-        const inputMethod = document.getElementById('ciInputMethod').value;
-        document.getElementById('ciSuccessesInput').style.display = inputMethod === 'successes' ? 'block' : 'none';
-        document.getElementById('ciProportionsInput').style.display = inputMethod === 'proportions' ? 'block' : 'none';
-    }
-    
-    function performTwoProportionTest() {
-        var inputMethod = document.getElementById("inputMethod").value;
-        var p1, p2, n1, n2;
-
-        if (inputMethod === "successes") {
-            var x1 = document.getElementById("x1").value ? parseInt(document.getElementById("x1").value) : null;
-            n1 = parseInt(document.getElementById("n1").value);
-
-            var x2 = document.getElementById("x2").value ? parseInt(document.getElementById("x2").value) : null;
-            n2 = parseInt(document.getElementById("n2").value);
-
-            if (isNaN(n1) || isNaN(n2) || n1 <= 0 || n2 <= 0) {
-                alert("Please ensure all required inputs are valid numbers.");
-                return;
-            }
-
-            if (x1 !== null) {
-                p1 = x1 / n1;
-            }
-            if (x2 !== null) {
-                p2 = x2 / n2;
-            }
-        } else {
-            p1 = parseFloat(document.getElementById("p1").value);
-            n1 = parseInt(document.getElementById("n1_proportion").value);
-
-            p2 = parseFloat(document.getElementById("p2").value);
-            n2 = parseInt(document.getElementById("n2_proportion").value);
-
-            if (isNaN(p1) || isNaN(n1) || isNaN(p2) || isNaN(n2) || n1 <= 0 || n2 <= 0) {
-                alert("Please ensure all required inputs are valid numbers.");
-                return;
-            }
-         if (typeof p1 === "number" && !isNaN(p1) && p1 !== null) {
-    x1 = Math.round(p1 * n1);
+// ================= TOGGLES =================
+function toggleInput(){
+document.getElementById("successInputs").style.display =
+document.getElementById("inputMethod").value==="successes"?"block":"none";
+document.getElementById("propInputs").style.display =
+document.getElementById("inputMethod").value==="proportions"?"block":"none";
 }
-if (typeof p2 === "number" && !isNaN(p2) && p2 !== null) {
-    x2 = Math.round(p2 * n2);
+
+function toggleCI(){
+document.getElementById("ciSuccess").style.display =
+document.getElementById("ciMethod").value==="successes"?"block":"none";
+document.getElementById("ciProp").style.display =
+document.getElementById("ciMethod").value==="proportions"?"block":"none";
 }
-        }
 
-        var alpha = parseFloat(document.getElementById("alpha").value);
-        var testType = document.getElementById("test_type").value;
+// ================= TEST =================
+function runTest(){
 
-        if (isNaN(alpha) || alpha <= 0 || alpha >= 1) {
-            alert("Please ensure the alpha is a valid number between 0 and 1.");
-            return;
-        }
+let method=document.getElementById("inputMethod").value;
+let p1,p2,n1,n2,x1,x2;
 
-        var p_combined = (x1 + x2) / (n1 + n2);
-        var standardError = Math.sqrt(p_combined * (1 - p_combined) * ((1 / n1) + (1 / n2)));
-        var testStatistic = (x1*(1/n1)- x2*(1/n2)) / standardError;
+if(method==="successes"){
+x1=+document.getElementById("x1").value;
+n1=+document.getElementById("n1").value;
+x2=+document.getElementById("x2").value;
+n2=+document.getElementById("n2").value;
+p1=x1/n1;
+p2=x2/n2;
+}else{
+p1=+document.getElementById("p1").value;
+n1=+document.getElementById("n1p").value;
+p2=+document.getElementById("p2").value;
+n2=+document.getElementById("n2p").value;
+x1=p1*n1;
+x2=p2*n2;
+}
 
-        var criticalValueLower, criticalValueUpper, pValue;
-        if (testType === "left") {
-            criticalValueLower = jStat.normal.inv(alpha, 0, 1);
-            pValue = jStat.normal.cdf(testStatistic, 0, 1);
-        } else if (testType === "right") {
-            criticalValueUpper = jStat.normal.inv(1 - alpha, 0, 1);
-            pValue = 1 - jStat.normal.cdf(testStatistic, 0, 1);
-        } else {
-            criticalValueLower = jStat.normal.inv(alpha / 2, 0, 1);
-            criticalValueUpper = jStat.normal.inv(1 - alpha / 2, 0, 1);
-            pValue = 2 * (1 - jStat.normal.cdf(Math.abs(testStatistic), 0, 1));
-        }
+let alpha=+document.getElementById("alpha").value;
+let tail=document.getElementById("tail").value;
 
-        document.getElementById("pooled_estimate_result").innerHTML = "Pooled Estimate: " + p_combined.toFixed(5);
-        document.getElementById("test_statistic_result").innerHTML = "Test Statistic: " + testStatistic.toFixed(5);
-    
-        if (testType === "two") {
-            document.getElementById("critical_values_result").innerHTML = "Critical Values: [" + criticalValueLower.toFixed(5) + ", " + criticalValueUpper.toFixed(5) + "]";
-        } else {
-            document.getElementById("critical_values_result").innerHTML = "Critical Value: " + (testType === "left" ? criticalValueLower.toFixed(5) : criticalValueUpper.toFixed(5));
-        }
-        document.getElementById("p_value_result").innerHTML = "P-Value: " + pValue.toFixed(5);
-        document.getElementById("standard_error_result").innerHTML = "Standard Error: " + standardError.toFixed(5);
-   }
+// pooled
+let pbar=(x1+x2)/(n1+n2);
+let se=Math.sqrt(pbar*(1-pbar)*(1/n1+1/n2));
 
-    function calculateConfidenceInterval() {
-        var ciInputMethod = document.getElementById("ciInputMethod").value;
-        var p1, p2, n1, n2;
+// z stat
+let z=(p1-p2)/se;
 
-        if (ciInputMethod === "successes") {
-            var x1 = parseInt(document.getElementById("ci_x1").value);
-            var x2 = parseInt(document.getElementById("ci_x2").value);
-            n1 = parseInt(document.getElementById("ci_n1").value);
-            n2 = parseInt(document.getElementById("ci_n2").value);
+// p-value
+let pval;
+if(tail==="two"){
+pval=2*(1-jStat.normal.cdf(Math.abs(z),0,1));
+}else if(tail==="left"){
+pval=jStat.normal.cdf(z,0,1);
+}else{
+pval=1-jStat.normal.cdf(z,0,1);
+}
 
-            if (isNaN(x1) || isNaN(n1) || isNaN(x2) || isNaN(n2) || n1 <= 0 || n2 <= 0) {
-                alert("Please ensure all required inputs are valid numbers.");
-                return;
-            }
+// critical
+let zcrit=jStat.normal.inv(1-alpha/2,0,1);
 
-            p1 = x1 / n1;
-            p2 = x2 / n2;
-        } else {
-            p1 = parseFloat(document.getElementById("ci_p1").value);
-            p2 = parseFloat(document.getElementById("ci_p2").value);
-            n1 = parseInt(document.getElementById("ci_n1_proportion").value);
-            n2 = parseInt(document.getElementById("ci_n2_proportion").value);
+document.getElementById("testOut").innerHTML=
+`z = ${z.toFixed(4)}<br>
+p-value = ${pval.toFixed(4)}<br>
+z* = ${zcrit.toFixed(4)}<br>
+SE = ${se.toFixed(5)}`;
+}
 
-            if (isNaN(p1) || isNaN(p2) || isNaN(n1) || isNaN(n2) || n1 <= 0 || n2 <= 0) {
-                alert("Please ensure all required inputs are valid numbers.");
-                return;
-            }
-        }
+// ================= CI =================
+function runCI(){
 
-        var confidenceLevel = parseFloat(document.getElementById("ci_confidence_level").value) / 100;
+let method=document.getElementById("ciMethod").value;
+let p1,p2,n1,n2;
 
-        if (isNaN(confidenceLevel) || confidenceLevel <= 0 || confidenceLevel >= 1) {
-            alert("Please ensure the confidence level is a valid number between 0 and 100.");
-            return;
-        }
+if(method==="successes"){
+let x1=+document.getElementById("cix1").value;
+n1=+document.getElementById("cin1").value;
+let x2=+document.getElementById("cix2").value;
+n2=+document.getElementById("cin2").value;
+p1=x1/n1;
+p2=x2/n2;
+}else{
+p1=+document.getElementById("cip1").value;
+n1=+document.getElementById("cin1p").value;
+p2=+document.getElementById("cip2").value;
+n2=+document.getElementById("cin2p").value;
+}
 
-        // Calculate the standard error and the margin of error
-        var standardError = Math.sqrt((p1 * (1 - p1) / n1) + (p2 * (1 - p2) / n2));
-        var zValue = getZValueForConfidenceLevel(confidenceLevel); // Helper function to get Z value
-        var marginOfError = zValue * standardError;
+let conf=+document.getElementById("conf").value/100;
 
-        // Calculate the confidence interval
-        var lowerBound = (p1 - p2) - marginOfError;
-        var upperBound = (p1 - p2) + marginOfError;
+// correct z*
+let z=jStat.normal.inv(1-(1-conf)/2,0,1);
 
-        // Display the results
-      document.getElementById("ci_result").innerHTML = `
-    Confidence Interval: (${lowerBound.toFixed(5)}, ${upperBound.toFixed(5)})<br>
-    <br>
-    Confidence Interval: ${(p1 - p2).toFixed(5)} ± ${marginOfError.toFixed(4)}
-`;
-document.getElementById("margin_error_result").innerHTML = `Margin of Error: ${marginOfError.toFixed(5)}`;
+// SE (no pooling!)
+let se=Math.sqrt(p1*(1-p1)/n1 + p2*(1-p2)/n2);
 
-    }
+let me=z*se;
+let diff=p1-p2;
 
-    function getZValueForConfidenceLevel(confidenceLevel) {
-        // For simplicity, returning z-scores for common confidence levels
-        if (confidenceLevel === 0.90) return 1.645;
-        if (confidenceLevel === 0.95) return 1.96;
-        if (confidenceLevel === 0.99) return 2.576;
-        return 1.96; // Default for 95%
-    }
+let low=diff-me;
+let high=diff+me;
 
-    function calculateSampleSize() {
-        var p1 = parseFloat(document.getElementById("ss_p1").value);
-        var p2 = parseFloat(document.getElementById("ss_p2").value);
-
-        var confidenceLevel = parseFloat(document.getElementById("ss_confidence_level").value);
-        var marginError = parseFloat(document.getElementById("ss_margin_error").value) / 100; // Convert to proportion
-
-        if (isNaN(p1) || isNaN(p2) || isNaN(confidenceLevel) || isNaN(marginError) || confidenceLevel <= 0 || confidenceLevel >= 100 || marginError <= 0) {
-            alert("Please ensure all inputs are valid numbers.");
-            return;
-        }
-
-        var alpha = 1 - confidenceLevel / 100;
-
-        var zCritical = jStat.normal.inv(1 - alpha / 2, 0, 1);
-
-        var sampleSize = (p1 * (1 - p1) + p2 * (1 - p2)) * Math.pow(zCritical, 2) / Math.pow(marginError, 2);
-
-        document.getElementById("sample_size_result").innerHTML = "Required Sample Size per Group: " + Math.ceil(sampleSize);
-    }
+document.getElementById("ciOut").innerHTML=
+`CI: (${low.toFixed(4)}, ${high.toFixed(4)})<br>
+ME = ${me.toFixed(4)}<br>
+z* = ${z.toFixed(4)}<br>
+SE = ${se.toFixed(5)}`;
+}
 
 </script>
 
