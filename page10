@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Statistics Calculator</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.1/jstat.min.js"></script>
+
+<style>
+body { font-family: Arial; background:#f4f4f4; margin:0;}
+header, footer {
+    background:#6a0dad; color:white; text-align:center; padding:10px;
+}
+main { padding:20px; max-width:900px; margin:auto;}
+.calculator {
+    background:white; padding:20px; border-radius:8px;
+    box-shadow:0 0 10px rgba(0,0,0,0.1);
+    margin-bottom:20px;
+}
+input, select {
+    padding:8px; width:100%; max-width:250px;
+}
+button {
+    background:#6a0dad; color:white; padding:10px;
+    border:none; cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>Statistics Calculator</h1>
+</header>
+
+<main>
+
+<div class="calculator">
+<h2>Two Proportion Z Test</h2>
+
+<select id="inputMethod" onchange="toggleInputFields()">
+<option value="successes">Successes</option>
+<option value="proportions">Proportions</option>
+</select>
+
+<div id="successesInput">
+<p>x₁: <input type="number" id="x1"></p>
+<p>n₁: <input type="number" id="n1"></p>
+<p>x₂: <input type="number" id="x2"></p>
+<p>n₂: <input type="number" id="n2"></p>
+</div>
+
+<div id="proportionsInput" style="display:none;">
+<p>p₁: <input type="number" step="any" id="p1"></p>
+<p>n₁: <input type="number" id="n1p"></p>
+<p>p₂: <input type="number" step="any" id="p2"></p>
+<p>n₂: <input type="number" id="n2p"></p>
+</div>
+
+<p>α: <input type="number" step="any" id="alpha"></p>
+
+<select id="testType">
+<option value="left">Left</option>
+<option value="right">Right</option>
+<option value="two">Two Tail</option>
+</select>
+
+<br><br>
+<button onclick="runTest()">Calculate</button>
+
+<p id="pooled"></p>
+<p id="se"></p>
+<p id="z"></p>
+<p id="crit"></p>
+<p id="pval"></p>
+
+</div>
+
+</main>
+
+<footer>© Asma Alayeb</footer>
+
+<script>
+
+function toggleInputFields(){
+    let m = document.getElementById("inputMethod").value;
+    document.getElementById("successesInput").style.display = m==="successes"?"block":"none";
+    document.getElementById("proportionsInput").style.display = m==="proportions"?"block":"none";
+}
+
+function runTest(){
+
+let method = document.getElementById("inputMethod").value;
+
+let p1,p2,n1,n2,x1,x2;
+
+if(method==="successes"){
+    x1 = parseFloat(x1=document.getElementById("x1").value);
+    x2 = parseFloat(document.getElementById("x2").value);
+    n1 = parseFloat(document.getElementById("n1").value);
+    n2 = parseFloat(document.getElementById("n2").value);
+
+    if([x1,x2,n1,n2].some(v=>isNaN(v)||v<=0)){
+        alert("Enter valid values");
+        return;
+    }
+
+    p1 = x1/n1;
+    p2 = x2/n2;
+
+}else{
+    p1 = parseFloat(document.getElementById("p1").value);
+    p2 = parseFloat(document.getElementById("p2").value);
+    n1 = parseFloat(document.getElementById("n1p").value);
+    n2 = parseFloat(document.getElementById("n2p").value);
+
+    if([p1,p2,n1,n2].some(v=>isNaN(v)||n1<=0||n2<=0)){
+        alert("Enter valid values");
+        return;
+    }
+
+    if(p1<0||p1>1||p2<0||p2>1){
+        alert("Proportions must be between 0 and 1");
+        return;
+    }
+
+    x1 = p1*n1;
+    x2 = p2*n2;
+}
+
+// pooled estimate
+let ppool = (x1+x2)/(n1+n2);
+
+// standard error
+let se = Math.sqrt(ppool*(1-ppool)*(1/n1+1/n2));
+
+// test stat
+let z = (p1-p2)/se;
+
+// alpha
+let alpha = parseFloat(document.getElementById("alpha").value);
+let type = document.getElementById("testType").value;
+
+if(isNaN(alpha)||alpha<=0||alpha>=1){
+    alert("Invalid alpha");
+    return;
+}
+
+let critL=null, critU=null, pval;
+
+// critical + pvalue
+if(type==="left"){
+    critL = jStat.normal.inv(alpha,0,1);
+    pval = jStat.normal.cdf(z,0,1);
+}
+else if(type==="right"){
+    critU = jStat.normal.inv(1-alpha,0,1);
+    pval = 1 - jStat.normal.cdf(z,0,1);
+}
+else{
+    critL = jStat.normal.inv(alpha/2,0,1);
+    critU = jStat.normal.inv(1-alpha/2,0,1);
+    pval = 2*(1 - jStat.normal.cdf(Math.abs(z),0,1));
+}
+
+// display
+document.getElementById("pooled").innerHTML = "Pooled: " + ppool.toFixed(5);
+document.getElementById("se").innerHTML = "Standard Error: " + se.toFixed(5);
+document.getElementById("z").innerHTML = "Z: " + z.toFixed(5);
+
+document.getElementById("crit").innerHTML =
+(type==="two") ?
+"Critical: ["+critL.toFixed(5)+", "+critU.toFixed(5)+"]" :
+"Critical: "+(critL??critU).toFixed(5);
+
+document.getElementById("pval").innerHTML = "P-value: " + pval.toFixed(5);
+
+}
+
+</script>
+
+</body>
+</html>
