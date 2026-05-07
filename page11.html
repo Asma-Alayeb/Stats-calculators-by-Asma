@@ -183,14 +183,11 @@
     Confidence Interval: [${lowerBound.toFixed(4)}, ${upperBound.toFixed(4)}]`;
 
     }
-
 function calculateSampleSize() {
-    // Inputs
     const marginError = parseFloat(document.getElementById('marginError').value);
     const confidenceLevel = parseFloat(document.getElementById('ssConfidenceLevel').value) / 100;
     const stdDev = parseFloat(document.getElementById('ssStdDev').value);
 
-    // Validation
     if (
         isNaN(marginError) ||
         isNaN(confidenceLevel) ||
@@ -204,27 +201,25 @@ function calculateSampleSize() {
         return;
     }
 
-    // Z critical value
     const alpha = 1 - confidenceLevel;
     const z = jStat.normal.inv(1 - alpha / 2, 0, 1);
 
-    // Sample size formula
     const n = Math.pow((z * stdDev) / marginError, 2);
     const sampleSize = Math.ceil(n);
 
-    // LaTeX output
+    // Proper LaTeX (NO final value inside math block)
     const latex = `
     \\[
-    n = \\left( \\frac{z_{\\alpha/2} \\sigma}{E} \\right)^2
-    \\quad \\Rightarrow \\quad
-    n = \\left( \\frac{${z.toFixed(3)} \\cdot ${stdDev}}{${marginError}} \\right)^2
-    = ${sampleSize}
+    n = \\left( \\frac{z_{\\alpha/2}\\sigma}{E} \\right)^2
     \\]
     `;
 
-    document.getElementById('ssResult').innerHTML = latex;
+    document.getElementById('ssResult').innerHTML = `
+        ${latex}
+        <br>
+        Required Sample Size: <b>${sampleSize}</b>
+    `;
 
-    // Re-render MathJax
     if (window.MathJax) {
         MathJax.typesetPromise();
     }
