@@ -23,8 +23,10 @@
             z-index: 1000;
             border-bottom: 5px solid #b8860b;
         }
-        header h1 { margin: 0; font-size: 24px; }
-
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
         nav {
             background-color: #800080;
             padding: 10px;
@@ -36,52 +38,66 @@
             z-index: 999;
             border-top: 5px solid #b8860b;
         }
-
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        nav ul li {
+            display: inline;
+            margin-right: 15px;
+        }
         nav a {
             color: #fff;
             text-decoration: none;
             font-weight: bold;
             font-size: 16px;
         }
-
         main {
             padding: 15px;
             max-width: 900px;
             margin: 0 auto;
             padding-top: 80px;
         }
-
+        section {
+            margin-bottom: 12px;
+        }
         .calculator {
             padding: 20px;
             background-color: #fff;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            margin-bottom: 12px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-
-        input {
+        input[type="text"] {
             padding: 8px;
             font-size: 16px;
             width: 100%;
             max-width: 300px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
         }
-
         button {
             padding: 10px 15px;
             background-color: #6a0dad;
             color: white;
             border: none;
+            border-radius: 4px;
             cursor: pointer;
+            font-size: 16px;
         }
-
+        button:hover {
+            background-color: #800080;
+        }
         footer {
             background-color: #6a0dad;
             color: #fff;
+            padding: 2px;
             text-align: center;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
             font-size: 12px;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            border-top: 5px solid #b8860b;
         }
     </style>
 
@@ -97,62 +113,67 @@
 </header>
 
 <nav>
-    <a href="index.html">Home</a>
+    <ul>
+        <li><a href="index.html">Home</a></li>
+    </ul>
 </nav>
 
 <main>
 
-<section class="calculator">
+<section id="confidenceInterval" class="calculator">
     <h2>Confidence Interval Calculator</h2>
-
-    <p>Sample Mean: <input id="mean"></p>
-    <p>Standard Deviation: <input id="stdDev"></p>
-    <p>Sample Size: <input id="sampleSize"></p>
-    <p>Confidence Level (%): <input id="confidenceLevel"></p>
-
-    <button onclick="calculateConfidenceInterval()">Calculate Confidence Interval</button>
-
+    <form id="ciForm">
+        <p>Sample Mean (\(\bar{x}\)): <input type="text" id="mean" required></p>
+        <p>Sample Standard Deviation (\(s\)): <input type="text" id="stdDev" required></p>
+        <p>Sample Size (\(n\)): <input type="text" id="sampleSize" required></p>
+        <p>Confidence Level (%): <input type="text" id="confidenceLevel" required></p>
+        <button type="button" onclick="calculateConfidenceInterval()">Calculate Confidence Interval</button>
+    </form>
     <p id="ciResult"></p>
 </section>
 
-<section class="calculator">
+<section id="sampleSizeCalculator" class="calculator">
     <h2>Sample Size Calculator</h2>
-
-    <p>Margin of Error (E): <input id="marginError"></p>
-    <p>Confidence Level (%): <input id="ssConfidenceLevel"></p>
-    <p>Standard Deviation (σ): <input id="ssStdDev"></p>
-
-    <button onclick="calculateSampleSize()">Calculate Sample Size</button>
-
+    <form id="ssForm">
+        <p>Estimated Margin of Error (\(E\)): <input type="text" id="marginError" required></p>
+        <p>Confidence Level (%): <input type="text" id="ssConfidenceLevel" required></p>
+        <p>Standard Deviation (\(\sigma\)): <input type="text" id="ssStdDev" required></p>
+        <button type="button" onclick="calculateSampleSize()">Calculate Sample Size</button>
+    </form>
     <p id="ssResult"></p>
 </section>
 
 </main>
 
 <footer>
-<p>&copy;2026 Asma S. Alayeb</p>
+    <p>&copy;2024 Asma S. Alayeb</p>
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.4/jstat.min.js"></script>
 
 <script>
-
 function calculateConfidenceInterval() {
     const mean = parseFloat(document.getElementById('mean').value);
     const stdDev = parseFloat(document.getElementById('stdDev').value);
     const n = parseInt(document.getElementById('sampleSize').value);
-    const conf = parseFloat(document.getElementById('confidenceLevel').value) / 100;
+    const confidenceLevel = parseFloat(document.getElementById('confidenceLevel').value) / 100;
 
-    if (isNaN(mean) || isNaN(stdDev) || isNaN(n) || isNaN(conf)) return;
+    if (isNaN(mean) || isNaN(stdDev) || isNaN(n) || isNaN(confidenceLevel) || n <= 0) {
+        alert("Please enter valid numbers.");
+        return;
+    }
 
-    const t = jStat.studentt.inv(1 - (1 - conf) / 2, n - 1);
-    const ME = t * (stdDev / Math.sqrt(n));
+    const tValue = jStat.studentt.inv(1 - (1 - confidenceLevel) / 2, n - 1);
+    const marginOfError = tValue * (stdDev / Math.sqrt(n));
 
-    const low = mean - ME;
-    const high = mean + ME;
+    const lowerBound = mean - marginOfError;
+    const upperBound = mean + marginOfError;
 
-    document.getElementById('ciResult').innerHTML =
-        `CI: [${low.toFixed(4)}, ${high.toFixed(4)}]`;
+    document.getElementById('ciResult').innerHTML = `
+        Lower Bound: ${lowerBound.toFixed(4)}<br><br>
+        Upper Bound: ${upperBound.toFixed(4)}<br><br>
+        Confidence Interval: [${lowerBound.toFixed(4)}, ${upperBound.toFixed(4)}]
+    `;
 }
 
 function calculateSampleSize() {
@@ -192,7 +213,6 @@ function calculateSampleSize() {
         MathJax.typesetPromise();
     }
 }
-
 </script>
 
 </body>
