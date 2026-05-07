@@ -186,7 +186,7 @@ function calculateSampleSize() {
     const confidenceLevel = parseFloat(document.getElementById('ssConfidenceLevel').value) / 100;
     const stdDev = parseFloat(document.getElementById('ssStdDev').value);
 
-    const marginError = marginErrorPercent / 100;
+    const marginError = marginErrorPercent ;
 
     if (
         isNaN(marginError) ||
