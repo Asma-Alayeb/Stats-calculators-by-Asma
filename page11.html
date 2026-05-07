@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>	
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Confidence Intervals For The Mean</title>
@@ -53,6 +53,9 @@
             font-weight: bold;
             font-size: 16px;
         }
+        nav a:hover {
+            text-decoration: underline;
+        }
         main {
             padding: 15px;
             max-width: 900px;
@@ -67,6 +70,14 @@
             background-color: #fff;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            margin-top: 0;
+            font-size: 22px;
+        }
+        p {
+            margin-bottom: 10px;
+            font-size: 16px;
         }
         input[type="text"] {
             padding: 8px;
@@ -102,10 +113,8 @@
     </style>
 
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
-
 <body>
 
 <header>
@@ -119,67 +128,65 @@
 </nav>
 
 <main>
+    <section id="confidenceInterval" class="calculator">
+        <h2>Confidence Interval Calculator</h2>
+        <form id="ciForm">
+            <p>Sample Mean (\(\bar{x}\)): <input type="text" id="mean" required></p>
+            <p>Sample Standard Deviation (\(s\)): <input type="text" id="stdDev" required></p>
+            <p>Sample Size (\(n\)): <input type="text" id="sampleSize" required></p>
+            <p>Confidence Level (%): <input type="text" id="confidenceLevel" required></p>
+            <button type="button" onclick="calculateConfidenceInterval()">Calculate Confidence Interval</button>
+        </form>
+        <p id="ciResult"></p>
+    </section>
 
-<section id="confidenceInterval" class="calculator">
-    <h2>Confidence Interval Calculator</h2>
-    <form id="ciForm">
-        <p>Sample Mean (\(\bar{x}\)): <input type="text" id="mean" required></p>
-        <p>Sample Standard Deviation (\(s\)): <input type="text" id="stdDev" required></p>
-        <p>Sample Size (\(n\)): <input type="text" id="sampleSize" required></p>
-        <p>Confidence Level (%): <input type="text" id="confidenceLevel" required></p>
-        <button type="button" onclick="calculateConfidenceInterval()">Calculate Confidence Interval</button>
-    </form>
-    <p id="ciResult"></p>
-</section>
-
-<section id="sampleSizeCalculator" class="calculator">
-    <h2>Sample Size Calculator</h2>
-    <form id="ssForm">
-        <p>Estimated Margin of Error (\(E\)): <input type="text" id="marginError" required></p>
-        <p>Confidence Level (%): <input type="text" id="ssConfidenceLevel" required></p>
-        <p>Standard Deviation (\(\sigma\)): <input type="text" id="ssStdDev" required></p>
-        <button type="button" onclick="calculateSampleSize()">Calculate Sample Size</button>
-    </form>
-    <p id="ssResult"></p>
-</section>
-
+    <section id="sampleSizeCalculator" class="calculator">
+        <h2>Sample Size Calculator</h2>
+        <form id="ssForm">
+            <p>Estimated Margin of Error (%) (\(E\)): <input type="text" id="marginError" required></p>
+            <p>Confidence Level (%): <input type="text" id="ssConfidenceLevel" required></p>
+            <p>Standard Deviation (\(\sigma\)): <input type="text" id="ssStdDev" required></p>
+            <button type="button" onclick="calculateSampleSize()">Calculate Sample Size</button>
+        </form>
+        <p id="ssResult"></p>
+    </section>
 </main>
 
 <footer>
     <p>&copy;2024 Asma S. Alayeb</p>
 </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.4/jstat.min.js"></script>
-
 <script>
 function calculateConfidenceInterval() {
     const mean = parseFloat(document.getElementById('mean').value);
     const stdDev = parseFloat(document.getElementById('stdDev').value);
-    const n = parseInt(document.getElementById('sampleSize').value);
+    const sampleSize = parseInt(document.getElementById('sampleSize').value);
     const confidenceLevel = parseFloat(document.getElementById('confidenceLevel').value) / 100;
 
-    if (isNaN(mean) || isNaN(stdDev) || isNaN(n) || isNaN(confidenceLevel) || n <= 0) {
+    if (isNaN(mean) || isNaN(stdDev) || isNaN(sampleSize) || isNaN(confidenceLevel) || sampleSize <= 0) {
         alert("Please enter valid numbers.");
         return;
     }
 
-    const tValue = jStat.studentt.inv(1 - (1 - confidenceLevel) / 2, n - 1);
-    const marginOfError = tValue * (stdDev / Math.sqrt(n));
+    const tValue = jStat.studentt.inv(1 - (1 - confidenceLevel) / 2, sampleSize - 1);
+    const marginOfError = tValue * (stdDev / Math.sqrt(sampleSize));
 
     const lowerBound = mean - marginOfError;
     const upperBound = mean + marginOfError;
 
     document.getElementById('ciResult').innerHTML = `
-        Lower Bound: ${lowerBound.toFixed(4)}<br><br>
-        Upper Bound: ${upperBound.toFixed(4)}<br><br>
-        Confidence Interval: [${lowerBound.toFixed(4)}, ${upperBound.toFixed(4)}]
-    `;
+    Lower Bound: ${lowerBound.toFixed(4)}<br><br>
+    Upper Bound: ${upperBound.toFixed(4)}<br><br>
+    Confidence Interval: ${mean} ± ${marginOfError.toFixed(4)}<br><br>
+    Confidence Interval: [${lowerBound.toFixed(4)}, ${upperBound.toFixed(4)}]`;
 }
 
 function calculateSampleSize() {
-    const marginError = parseFloat(document.getElementById('marginError').value);
+    const marginErrorPercent = parseFloat(document.getElementById('marginError').value);
     const confidenceLevel = parseFloat(document.getElementById('ssConfidenceLevel').value) / 100;
     const stdDev = parseFloat(document.getElementById('ssStdDev').value);
+
+    const marginError = marginErrorPercent / 100;
 
     if (
         isNaN(marginError) ||
@@ -187,33 +194,24 @@ function calculateSampleSize() {
         isNaN(stdDev) ||
         marginError <= 0 ||
         confidenceLevel <= 0 ||
-        confidenceLevel >= 1 ||
-        stdDev <= 0
+        confidenceLevel >= 1
     ) {
-        alert("Please enter valid positive numbers.");
+        alert("Please enter valid numbers.");
         return;
     }
 
-    const alpha = 1 - confidenceLevel;
-    const z = jStat.normal.inv(1 - alpha / 2, 0, 1);
+    // FIX: removed rounding of z-score
+    const zScore = jStat.normal.inv(1 - (1 - confidenceLevel) / 2, 0, 1);
 
-    const n = Math.pow((z * stdDev) / marginError, 2);
-    const sampleSize = Math.ceil(n);
-
-    const latex = `
-    \\[
-    n = \\left( \\frac{z_{\\alpha/2}\\sigma}{E} \\right)^2
-    \\]
-    `;
+    const numerator = Math.pow(zScore * stdDev, 2);
+    const sampleSize = Math.ceil(numerator / Math.pow(marginError, 2));
 
     document.getElementById('ssResult').innerHTML =
-        `${latex}<br><b>Required Sample Size: ${sampleSize}</b>`;
-
-    if (window.MathJax) {
-        MathJax.typesetPromise();
-    }
+        `Required Sample Size: ${sampleSize}`;
 }
 </script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.4/jstat.min.js"></script>
 
 </body>
 </html>
