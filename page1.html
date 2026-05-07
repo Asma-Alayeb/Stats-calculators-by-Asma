@@ -184,20 +184,34 @@
 
     }
 
-    function calculateSampleSize() {
-    const marginErrorPercent = parseFloat(document.getElementById('marginError').value); // Input as percentage
-    const confidenceLevel = parseFloat(document.getElementById('ssConfidenceLevel').value) / 100; // Convert to decimal
-    const stdDev = parseFloat(document.getElementById('ssStdDev').value); // Keep the variable name consistent
+   function calculateSampleSize() {
+    const marginErrorPercent = parseFloat(document.getElementById('marginError').value);
+    const confidenceLevel = parseFloat(document.getElementById('ssConfidenceLevel').value) / 100;
+    const stdDev = parseFloat(document.getElementById('ssStdDev').value);
 
-    // Convert margin error from percentage to decimal
     const marginError = marginErrorPercent / 100;
 
-    // Validate inputs
-    if (isNaN(marginError) || isNaN(confidenceLevel) || isNaN(stdDev) || marginError <= 0 || confidenceLevel <= 0 || confidenceLevel >= 1) {
+    if (
+        isNaN(marginError) ||
+        isNaN(confidenceLevel) ||
+        isNaN(stdDev) ||
+        marginError <= 0 ||
+        confidenceLevel <= 0 ||
+        confidenceLevel >= 1
+    ) {
         alert("Please enter valid numbers.");
         return;
     }
 
+    // FIX: use full precision z-score (do NOT round it)
+    const zScore = jStat.normal.inv(1 - (1 - confidenceLevel) / 2, 0, 1);
+
+    const sampleSize =
+        Math.ceil(Math.pow((zScore * stdDev) / marginError, 2));
+
+    document.getElementById('ssResult').innerHTML =
+        `Required Sample Size: ${sampleSize}`;
+}
     // Calculate the zValue for the given confidence level
     const zScore = jStat.normal.inv(1 - (1 - confidenceLevel) / 2, 0, 1);
     const roundedZScore = parseFloat(zScore.toFixed(3)); // Round to three decimal places
