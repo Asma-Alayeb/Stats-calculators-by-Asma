@@ -184,13 +184,13 @@
 
     }
 
-   function calculateSampleSize() {
-    // Get inputs
+function calculateSampleSize() {
+    // Inputs
     const marginError = parseFloat(document.getElementById('marginError').value);
     const confidenceLevel = parseFloat(document.getElementById('ssConfidenceLevel').value) / 100;
     const stdDev = parseFloat(document.getElementById('ssStdDev').value);
 
-    // Validate inputs
+    // Validation
     if (
         isNaN(marginError) ||
         isNaN(confidenceLevel) ||
@@ -204,19 +204,30 @@
         return;
     }
 
-    // Compute alpha and z critical value
+    // Z critical value
     const alpha = 1 - confidenceLevel;
-    const zScore = jStat.normal.inv(1 - alpha / 2, 0, 1);
+    const z = jStat.normal.inv(1 - alpha / 2, 0, 1);
 
-    // Sample size formula for estimating a population mean
-    const n = Math.pow((zScore * stdDev) / marginError, 2);
-
-    // Round up to next whole number
+    // Sample size formula
+    const n = Math.pow((z * stdDev) / marginError, 2);
     const sampleSize = Math.ceil(n);
 
-    // Display result
-    document.getElementById('ssResult').innerHTML =
-        `Required Sample Size: ${sampleSize}`;
+    // LaTeX output
+    const latex = `
+    \\[
+    n = \\left( \\frac{z_{\\alpha/2} \\sigma}{E} \\right)^2
+    \\quad \\Rightarrow \\quad
+    n = \\left( \\frac{${z.toFixed(3)} \\cdot ${stdDev}}{${marginError}} \\right)^2
+    = ${sampleSize}
+    \\]
+    `;
+
+    document.getElementById('ssResult').innerHTML = latex;
+
+    // Re-render MathJax
+    if (window.MathJax) {
+        MathJax.typesetPromise();
+    }
 }
 
     // Calculate the zValue for the given confidence level
