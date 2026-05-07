@@ -12,7 +12,7 @@
             padding: 0;
         }
         header {
-            background-color: #6a0dad; /* Purple */
+            background-color: #6a0dad;
             color: #fff;
             padding: 10px 0;
             text-align: center;
@@ -20,23 +20,23 @@
             width: 100%;
             top: 0;
             left: 0;
-            z-index: 1000; /* Ensure it is above other content */
-            border-bottom: 5px solid #b8860b; /* Dark Goldenrod border */
+            z-index: 1000;
+            border-bottom: 5px solid #b8860b;
         }
         header h1 {
             margin: 0;
             font-size: 24px;
         }
         nav {
-            background-color: #800080; /* Darker purple */
+            background-color: #800080;
             padding: 10px;
             text-align: center;
             position: fixed;
             width: 100%;
-            top: 50px; /* Below the header */
+            top: 50px;
             left: 0;
-            z-index: 999; /* Ensure it is above main content but below header */
-            border-top: 5px solid #b8860b; /* Dark Goldenrod border */
+            z-index: 999;
+            border-top: 5px solid #b8860b;
         }
         nav ul {
             list-style: none;
@@ -60,7 +60,7 @@
             padding: 15px;
             max-width: 900px;
             margin: 0 auto;
-            padding-top: 80px; /* Space for fixed header and nav */
+            padding-top: 80px;
         }
         section {
             margin-bottom: 12px;
@@ -102,16 +102,16 @@
         footer {
             background-color: #6a0dad;
             color: #fff;
-            padding: 2px; /* Reduced padding */
+            padding: 2px;
             text-align: center;
             font-size: 12px;
             position: fixed;
             width: 100%;
             bottom: 0;
-            border-top: 5px solid #b8860b; /* Dark Goldenrod border */
+            border-top: 5px solid #b8860b;
         }
     </style>
-    <!-- MathJax script to render math symbols -->
+
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
@@ -157,34 +157,31 @@
 </footer>
 
 <script>
-    function calculateConfidenceInterval() {
-        const mean = parseFloat(document.getElementById('mean').value);
-        const stdDev = parseFloat(document.getElementById('stdDev').value);
-        const sampleSize = parseInt(document.getElementById('sampleSize').value);
-        const confidenceLevel = parseFloat(document.getElementById('confidenceLevel').value) / 100;
+function calculateConfidenceInterval() {
+    const mean = parseFloat(document.getElementById('mean').value);
+    const stdDev = parseFloat(document.getElementById('stdDev').value);
+    const sampleSize = parseInt(document.getElementById('sampleSize').value);
+    const confidenceLevel = parseFloat(document.getElementById('confidenceLevel').value) / 100;
 
-        if (isNaN(mean) || isNaN(stdDev) || isNaN(sampleSize) || isNaN(confidenceLevel) || sampleSize <= 0) {
-            alert("Please enter valid numbers.");
-            return;
-        }
-
-        const tValue = jStat.studentt.inv(1 - (1 - confidenceLevel) / 2, sampleSize - 1);
-        const marginOfError = tValue * (stdDev / Math.sqrt(sampleSize));
-        const lowerBound = mean - marginOfError;
-        const upperBound = mean + marginOfError;
-
-    document.getElementById('ciResult').innerHTML = `
-    Lower Bound: ${lowerBound.toFixed(4)}<br>
-    <br>
-    Upper Bound: ${upperBound.toFixed(4)}<br>
-    <br>
-    Confidence Interval: ${mean} ± ${marginOfError.toFixed(4)}<br>
-    <br>
-    Confidence Interval: [${lowerBound.toFixed(4)}, ${upperBound.toFixed(4)}]`;
-
+    if (isNaN(mean) || isNaN(stdDev) || isNaN(sampleSize) || isNaN(confidenceLevel) || sampleSize <= 0) {
+        alert("Please enter valid numbers.");
+        return;
     }
 
-   function calculateSampleSize() {
+    const tValue = jStat.studentt.inv(1 - (1 - confidenceLevel) / 2, sampleSize - 1);
+    const marginOfError = tValue * (stdDev / Math.sqrt(sampleSize));
+
+    const lowerBound = mean - marginOfError;
+    const upperBound = mean + marginOfError;
+
+    document.getElementById('ciResult').innerHTML = `
+    Lower Bound: ${lowerBound.toFixed(4)}<br><br>
+    Upper Bound: ${upperBound.toFixed(4)}<br><br>
+    Confidence Interval: ${mean} ± ${marginOfError.toFixed(4)}<br><br>
+    Confidence Interval: [${lowerBound.toFixed(4)}, ${upperBound.toFixed(4)}]`;
+}
+
+function calculateSampleSize() {
     const marginErrorPercent = parseFloat(document.getElementById('marginError').value);
     const confidenceLevel = parseFloat(document.getElementById('ssConfidenceLevel').value) / 100;
     const stdDev = parseFloat(document.getElementById('ssStdDev').value);
@@ -203,31 +200,18 @@
         return;
     }
 
-    // FIX: use full precision z-score (do NOT round it)
+    // FIX: removed rounding of z-score
     const zScore = jStat.normal.inv(1 - (1 - confidenceLevel) / 2, 0, 1);
 
-    const sampleSize =
-        Math.ceil(Math.pow((zScore * stdDev) / marginError, 2));
+    const numerator = Math.pow(zScore * stdDev, 2);
+    const sampleSize = Math.ceil(numerator / Math.pow(marginError, 2));
 
     document.getElementById('ssResult').innerHTML =
         `Required Sample Size: ${sampleSize}`;
 }
-    // Calculate the zValue for the given confidence level
-    const zScore = jStat.normal.inv(1 - (1 - confidenceLevel) / 2, 0, 1);
-    const roundedZScore = parseFloat(zScore.toFixed(3)); // Round to three decimal places
-
-    // Calculate the required sample size
-    const numerator = Math.pow(roundedZScore * stdDev, 2); // Use stdDev instead of sigma
-    const sampleSize = Math.ceil(numerator / Math.pow(marginError, 2));
-
-    // Display the result
-    document.getElementById('ssResult').innerHTML = `Required Sample Size: ${sampleSize}`;
-
-
-    }
-    
 </script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.4/jstat.min.js"></script>
+
 </body>
 </html>
