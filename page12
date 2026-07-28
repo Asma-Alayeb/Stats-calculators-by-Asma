@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confidence Intervals for the Mean (Known σ)</title>
+
+    <!-- MathJax -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+
+    <!-- jStat -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.4/jstat.min.js"></script>
+
+    <style>
+        body{
+            font-family:Arial,sans-serif;
+            background:#f4f4f4;
+            margin:0;
+            padding:0;
+        }
+
+        header{
+            background:#6a0dad;
+            color:white;
+            text-align:center;
+            padding:12px;
+            position:fixed;
+            top:0;
+            left:0;
+            width:100%;
+            border-bottom:5px solid #b8860b;
+            z-index:1000;
+        }
+
+        header h1{
+            margin:0;
+        }
+
+        nav{
+            background:#800080;
+            position:fixed;
+            top:60px;
+            left:0;
+            width:100%;
+            text-align:center;
+            padding:10px;
+            border-top:5px solid #b8860b;
+            z-index:999;
+        }
+
+        nav ul{
+            margin:0;
+            padding:0;
+            list-style:none;
+        }
+
+        nav li{
+            display:inline;
+            margin-right:20px;
+        }
+
+        nav a{
+            color:white;
+            text-decoration:none;
+            font-weight:bold;
+        }
+
+        nav a:hover{
+            text-decoration:underline;
+        }
+
+        main{
+            max-width:900px;
+            margin:auto;
+            padding:150px 20px 30px;
+        }
+
+        .calculator{
+            background:white;
+            padding:20px;
+            margin-bottom:20px;
+            border-radius:8px;
+            box-shadow:0 0 10px rgba(0,0,0,.15);
+        }
+
+        h2{
+            margin-top:0;
+            color:#6a0dad;
+        }
+
+        p{
+            margin:12px 0;
+        }
+
+        input[type=text]{
+            width:250px;
+            padding:8px;
+            font-size:16px;
+            border:1px solid #ccc;
+            border-radius:4px;
+        }
+
+        button{
+            margin-top:10px;
+            padding:10px 18px;
+            background:#6a0dad;
+            color:white;
+            border:none;
+            border-radius:4px;
+            cursor:pointer;
+            font-size:16px;
+        }
+
+        button:hover{
+            background:#800080;
+        }
+
+        .result{
+            margin-top:20px;
+            padding:15px;
+            background:#fafafa;
+            border-left:5px solid #6a0dad;
+            line-height:1.8;
+        }
+
+        footer{
+            background:#6a0dad;
+            color:white;
+            text-align:center;
+            padding:5px;
+            font-size:12px;
+            border-top:5px solid #b8860b;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Z Confidence Intervals for the Mean (Known Population Standard Deviation)</h1>
+</header>
+
+<nav>
+    <ul>
+        <li><a href="index.html">Home</a></li>
+    </ul>
+</nav>
+
+<main>
+
+    <!-- ========================= -->
+    <!-- Confidence Interval -->
+    <!-- ========================= -->
+
+    <section class="calculator">
+
+        <h2>Confidence Interval Calculator</h2>
+
+        <form id="ciForm">
+
+            <p>
+                Sample Mean (\(\bar{x}\))
+                <br>
+                <input type="text" id="mean">
+            </p>
+
+            <p>
+                Population Standard Deviation (\(\sigma\))
+                <br>
+                <input type="text" id="sigma">
+            </p>
+
+            <p>
+                Sample Size (\(n\))
+                <br>
+                <input type="text" id="sampleSize">
+            </p>
+
+            <p>
+                Confidence Level (%)
+                <br>
+                <input type="text" id="confidenceLevel">
+            </p>
+
+            <button type="button"
+                onclick="calculateConfidenceInterval()">
+                Calculate Confidence Interval
+            </button>
+
+        </form>
+
+        <div id="ciResult" class="result"></div>
+
+    </section>
+
+    <!-- ========================= -->
+    <!-- Sample Size -->
+    <!-- ========================= -->
+
+    <section class="calculator">
+
+        <h2>Sample Size Calculator</h2>
+
+        <form id="ssForm">
+
+            <p>
+                Desired Margin of Error (\(E\))
+                <br>
+                <input type="text" id="marginError">
+            </p>
+
+            <p>
+                Confidence Level (%)
+                <br>
+                <input type="text" id="ssConfidenceLevel">
+            </p>
+
+            <p>
+                Population Standard Deviation (\(\sigma\))
+                <br>
+                <input type="text" id="ssSigma">
+            </p>
+
+            <button type="button"
+                onclick="calculateSampleSize()">
+                Calculate Sample Size
+            </button>
+
+        </form>
+
+        <div id="ssResult" class="result"></div>
+
+    </section>
+    <script>
+
+    // ===============================
+    // Z Confidence Interval Calculator
+    // (Known Population Standard Deviation)
+    // ===============================
+
+    function calculateConfidenceInterval() {
+
+        const mean = parseFloat(document.getElementById("mean").value);
+        const sigma = parseFloat(document.getElementById("sigma").value);
+        const sampleSize = parseInt(document.getElementById("sampleSize").value);
+        const confidenceLevel =
+            parseFloat(document.getElementById("confidenceLevel").value) / 100;
+
+        if (
+            isNaN(mean) ||
+            isNaN(sigma) ||
+            isNaN(sampleSize) ||
+            isNaN(confidenceLevel) ||
+            sampleSize <= 0 ||
+            confidenceLevel <= 0 ||
+            confidenceLevel >= 1
+        ) {
+            alert("Please enter valid numbers.");
+            return;
+        }
+
+        // Critical z-value
+        const z = jStat.normal.inv(
+            1 - (1 - confidenceLevel) / 2,
+            0,
+            1
+        );
+
+        // Margin of Error
+        const marginOfError = z * sigma / Math.sqrt(sampleSize);
+
+        // Confidence Interval
+        const lowerBound = mean - marginOfError;
+        const upperBound = mean + marginOfError;
+
+        document.getElementById("ciResult").innerHTML = `
+            <strong>Critical Value (z):</strong> ${z.toFixed(3)}<br><br>
+
+            <strong>Margin of Error (E):</strong>
+            ${marginOfError.toFixed(4)}<br><br>
+
+            <strong>Lower Bound:</strong>
+            ${lowerBound.toFixed(4)}<br><br>
+
+            <strong>Upper Bound:</strong>
+            ${upperBound.toFixed(4)}<br><br>
+
+            <strong>Confidence Interval:</strong><br>
+            (${lowerBound.toFixed(4)}, ${upperBound.toFixed(4)})
+        `;
+    }
+
+    // ===============================
+    // Sample Size Calculator
+    // (Known Population Standard Deviation)
+    // ===============================
+
+    function calculateSampleSize() {
+
+        const marginError =
+            parseFloat(document.getElementById("marginError").value);
+
+        const confidenceLevel =
+            parseFloat(document.getElementById("ssConfidenceLevel").value) / 100;
+
+        const sigma =
+            parseFloat(document.getElementById("ssSigma").value);
+
+        if (
+            isNaN(marginError) ||
+            isNaN(confidenceLevel) ||
+            isNaN(sigma) ||
+            marginError <= 0 ||
+            confidenceLevel <= 0 ||
+            confidenceLevel >= 1
+        ) {
+            alert("Please enter valid numbers.");
+            return;
+        }
+
+        // Critical z-value
+        const z = jStat.normal.inv(
+            1 - (1 - confidenceLevel) / 2,
+            0,
+            1
+        );
+
+        // Sample size formula
+        const sampleSize = Math.ceil(
+            Math.pow((z * sigma) / marginError, 2)
+        );
+
+        document.getElementById("ssResult").innerHTML = `
+            <strong>Critical Value (z):</strong> ${z.toFixed(3)}<br><br>
+
+            <strong>Required Sample Size:</strong>
+            ${sampleSize}
+        `;
+    }
+
+    </script>
+
+</main>
+
+<footer>
+    <p>&copy;2024 Asma S. Alayeb</p>
+</footer>
+
+</body>
+</html>
