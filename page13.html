@@ -1,0 +1,1831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Data & Graphs | Asma's Statistics Calculators</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f5f3f8;
+    color: #333;
+}
+
+/* =========================
+   NAVIGATION
+========================= */
+
+.navbar {
+    background: #4b2e83;
+    padding: 12px 20px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+.nav-container {
+    max-width: 1100px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.logo {
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.nav-links {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    padding: 7px 10px;
+    border-radius: 5px;
+    font-size: 13px;
+}
+
+.nav-links a:hover {
+    background: #6a4c9c;
+}
+
+.nav-links a.active {
+    background: #d4af37;
+    color: #222;
+    font-weight: bold;
+}
+
+
+/* =========================
+   MAIN CONTAINER
+========================= */
+
+.container {
+    max-width: 1100px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.header {
+    background: #4b2e83;
+    color: white;
+    padding: 28px;
+    border-radius: 12px 12px 0 0;
+    text-align: center;
+}
+
+.header h1 {
+    margin: 0 0 8px;
+    font-size: 28px;
+}
+
+.header p {
+    margin: 0;
+    font-size: 15px;
+}
+
+
+/* =========================
+   CARDS
+========================= */
+
+.card {
+    background: white;
+    padding: 25px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.instructions {
+    background: #f1ecf8;
+    border-left: 5px solid #4b2e83;
+    padding: 15px;
+    margin-bottom: 18px;
+    border-radius: 5px;
+    line-height: 1.6;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #4b2e83;
+}
+
+textarea {
+    width: 100%;
+    min-height: 180px;
+    padding: 15px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    resize: vertical;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: #4b2e83;
+}
+
+
+/* =========================
+   BUTTONS
+========================= */
+
+.buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 15px;
+}
+
+button {
+    border: none;
+    padding: 12px 20px;
+    border-radius: 7px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.primary {
+    background: #4b2e83;
+    color: white;
+}
+
+.primary:hover {
+    background: #392263;
+}
+
+.secondary {
+    background: #d4af37;
+    color: #222;
+}
+
+.secondary:hover {
+    background: #b99624;
+}
+
+.clear {
+    background: #eeeeee;
+    color: #333;
+}
+
+.clear:hover {
+    background: #dddddd;
+}
+
+
+/* =========================
+   STATUS
+========================= */
+
+.status {
+    margin-top: 15px;
+    padding: 12px;
+    border-radius: 7px;
+    display: none;
+}
+
+.success {
+    background: #eaf6ea;
+    color: #27632a;
+}
+
+.error {
+    background: #fdeaea;
+    color: #9b2226;
+}
+
+
+/* =========================
+   DATA TYPE
+========================= */
+
+.data-type {
+    display: inline-block;
+    background: #d4af37;
+    color: #222;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+
+/* =========================
+   SUMMARY STATISTICS
+========================= */
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+    gap: 12px;
+    margin-top: 15px;
+}
+
+.stat-box {
+    background: #f5f3f8;
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+}
+
+.stat-label {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 6px;
+}
+
+.stat-value {
+    font-size: 21px;
+    font-weight: bold;
+    color: #4b2e83;
+}
+
+
+/* =========================
+   GRAPH SECTIONS
+========================= */
+
+.graph-title {
+    color: #4b2e83;
+    margin-top: 0;
+    margin-bottom: 6px;
+}
+
+.chart-container {
+    position: relative;
+    width: 100%;
+    height: 420px;
+    margin-top: 20px;
+}
+
+
+/* =========================
+   HIDDEN
+========================= */
+
+.hidden {
+    display: none;
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+.footer {
+    text-align: center;
+    font-size: 13px;
+    color: #777;
+    padding: 25px;
+}
+
+.footer a {
+    color: #4b2e83;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 700px) {
+
+    .nav-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .nav-links {
+        justify-content: center;
+    }
+
+    .nav-links a {
+        font-size: 12px;
+        padding: 6px 8px;
+    }
+
+    .header h1 {
+        font-size: 22px;
+    }
+
+    .card {
+        padding: 18px;
+    }
+
+    .chart-container {
+        height: 320px;
+    }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     NAVIGATION
+========================= -->
+
+<nav class="navbar">
+
+    <div class="nav-container">
+
+        <a href="index.html" class="logo">
+            Asma's Statistics Calculators
+        </a>
+
+        <div class="nav-links">
+
+            <a href="index.html">Home</a>
+
+            <a href="page2.html">2</a>
+            <a href="page3.html">3</a>
+            <a href="page4.html">4</a>
+            <a href="page5.html">5</a>
+            <a href="page6.html">6</a>
+            <a href="page7.html">7</a>
+            <a href="page8.html">8</a>
+            <a href="page9.html">9</a>
+            <a href="page10.html">10</a>
+            <a href="page11.html">11</a>
+            <a href="page12.html">12</a>
+
+            <a href="page13.html" class="active">13</a>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+<!-- =========================
+     MAIN CONTENT
+========================= -->
+
+<div class="container">
+
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <h1>Data & Graphs</h1>
+
+        <p>
+            Enter your data and create appropriate statistical graphs.
+        </p>
+
+    </div>
+
+
+    <!-- =========================
+         DATA INPUT
+    ========================= -->
+
+    <div class="card">
+
+        <div class="instructions">
+
+            <strong>How to use this tool:</strong>
+
+            <br>
+
+            Enter your data below. You can enter one observation per line
+            or paste a comma-separated list.
+
+            <br><br>
+
+            <strong>Quantitative example:</strong>
+
+            <br>
+
+            12, 15, 18, 14, 20, 17, 19, 15
+
+            <br><br>
+
+            <strong>Categorical example:</strong>
+
+            <br>
+
+            Apple, Banana, Apple, Orange, Banana, Apple
+
+        </div>
+
+
+        <label for="dataInput">
+            Enter Your Data
+        </label>
+
+
+        <textarea
+            id="dataInput"
+            placeholder="Enter your data here..."
+        ></textarea>
+
+
+        <div class="buttons">
+
+            <button
+                class="primary"
+                onclick="analyzeData()">
+
+                Analyze Data
+
+            </button>
+
+
+            <button
+                class="secondary"
+                onclick="loadNumericalExample()">
+
+                Numerical Example
+
+            </button>
+
+
+            <button
+                class="secondary"
+                onclick="loadCategoricalExample()">
+
+                Categorical Example
+
+            </button>
+
+
+            <button
+                class="clear"
+                onclick="clearData()">
+
+                Clear
+
+            </button>
+
+        </div>
+
+
+        <div
+            id="status"
+            class="status">
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         DATA TYPE
+    ========================= -->
+
+    <div
+        id="typeCard"
+        class="card hidden">
+
+        <h2 class="graph-title">
+            Data Type
+        </h2>
+
+        <p>
+
+            Your data was identified as:
+
+            <span
+                id="dataType"
+                class="data-type">
+            </span>
+
+        </p>
+
+    </div>
+
+
+    <!-- =========================
+         SUMMARY STATISTICS
+    ========================= -->
+
+    <div
+        id="summaryCard"
+        class="card hidden">
+
+        <h2 class="graph-title">
+            Summary Statistics
+        </h2>
+
+        <div
+            id="summaryGrid"
+            class="summary-grid">
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         BAR CHART
+    ========================= -->
+
+    <div
+        id="barCard"
+        class="card hidden">
+
+        <h2 class="graph-title">
+            Bar Chart
+        </h2>
+
+        <p>
+            A bar chart displays the frequency of each category.
+            The bars are separated because the categories are distinct.
+        </p>
+
+        <div class="chart-container">
+
+            <canvas id="barChart"></canvas>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         PIE CHART
+    ========================= -->
+
+    <div
+        id="pieCard"
+        class="card hidden">
+
+        <h2 class="graph-title">
+            Pie Chart
+        </h2>
+
+        <p>
+            A pie chart shows the relative frequency of each category.
+        </p>
+
+        <div class="chart-container">
+
+            <canvas id="pieChart"></canvas>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         HISTOGRAM
+    ========================= -->
+
+    <div
+        id="histogramCard"
+        class="card hidden">
+
+        <h2 class="graph-title">
+            Histogram
+        </h2>
+
+        <p>
+            A histogram displays the distribution of quantitative data.
+            The bars touch because the intervals represent continuous
+            numerical values.
+        </p>
+
+        <div class="chart-container">
+
+            <canvas id="histogramChart"></canvas>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         FIVE NUMBER SUMMARY
+    ========================= -->
+
+    <div
+        id="boxCard"
+        class="card hidden">
+
+        <h2 class="graph-title">
+            Five-Number Summary
+        </h2>
+
+        <p>
+            The five-number summary describes the center and spread
+            of quantitative data.
+        </p>
+
+        <div
+            id="fiveNumberSummary"
+            class="summary-grid">
+        </div>
+
+    </div>
+
+
+    <!-- FOOTER -->
+
+    <div class="footer">
+
+        <a href="index.html">
+            ← Back to Statistics Calculators Home
+        </a>
+
+        <br><br>
+
+        Asma's Statistics Calculators
+
+    </div>
+
+</div>
+
+
+
+<script>
+
+
+/* =========================
+   CHART VARIABLES
+========================= */
+
+let barChart = null;
+
+let pieChart = null;
+
+let histogramChart = null;
+
+
+
+/* =========================
+   ANALYZE DATA
+========================= */
+
+function analyzeData() {
+
+    const input =
+        document.getElementById("dataInput")
+        .value
+        .trim();
+
+
+    if (!input) {
+
+        showStatus(
+            "Please enter some data first.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    let data =
+        input
+        .split(/[\n,]+/)
+        .map(x => x.trim())
+        .filter(x => x !== "");
+
+
+    if (data.length < 2) {
+
+        showStatus(
+            "Please enter at least two observations.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    const numericData =
+        data.map(Number);
+
+
+    const isNumeric =
+        numericData.every(
+            x => !isNaN(x)
+        );
+
+
+    document
+        .getElementById("typeCard")
+        .classList
+        .remove("hidden");
+
+
+    if (isNumeric) {
+
+        document
+            .getElementById("dataType")
+            .textContent =
+            "Quantitative (Numerical)";
+
+
+        hideCategoricalGraphs();
+
+
+        createSummary(
+            numericData
+        );
+
+
+        createHistogram(
+            numericData
+        );
+
+
+        createFiveNumberSummary(
+            numericData
+        );
+
+
+        showStatus(
+            "Your quantitative data has been analyzed.",
+            "success"
+        );
+
+    }
+
+    else {
+
+        document
+            .getElementById("dataType")
+            .textContent =
+            "Categorical";
+
+
+        hideNumericalGraphs();
+
+
+        createBarChart(data);
+
+
+        createPieChart(data);
+
+
+        showStatus(
+            "Your categorical data has been analyzed.",
+            "success"
+        );
+
+    }
+
+}
+
+
+
+/* =========================
+   SUMMARY STATISTICS
+========================= */
+
+function createSummary(data) {
+
+    document
+        .getElementById("summaryCard")
+        .classList
+        .remove("hidden");
+
+
+    const sorted =
+        [...data]
+        .sort(
+            (a,b) => a-b
+        );
+
+
+    const n =
+        data.length;
+
+
+    const mean =
+        data.reduce(
+            (sum,x) => sum+x,
+            0
+        ) / n;
+
+
+    const median =
+        getMedian(sorted);
+
+
+    const min =
+        sorted[0];
+
+
+    const max =
+        sorted[n-1];
+
+
+    const range =
+        max-min;
+
+
+    let standardDeviation = 0;
+
+
+    if (n > 1) {
+
+        const variance =
+            data.reduce(
+                (sum,x) =>
+                    sum +
+                    Math.pow(
+                        x-mean,
+                        2
+                    ),
+                0
+            ) / (n-1);
+
+
+        standardDeviation =
+            Math.sqrt(variance);
+
+    }
+
+
+    document
+        .getElementById("summaryGrid")
+        .innerHTML = `
+
+        <div class="stat-box">
+
+            <div class="stat-label">
+                Count
+            </div>
+
+            <div class="stat-value">
+                ${n}
+            </div>
+
+        </div>
+
+
+        <div class="stat-box">
+
+            <div class="stat-label">
+                Mean
+            </div>
+
+            <div class="stat-value">
+                ${format(mean)}
+            </div>
+
+        </div>
+
+
+        <div class="stat-box">
+
+            <div class="stat-label">
+                Median
+            </div>
+
+            <div class="stat-value">
+                ${format(median)}
+            </div>
+
+        </div>
+
+
+        <div class="stat-box">
+
+            <div class="stat-label">
+                Minimum
+            </div>
+
+            <div class="stat-value">
+                ${format(min)}
+            </div>
+
+        </div>
+
+
+        <div class="stat-box">
+
+            <div class="stat-label">
+                Maximum
+            </div>
+
+            <div class="stat-value">
+                ${format(max)}
+            </div>
+
+        </div>
+
+
+        <div class="stat-box">
+
+            <div class="stat-label">
+                Range
+            </div>
+
+            <div class="stat-value">
+                ${format(range)}
+            </div>
+
+        </div>
+
+
+        <div class="stat-box">
+
+            <div class="stat-label">
+                Standard Deviation
+            </div>
+
+            <div class="stat-value">
+                ${format(standardDeviation)}
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+
+/* =========================
+   MEDIAN
+========================= */
+
+function getMedian(sorted) {
+
+    const n =
+        sorted.length;
+
+
+    if (n % 2 === 1) {
+
+        return sorted[
+            Math.floor(n/2)
+        ];
+
+    }
+
+
+    return (
+        sorted[n/2 - 1] +
+        sorted[n/2]
+    ) / 2;
+
+}
+
+
+
+/* =========================
+   FIVE NUMBER SUMMARY
+========================= */
+
+function createFiveNumberSummary(data) {
+
+    document
+        .getElementById("boxCard")
+        .classList
+        .remove("hidden");
+
+
+    const sorted =
+        [...data]
+        .sort(
+            (a,b) => a-b
+        );
+
+
+    const median =
+        getMedian(sorted);
+
+
+    const lower =
+        sorted.slice(
+            0,
+            Math.floor(
+                sorted.length/2
+            )
+        );
+
+
+    const upper =
+        sorted.slice(
+            Math.ceil(
+                sorted.length/2
+            )
+        );
+
+
+    const q1 =
+        lower.length
+        ? getMedian(lower)
+        : sorted[0];
+
+
+    const q3 =
+        upper.length
+        ? getMedian(upper)
+        : sorted[sorted.length-1];
+
+
+    document
+        .getElementById(
+            "fiveNumberSummary"
+        )
+        .innerHTML = `
+
+        <div class="stat-box">
+
+            <div class="stat-label">
+                Minimum
+            </div>
+
+            <div class="stat-value">
+                ${format(sorted[0])}
+            </div>
+
+        </div>
+
+
+        <div class="stat-box">
+
+            <div class="stat-label">
+                Q1
+            </div>
+
+            <div class="stat-value">
+                ${format(q1)}
+            </div>
+
+        </div>
+
+
+        <div class="stat-box">
+
+            <div class="stat-label">
+                Median
+            </div>
+
+            <div class="stat-value">
+                ${format(median)}
+            </div>
+
+        </div>
+
+
+        <div class="stat-box">
+
+            <div class="stat-label">
+                Q3
+            </div>
+
+            <div class="stat-value">
+                ${format(q3)}
+            </div>
+
+        </div>
+
+
+        <div class="stat-box">
+
+            <div class="stat-label">
+                Maximum
+            </div>
+
+            <div class="stat-value">
+                ${format(
+                    sorted[
+                        sorted.length-1
+                    ]
+                )}
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+
+/* =========================
+   HISTOGRAM
+========================= */
+
+function createHistogram(data) {
+
+    document
+        .getElementById("histogramCard")
+        .classList
+        .remove("hidden");
+
+
+    if (histogramChart) {
+
+        histogramChart.destroy();
+
+    }
+
+
+    const min =
+        Math.min(...data);
+
+
+    const max =
+        Math.max(...data);
+
+
+    let bins =
+        Math.ceil(
+            Math.sqrt(
+                data.length
+            )
+        );
+
+
+    if (bins < 5)
+        bins = 5;
+
+
+    if (bins > 12)
+        bins = 12;
+
+
+    const width =
+        (max-min) / bins || 1;
+
+
+    const counts =
+        new Array(bins)
+        .fill(0);
+
+
+    const labels = [];
+
+
+    for (
+        let i=0;
+        i<bins;
+        i++
+    ) {
+
+        const start =
+            min + i*width;
+
+
+        const end =
+            start + width;
+
+
+        labels.push(
+            `${format(start)}–${format(end)}`
+        );
+
+    }
+
+
+    data.forEach(value => {
+
+        let index =
+            Math.floor(
+                (value-min) /
+                width
+            );
+
+
+        if (index >= bins) {
+
+            index =
+                bins-1;
+
+        }
+
+
+        counts[index]++;
+
+    });
+
+
+    histogramChart =
+        new Chart(
+
+            document.getElementById(
+                "histogramChart"
+            ),
+
+            {
+
+                type: "bar",
+
+
+                data: {
+
+                    labels: labels,
+
+
+                    datasets: [{
+
+                        label: "Frequency",
+
+                        data: counts,
+
+
+                        /* 
+                           These settings make
+                           histogram bars touch.
+                        */
+
+                        categoryPercentage: 1.0,
+
+                        barPercentage: 1.0,
+
+                        borderWidth: 1
+
+                    }]
+
+                },
+
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+
+                    scales: {
+
+                        x: {
+
+                            title: {
+
+                                display: true,
+
+                                text:
+                                    "Data Values"
+
+                            },
+
+
+                            offset: false
+
+                        },
+
+
+                        y: {
+
+                            beginAtZero: true,
+
+
+                            title: {
+
+                                display: true,
+
+                                text:
+                                    "Frequency"
+
+                            },
+
+
+                            ticks: {
+
+                                stepSize: 1
+
+                            }
+
+                        }
+
+                    },
+
+
+                    plugins: {
+
+                        legend: {
+
+                            display: false
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        );
+
+}
+
+
+
+/* =========================
+   FREQUENCY TABLE
+========================= */
+
+function createFrequencyTable(data) {
+
+    const frequencies = {};
+
+
+    data.forEach(value => {
+
+        if (
+            frequencies[value]
+        ) {
+
+            frequencies[value]++;
+
+        }
+
+        else {
+
+            frequencies[value] = 1;
+
+        }
+
+    });
+
+
+    return frequencies;
+
+}
+
+
+
+/* =========================
+   BAR CHART
+========================= */
+
+function createBarChart(data) {
+
+    document
+        .getElementById("barCard")
+        .classList
+        .remove("hidden");
+
+
+    if (barChart) {
+
+        barChart.destroy();
+
+    }
+
+
+    const frequencies =
+        createFrequencyTable(data);
+
+
+    barChart =
+        new Chart(
+
+            document.getElementById(
+                "barChart"
+            ),
+
+            {
+
+                type: "bar",
+
+
+                data: {
+
+                    labels:
+                        Object.keys(
+                            frequencies
+                        ),
+
+
+                    datasets: [{
+
+                        label:
+                            "Frequency",
+
+
+                        data:
+                            Object.values(
+                                frequencies
+                            ),
+
+
+                        categoryPercentage:
+                            0.8,
+
+
+                        barPercentage:
+                            0.9
+
+                    }]
+
+                },
+
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+
+                    scales: {
+
+                        y: {
+
+                            beginAtZero: true,
+
+
+                            ticks: {
+
+                                stepSize: 1
+
+                            },
+
+
+                            title: {
+
+                                display: true,
+
+                                text:
+                                    "Frequency"
+
+                            }
+
+                        },
+
+
+                        x: {
+
+                            title: {
+
+                                display: true,
+
+                                text:
+                                    "Category"
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        );
+
+}
+
+
+
+/* =========================
+   PIE CHART
+========================= */
+
+function createPieChart(data) {
+
+    document
+        .getElementById("pieCard")
+        .classList
+        .remove("hidden");
+
+
+    if (pieChart) {
+
+        pieChart.destroy();
+
+    }
+
+
+    const frequencies =
+        createFrequencyTable(data);
+
+
+    pieChart =
+        new Chart(
+
+            document.getElementById(
+                "pieChart"
+            ),
+
+            {
+
+                type: "pie",
+
+
+                data: {
+
+                    labels:
+                        Object.keys(
+                            frequencies
+                        ),
+
+
+                    datasets: [{
+
+                        data:
+                            Object.values(
+                                frequencies
+                            )
+
+                    }]
+
+                },
+
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+
+                    plugins: {
+
+                        legend: {
+
+                            position: "right"
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        );
+
+}
+
+
+
+/* =========================
+   NUMERICAL EXAMPLE
+========================= */
+
+function loadNumericalExample() {
+
+    document
+        .getElementById(
+            "dataInput"
+        )
+        .value =
+`12
+15
+18
+14
+20
+17
+19
+15
+16
+18
+21
+13
+17
+16
+20`;
+
+
+    analyzeData();
+
+}
+
+
+
+/* =========================
+   CATEGORICAL EXAMPLE
+========================= */
+
+function loadCategoricalExample() {
+
+    document
+        .getElementById(
+            "dataInput"
+        )
+        .value =
+`Apple
+Banana
+Apple
+Orange
+Banana
+Apple
+Orange
+Apple
+Banana
+Orange
+Apple
+Banana`;
+
+
+    analyzeData();
+
+}
+
+
+
+/* =========================
+   CLEAR DATA
+========================= */
+
+function clearData() {
+
+    document
+        .getElementById(
+            "dataInput"
+        )
+        .value = "";
+
+
+    document
+        .getElementById(
+            "status"
+        )
+        .style.display =
+        "none";
+
+
+    document
+        .querySelectorAll(
+            ".card"
+        )
+        .forEach(
+            (card,index) => {
+
+                if (index > 0) {
+
+                    card.classList
+                        .add("hidden");
+
+                }
+
+            }
+        );
+
+
+    if (barChart) {
+
+        barChart.destroy();
+
+        barChart = null;
+
+    }
+
+
+    if (pieChart) {
+
+        pieChart.destroy();
+
+        pieChart = null;
+
+    }
+
+
+    if (histogramChart) {
+
+        histogramChart.destroy();
+
+        histogramChart = null;
+
+    }
+
+}
+
+
+
+/* =========================
+   HIDE CATEGORICAL GRAPHS
+========================= */
+
+function hideCategoricalGraphs() {
+
+    document
+        .getElementById(
+            "barCard"
+        )
+        .classList
+        .add("hidden");
+
+
+    document
+        .getElementById(
+            "pieCard"
+        )
+        .classList
+        .add("hidden");
+
+}
+
+
+
+/* =========================
+   HIDE NUMERICAL GRAPHS
+========================= */
+
+function hideNumericalGraphs() {
+
+    document
+        .getElementById(
+            "summaryCard"
+        )
+        .classList
+        .add("hidden");
+
+
+    document
+        .getElementById(
+            "histogramCard"
+        )
+        .classList
+        .add("hidden");
+
+
+    document
+        .getElementById(
+            "boxCard"
+        )
+        .classList
+        .add("hidden");
+
+}
+
+
+
+/* =========================
+   STATUS MESSAGE
+========================= */
+
+function showStatus(
+    message,
+    type
+) {
+
+    const status =
+        document.getElementById(
+            "status"
+        );
+
+
+    status.textContent =
+        message;
+
+
+    status.className =
+        "status " + type;
+
+
+    status.style.display =
+        "block";
+
+}
+
+
+
+/* =========================
+   FORMAT NUMBERS
+========================= */
+
+function format(value) {
+
+    if (
+        Number.isInteger(value)
+    ) {
+
+        return value.toString();
+
+    }
+
+
+    return Number(value)
+        .toFixed(2);
+
+}
+
+</script>
+
+</body>
+</html>
