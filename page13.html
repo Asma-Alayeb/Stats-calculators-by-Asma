@@ -5,19 +5,22 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Data Explorer - MAT 1260 Statistics Calculator</title>
 
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<!-- SheetJS for Excel/CSV files -->
+<!-- Chart.js Boxplot -->
+<script src="https://cdn.jsdelivr.net/npm/@sgratzl/chartjs-chart-boxplot@4/build/index.umd.min.js"></script>
+
+<!-- SheetJS -->
 <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 
-<!-- jStat for probability calculations -->
+<!-- jStat -->
 <script src="https://cdn.jsdelivr.net/npm/jstat@latest/dist/jstat.min.js"></script>
+
 
 <style>
 
@@ -30,15 +33,10 @@ content="width=device-width, initial-scale=1.0">
 }
 
 body {
-
     font-family: Arial, sans-serif;
-
     background-color: #f4f4f4;
-
     margin: 0;
-
     padding: 0;
-
     color: #333;
 }
 
@@ -48,33 +46,20 @@ body {
 ===================================================== */
 
 header {
-
     background-color: #6a0dad;
-
     color: white;
-
     padding: 10px 0;
-
     text-align: center;
-
     position: fixed;
-
     width: 100%;
-
     top: 0;
-
     left: 0;
-
     z-index: 1000;
-
     border-bottom: 5px solid #b8860b;
 }
 
-
 header h1 {
-
     margin: 0;
-
     font-size: 24px;
 }
 
@@ -84,43 +69,26 @@ header h1 {
 ===================================================== */
 
 nav {
-
     background-color: #800080;
-
     padding: 10px;
-
     text-align: center;
-
     position: fixed;
-
     width: 100%;
-
     top: 50px;
-
     left: 0;
-
     z-index: 999;
-
     border-top: 5px solid #b8860b;
 }
 
-
 nav a {
-
     color: white;
-
     text-decoration: none;
-
     font-weight: bold;
-
     margin-right: 18px;
-
     font-size: 15px;
 }
 
-
 nav a:hover {
-
     text-decoration: underline;
 }
 
@@ -130,40 +98,25 @@ nav a:hover {
 ===================================================== */
 
 main {
-
     max-width: 1100px;
-
     margin: auto;
-
     padding: 105px 15px 70px;
 }
 
-
 .card {
-
     background: white;
-
     border-radius: 8px;
-
     padding: 20px;
-
     margin-bottom: 18px;
-
-    box-shadow:
-        0 0 10px rgba(0,0,0,.1);
+    box-shadow: 0 0 10px rgba(0,0,0,.1);
 }
 
-
 h2 {
-
     color: #6a0dad;
-
     margin-top: 0;
 }
 
-
 h3 {
-
     color: #6a0dad;
 }
 
@@ -173,55 +126,35 @@ h3 {
 ===================================================== */
 
 .tabs {
-
     display: flex;
-
     flex-wrap: wrap;
-
     gap: 4px;
-
     margin-bottom: 15px;
 }
 
-
 .tabButton {
-
     background-color: #800080;
-
     color: white;
-
     border: none;
-
     padding: 11px 14px;
-
     border-radius: 5px 5px 0 0;
-
     cursor: pointer;
-
     font-weight: bold;
 }
 
-
 .tabButton:hover {
-
     background-color: #6a0dad;
 }
 
-
 .tabButton.active {
-
     background-color: #b8860b;
 }
 
-
 .tabContent {
-
     display: none;
 }
 
-
 .tabContent.active {
-
     display: block;
 }
 
@@ -233,26 +166,18 @@ h3 {
 input,
 select,
 textarea {
-
     font-family: Arial, sans-serif;
-
     font-size: 16px;
-
     padding: 8px;
-
     border: 1px solid #ccc;
-
     border-radius: 4px;
-
     width: 100%;
-
-    max-width: 400px;
+    max-width: 500px;
 }
 
-
 textarea {
-
     min-height: 150px;
+    resize: vertical;
 }
 
 
@@ -261,72 +186,97 @@ textarea {
 ===================================================== */
 
 button {
-
     padding: 10px 15px;
-
     background-color: #6a0dad;
-
     color: white;
-
     border: none;
-
     border-radius: 4px;
-
     cursor: pointer;
-
     font-size: 15px;
-
     margin: 5px 4px 5px 0;
 }
 
-
 button:hover {
-
     background-color: #800080;
 }
 
-
 .gold {
-
     background-color: #b8860b;
 }
 
-
 .gold:hover {
-
     background-color: #8f6c08;
+}
+
+.smallButton {
+    padding: 7px 10px;
+    font-size: 13px;
 }
 
 
 /* =====================================================
-   INSTRUCTIONS
+   INFORMATION BOXES
 ===================================================== */
 
 .info {
-
     background-color: #f3eafa;
-
     border-left: 5px solid #6a0dad;
-
     padding: 12px;
-
     margin: 10px 0 15px;
+    border-radius: 4px;
+}
 
+.note {
+    background-color: #fff8dc;
+    border-left: 5px solid #b8860b;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 4px;
+}
+
+.success {
+    background-color: #eef8ee;
+    border-left: 5px solid #4b8b3b;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 4px;
+}
+
+.error {
+    background-color: #fff0f0;
+    border-left: 5px solid #b00020;
+    padding: 12px;
+    margin: 10px 0;
     border-radius: 4px;
 }
 
 
-.note {
+/* =====================================================
+   CURRENT DATA
+===================================================== */
 
-    background-color: #fff8dc;
+.currentDataBox {
+    background-color: #f3eafa;
+    border: 2px solid #6a0dad;
+    border-radius: 7px;
+    padding: 15px;
+    margin: 15px 0;
+}
 
-    border-left: 5px solid #b8860b;
+.currentDataTitle {
+    color: #6a0dad;
+    font-weight: bold;
+    font-size: 18px;
+}
 
-    padding: 12px;
-
-    margin: 10px 0;
-
+.dataPreview {
+    max-height: 100px;
+    overflow-y: auto;
+    background: white;
+    padding: 10px;
     border-radius: 4px;
+    margin-top: 10px;
+    word-break: break-word;
 }
 
 
@@ -335,15 +285,10 @@ button:hover {
 ===================================================== */
 
 .result {
-
     background-color: #f3eafa;
-
     border-left: 5px solid #6a0dad;
-
     padding: 15px;
-
     margin-top: 15px;
-
     border-radius: 5px;
 }
 
@@ -353,46 +298,28 @@ button:hover {
 ===================================================== */
 
 .statsGrid {
-
     display: grid;
-
-    grid-template-columns:
-        repeat(auto-fit,minmax(145px,1fr));
-
+    grid-template-columns: repeat(auto-fit,minmax(145px,1fr));
     gap: 10px;
-
     margin-top: 15px;
 }
 
-
 .statCard {
-
     background-color: #f3eafa;
-
     padding: 14px;
-
     text-align: center;
-
     border-radius: 6px;
 }
 
-
 .statLabel {
-
     font-size: 13px;
-
     color: #555;
 }
 
-
 .statValue {
-
     font-size: 20px;
-
     font-weight: bold;
-
     color: #6a0dad;
-
     margin-top: 5px;
 }
 
@@ -402,13 +329,9 @@ button:hover {
 ===================================================== */
 
 .chartBox {
-
     position: relative;
-
     width: 100%;
-
     height: 450px;
-
     margin-top: 20px;
 }
 
@@ -418,43 +341,28 @@ button:hover {
 ===================================================== */
 
 .tableWrap {
-
     overflow-x: auto;
-
     margin-top: 15px;
 }
 
-
 table {
-
     border-collapse: collapse;
-
     width: 100%;
 }
 
-
 th {
-
     background-color: #6a0dad;
-
     color: white;
-
     padding: 9px;
 }
 
-
 td {
-
     border: 1px solid #ddd;
-
     padding: 8px;
-
     text-align: center;
 }
 
-
 tr:nth-child(even) {
-
     background-color: #f7f2fb;
 }
 
@@ -464,23 +372,14 @@ tr:nth-child(even) {
 ===================================================== */
 
 footer {
-
     background-color: #6a0dad;
-
     color: white;
-
     padding: 2px;
-
     text-align: center;
-
     font-size: 12px;
-
     position: fixed;
-
     bottom: 0;
-
     width: 100%;
-
     border-top: 5px solid #b8860b;
 }
 
@@ -492,27 +391,26 @@ footer {
 @media(max-width:700px) {
 
     header h1 {
-
         font-size: 19px;
     }
 
     nav a {
-
         font-size: 12px;
-
         margin-right: 7px;
     }
 
     .tabButton {
-
         font-size: 12px;
-
         padding: 9px;
     }
 
     .chartBox {
-
         height: 350px;
+    }
+
+    main {
+        padding-left: 10px;
+        padding-right: 10px;
     }
 
 }
@@ -538,9 +436,7 @@ Data Explorer & Statistics Calculator
 
 <a href="index.html">Home</a>
 
-<a href="page13.html">
-Data Explorer
-</a>
+<a href="page13.html">Data Explorer</a>
 
 </nav>
 
@@ -551,6 +447,29 @@ Data Explorer
 <div class="card">
 
 
+<!-- ==================================================
+     CURRENT DATA SUMMARY
+================================================== -->
+
+<div
+id="currentDataBox"
+class="currentDataBox">
+
+<div class="currentDataTitle">
+📊 Current Dataset
+</div>
+
+<div id="currentDataSummary">
+No dataset selected yet.
+</div>
+
+</div>
+
+
+<!-- ==================================================
+     TABS
+================================================== -->
+
 <div class="tabs">
 
 
@@ -558,7 +477,7 @@ Data Explorer
 class="tabButton active"
 onclick="openTab(event,'upload')">
 
-📁 Upload Data
+📁 Data Input
 
 </button>
 
@@ -629,7 +548,6 @@ onclick="openTab(event,'binomial')">
 </div>
 
 
-
 <!-- ==================================================
      DATA INPUT
 ================================================== -->
@@ -642,18 +560,25 @@ class="tabContent active">
 Data Input
 </h2>
 
+
 <div class="info">
 
-<strong>You can enter your data in either way:</strong>
+<strong>Choose one of the following:</strong>
 
 <ul>
-<li>Type or paste numerical data directly below.</li>
+
+<li>Type or paste numerical data.</li>
+
 <li>Upload an Excel (.xlsx/.xls) or CSV file.</li>
-<li>You may use both methods. The most recently loaded data will be used for analysis.</li>
+
+<li>Select a numerical column from the uploaded file.</li>
+
+<li>Once data are selected, the same dataset can be used throughout the calculator.</li>
+
 </ul>
 
 <p>
-Separate values with commas, spaces, semicolons, or put one value on each line.
+Separate values with commas, spaces, semicolons, or place one value on each line.
 </p>
 
 </div>
@@ -667,6 +592,7 @@ Separate values with commas, spaces, semicolons, or put one value on each line.
 ⌨️ Type or Paste Data
 </h3>
 
+
 <textarea
 id="typedData"
 placeholder="Example:
@@ -677,16 +603,21 @@ placeholder="Example:
 18
 21"></textarea>
 
+
 <br>
+
 
 <button onclick="useTypedData()">
 Use Typed Data
 </button>
 
+
 <button
 class="gold"
 onclick="clearTypedData()">
+
 Clear Typed Data
+
 </button>
 
 
@@ -707,21 +638,27 @@ No typed data has been entered.
 📁 Upload Excel or CSV File
 </h3>
 
+
 <input
 type="file"
 id="fileInput"
 accept=".csv,.xlsx,.xls">
 
+
 <br><br>
+
 
 <button onclick="loadFile()">
 Analyze File
 </button>
 
+
 <button
 class="gold"
 onclick="clearUploadedData()">
+
 Clear File
+
 </button>
 
 
@@ -735,42 +672,28 @@ No file loaded.
 
 
 <h3>
-Select a Data Column
+Select a Numerical Data Column
 </h3>
+
 
 <select
 id="columnSelect"
 onchange="useSelectedColumn()">
 
-<option>
+<option value="">
 Upload a file first
 </option>
 
 </select>
 
 
-<div
-id="uploadedStats">
+<div id="uploadedStats">
 </div>
 
 
-<!-- ==================================================
-     CURRENT DATA
-================================================== -->
-
-<h3>
-📊 Current Data Being Analyzed
-</h3>
-
-<div
-id="currentDataResult"
-class="result">
-
-No data selected yet.
-
 </div>
 
-</div>
+
 <!-- ==================================================
      GRAPHS
 ================================================== -->
@@ -787,19 +710,11 @@ Graphing Your Data
 
 <div class="info">
 
-Enter quantitative data below.
-Separate values with commas or place
-one value on each line.
+The graph below uses the <strong>current dataset</strong>.
+
+You can change the dataset from the Data Input tab.
 
 </div>
-
-
-<textarea
-id="graphData"
-placeholder="12, 15, 18, 14, 20, 17, 19"></textarea>
-
-
-<br>
 
 
 <select id="graphType">
@@ -846,6 +761,11 @@ Load Example
 </button>
 
 
+<div
+id="graphInfo">
+</div>
+
+
 <div class="chartBox">
 
 <canvas id="mainChart"></canvas>
@@ -854,7 +774,6 @@ Load Example
 
 
 </div>
-
 
 
 <!-- ==================================================
@@ -871,9 +790,11 @@ Grouped Frequency Table
 </h2>
 
 
-<textarea
-id="frequencyData"
-placeholder="Enter quantitative data..."></textarea>
+<div class="info">
+
+The table below uses the <strong>current dataset</strong>.
+
+</div>
 
 
 <h3>
@@ -891,7 +812,8 @@ Number of Classes:
 type="number"
 id="numClasses"
 value="5"
-min="2">
+min="2"
+step="1">
 
 </p>
 
@@ -928,6 +850,7 @@ Manual Class Width:
 type="number"
 id="manualWidth"
 step="any"
+min="0"
 placeholder="Example: 5">
 
 </p>
@@ -942,19 +865,16 @@ Create Frequency Table
 
 <div
 id="frequencyCalculations">
-
 </div>
 
 
 <div
 id="frequencyTable"
 class="tableWrap">
-
 </div>
 
 
 </div>
-
 
 
 <!-- ==================================================
@@ -971,12 +891,13 @@ Descriptive Statistics
 </h2>
 
 
-<textarea
-id="statisticsData"
-placeholder="Enter quantitative data..."></textarea>
+<div class="info">
 
+The statistics below are calculated from the <strong>current dataset</strong>.
 
-<br>
+Standard deviation and variance are calculated using the <strong>sample</strong> formulas.
+
+</div>
 
 
 <button onclick="calculateStatistics()">
@@ -988,12 +909,10 @@ Calculate Statistics
 
 <div
 id="statisticsOutput">
-
 </div>
 
 
 </div>
-
 
 
 <!-- ==================================================
@@ -1010,6 +929,15 @@ Linear Regression & Correlation
 </h2>
 
 
+<div class="info">
+
+Enter paired quantitative data.
+
+Each X-value must correspond to the Y-value in the same position.
+
+</div>
+
+
 <p>
 X Values:
 </p>
@@ -1017,7 +945,7 @@ X Values:
 
 <textarea
 id="xData"
-placeholder="1,2,3,4,5"></textarea>
+placeholder="1, 2, 3, 4, 5"></textarea>
 
 
 <p>
@@ -1027,7 +955,7 @@ Y Values:
 
 <textarea
 id="yData"
-placeholder="2,4,5,4,7"></textarea>
+placeholder="2, 4, 5, 4, 7"></textarea>
 
 
 <br>
@@ -1040,9 +968,17 @@ Calculate Regression
 </button>
 
 
+<button
+class="gold"
+onclick="loadRegressionExample()">
+
+Load Example
+
+</button>
+
+
 <div
 id="regressionOutput">
-
 </div>
 
 
@@ -1068,12 +1004,10 @@ Residual Plot
 <div
 id="regressionTable"
 class="tableWrap">
-
 </div>
 
 
 </div>
-
 
 
 <!-- ==================================================
@@ -1092,8 +1026,7 @@ Outlier Detector
 
 <div class="info">
 
-The calculator uses the
-<strong>1.5 × IQR rule</strong>.
+The calculator uses the <strong>1.5 × IQR rule</strong>.
 
 <br><br>
 
@@ -1114,14 +1047,6 @@ Q3 + 1.5(IQR)
 </div>
 
 
-<textarea
-id="outlierData"
-placeholder="Enter data..."></textarea>
-
-
-<br>
-
-
 <button onclick="findOutliers()">
 
 Find Outliers
@@ -1131,12 +1056,10 @@ Find Outliers
 
 <div
 id="outlierOutput">
-
 </div>
 
 
 </div>
-
 
 
 <!-- ==================================================
@@ -1155,14 +1078,13 @@ Normal Distribution Calculator
 
 <div class="info">
 
-Use this calculator to find areas and
-probabilities for normal distributions.
+Use this calculator to find areas and probabilities for normal distributions.
 
-For a standard normal distribution:
+For the standard normal distribution:
 
-<strong>
-μ = 0, σ = 1
-</strong>
+<strong>μ = 0, σ = 1</strong>
+
+The graph will shade the area corresponding to the probability you calculate.
 
 </div>
 
@@ -1314,7 +1236,6 @@ Results will appear here.
 </div>
 
 
-
 <!-- ==================================================
      BINOMIAL
 ================================================== -->
@@ -1358,7 +1279,8 @@ Number of trials \(n\):
 type="number"
 id="binomN"
 value="10"
-min="1">
+min="1"
+step="1">
 
 </p>
 
@@ -1390,7 +1312,8 @@ Number of successes \(x\):
 type="number"
 id="binomX"
 value="5"
-min="0">
+min="0"
+step="1">
 
 </p>
 
@@ -1430,7 +1353,9 @@ Lower x:
 <input
 type="number"
 id="binomLow"
-value="3">
+value="3"
+min="0"
+step="1">
 
 </p>
 
@@ -1444,7 +1369,9 @@ Upper x:
 <input
 type="number"
 id="binomHigh"
-value="7">
+value="7"
+min="0"
+step="1">
 
 </p>
 
@@ -1478,18 +1405,16 @@ Results will appear here.
 </div>
 
 
-</main>
-
+</div>
 
 
 <footer>
 
 <p>
-&copy;2024 Asma S. Alayeb
+&copy; 2026 Asma S. Alayeb | MAT 1260 Statistics
 </p>
 
 </footer>
-
 
 
 <script>
@@ -1512,24 +1437,19 @@ let uploadedWorkbook = null;
 
 let selectedData = [];
 
+let currentData = [];
+
 
 /* =====================================================
-   TABS
+   TAB SYSTEM
 ===================================================== */
 
 function openTab(event, tabName) {
 
-    let contents =
-        document.getElementsByClassName(
-            "tabContent"
-        );
+    const contents =
+        document.getElementsByClassName("tabContent");
 
-
-    for (
-        let i = 0;
-        i < contents.length;
-        i++
-    ) {
+    for (let i = 0; i < contents.length; i++) {
 
         contents[i]
             .classList
@@ -1537,18 +1457,10 @@ function openTab(event, tabName) {
 
     }
 
+    const buttons =
+        document.getElementsByClassName("tabButton");
 
-    let buttons =
-        document.getElementsByClassName(
-            "tabButton"
-        );
-
-
-    for (
-        let i = 0;
-        i < buttons.length;
-        i++
-    ) {
+    for (let i = 0; i < buttons.length; i++) {
 
         buttons[i]
             .classList
@@ -1556,12 +1468,10 @@ function openTab(event, tabName) {
 
     }
 
-
     document
         .getElementById(tabName)
         .classList
         .add("active");
-
 
     event.currentTarget
         .classList
@@ -1576,12 +1486,216 @@ function openTab(event, tabName) {
 
 function parseNumbers(text) {
 
+    if (!text || !text.trim()) {
+        return [];
+    }
+
     return text
         .split(/[\s,;]+/)
         .map(Number)
         .filter(
-            x => !isNaN(x)
+            x => Number.isFinite(x)
         );
+
+}
+
+
+/* =====================================================
+   UPDATE CURRENT DATA
+===================================================== */
+
+function setCurrentData(data, source) {
+
+    if (!Array.isArray(data)) {
+        return;
+    }
+
+    currentData =
+        data
+        .filter(
+            x => Number.isFinite(x)
+        );
+
+    if (currentData.length < 2) {
+
+        document
+            .getElementById("currentDataSummary")
+            .innerHTML =
+            "<div class='error'>" +
+            "Please select at least two numerical values." +
+            "</div>";
+
+        return;
+
+    }
+
+    const sorted =
+        currentData
+        .slice()
+        .sort((a,b) => a-b);
+
+    const mean =
+        currentData.reduce(
+            (a,b) => a+b,
+            0
+        ) / currentData.length;
+
+    const median =
+        percentile(sorted,50);
+
+    const sd =
+        standardDeviation(currentData);
+
+    const min =
+        sorted[0];
+
+    const max =
+        sorted[sorted.length-1];
+
+    document
+        .getElementById("currentDataSummary")
+        .innerHTML =
+
+        "<div class='statsGrid'>" +
+
+        statCard(
+            "Source",
+            source || "Data"
+        ) +
+
+        statCard(
+            "n",
+            currentData.length
+        ) +
+
+        statCard(
+            "Mean",
+            mean.toFixed(4)
+        ) +
+
+        statCard(
+            "Median",
+            median.toFixed(4)
+        ) +
+
+        statCard(
+            "SD",
+            sd.toFixed(4)
+        ) +
+
+        statCard(
+            "Minimum",
+            min.toFixed(4)
+        ) +
+
+        statCard(
+            "Maximum",
+            max.toFixed(4)
+        ) +
+
+        "</div>" +
+
+        "<div class='dataPreview'>" +
+
+        "<strong>Data:</strong> " +
+
+        currentData
+            .map(x => formatNumber(x))
+            .join(", ") +
+
+        "</div>";
+
+}
+
+
+/* =====================================================
+   FORMAT NUMBER
+===================================================== */
+
+function formatNumber(value) {
+
+    if (
+        Number.isInteger(value)
+    ) {
+
+        return value.toString();
+
+    }
+
+    return Number(
+        value.toFixed(6)
+    ).toString();
+
+}
+
+
+/* =====================================================
+   TYPE / PASTE DATA
+===================================================== */
+
+function useTypedData() {
+
+    const text =
+        document
+        .getElementById("typedData")
+        .value;
+
+    const data =
+        parseNumbers(text);
+
+    if (data.length < 2) {
+
+        document
+            .getElementById("typedDataResult")
+            .innerHTML =
+
+            "<div class='error'>" +
+            "Please enter at least two numerical values." +
+            "</div>";
+
+        return;
+
+    }
+
+    setCurrentData(
+        data,
+        "Typed Data"
+    );
+
+    document
+        .getElementById("typedDataResult")
+        .innerHTML =
+
+        "<div class='success'>" +
+
+        "<strong>Data loaded successfully.</strong>" +
+
+        "<br>" +
+
+        data.length +
+        " numerical observations are now the current dataset."
+
+        +
+
+        "</div>";
+
+}
+
+
+/* =====================================================
+   CLEAR TYPED DATA
+===================================================== */
+
+function clearTypedData() {
+
+    document
+        .getElementById("typedData")
+        .value = "";
+
+    document
+        .getElementById("typedDataResult")
+        .innerHTML =
+        "No typed data has been entered.";
 
 }
 
@@ -1597,65 +1711,81 @@ function loadFile() {
         .getElementById("fileInput")
         .files[0];
 
-
     if (!file) {
 
-        alert(
-            "Please choose an Excel or CSV file."
-        );
+        document
+            .getElementById("fileResult")
+            .innerHTML =
+
+            "<div class='error'>" +
+            "Please choose an Excel or CSV file." +
+            "</div>";
 
         return;
 
     }
 
-
     const reader =
         new FileReader();
-
 
     reader.onload =
         function(e) {
 
-            const data =
-                new Uint8Array(
-                    e.target.result
-                );
+            try {
 
+                const data =
+                    new Uint8Array(
+                        e.target.result
+                    );
 
-            uploadedWorkbook =
-                XLSX.read(
-                    data,
-                    {
-                        type:"array"
-                    }
-                );
+                uploadedWorkbook =
+                    XLSX.read(
+                        data,
+                        {
+                            type:"array"
+                        }
+                    );
 
+                const sheetNames =
+                    uploadedWorkbook.SheetNames;
 
-            const sheetNames =
-                uploadedWorkbook
-                .SheetNames;
+                document
+                    .getElementById("fileResult")
+                    .innerHTML =
 
+                    "<div class='success'>" +
 
-            let html =
-                "<strong>File loaded successfully.</strong>" +
-                "<br><br>" +
+                    "<strong>File loaded successfully.</strong>" +
 
-                "Sheets: " +
-                sheetNames.join(", ");
+                    "<br><br>" +
 
+                    "Sheets: " +
 
-            document
-                .getElementById(
-                    "fileResult"
-                )
-                .innerHTML =
-                html;
+                    sheetNames.join(", ") +
 
+                    "</div>";
 
-            populateColumns();
+                populateColumns();
+
+            }
+
+            catch(error) {
+
+                document
+                    .getElementById("fileResult")
+                    .innerHTML =
+
+                    "<div class='error'>" +
+
+                    "The file could not be read." +
+
+                    "</div>";
+
+                console.error(error);
+
+            }
 
         };
-
 
     reader.readAsArrayBuffer(file);
 
@@ -1663,71 +1793,75 @@ function loadFile() {
 
 
 /* =====================================================
-   FIND NUMERIC COLUMNS
+   POPULATE NUMERICAL COLUMNS
 ===================================================== */
 
 function populateColumns() {
 
     const select =
         document
-        .getElementById(
-            "columnSelect"
-        );
-
+        .getElementById("columnSelect");
 
     select.innerHTML = "";
 
+    if (!uploadedWorkbook) {
 
-    const sheet =
-        uploadedWorkbook
-        .Sheets[
-            uploadedWorkbook
-            .SheetNames[0]
-        ];
-
-
-    const rows =
-        XLSX.utils.sheet_to_json(
-            sheet,
-            {
-                header:1
-            }
-        );
-
-
-    if (rows.length < 2) {
+        select.innerHTML =
+            "<option value=''>Upload a file first</option>";
 
         return;
 
     }
 
+    const sheet =
+        uploadedWorkbook
+        .Sheets[
+            uploadedWorkbook.SheetNames[0]
+        ];
+
+    const rows =
+        XLSX.utils.sheet_to_json(
+            sheet,
+            {
+                header:1,
+                defval:""
+            }
+        );
+
+    if (rows.length < 2) {
+
+        select.innerHTML =
+            "<option value=''>No data found</option>";
+
+        return;
+
+    }
 
     const headers =
         rows[0];
 
+    let foundColumn = false;
 
     for (
-        let c=0;
-        c<headers.length;
+        let c = 0;
+        c < headers.length;
         c++
     ) {
 
         let values = [];
 
-
         for (
-            let r=1;
-            r<rows.length;
+            let r = 1;
+            r < rows.length;
             r++
         ) {
 
             const value =
-                parseFloat(
-                    rows[r][c]
-                );
+                Number(rows[r][c]);
 
-
-            if (!isNaN(value)) {
+            if (
+                Number.isFinite(value)
+            ) {
 
                 values.push(value);
 
@@ -1735,23 +1869,18 @@ function populateColumns() {
 
         }
 
+        if (values.length >= 2) {
 
-        if (values.length > 1) {
+            foundColumn = true;
 
-            let option =
-                document.createElement(
-                    "option"
-                );
+            const option =
+                document.createElement("option");
 
-
-            option.value =
-                c;
-
+            option.value = c;
 
             option.text =
                 headers[c] ||
-                "Column " + (c+1);
-
+                "Column " + (c + 1);
 
             select.appendChild(option);
 
@@ -1759,6 +1888,16 @@ function populateColumns() {
 
     }
 
+    if (!foundColumn) {
+
+        select.innerHTML =
+            "<option value=''>" +
+            "No numerical columns found" +
+            "</option>";
+
+        return;
+
+    }
 
     useSelectedColumn();
 
@@ -1772,62 +1911,58 @@ function populateColumns() {
 function useSelectedColumn() {
 
     if (!uploadedWorkbook) {
-
         return;
-
     }
 
+    const select =
+        document
+        .getElementById("columnSelect");
+
+    if (select.value === "") {
+        return;
+    }
 
     const column =
         parseInt(
-            document
-            .getElementById(
-                "columnSelect"
-            )
-            .value
+            select.value,
+            10
         );
-
 
     const sheet =
         uploadedWorkbook
         .Sheets[
-            uploadedWorkbook
-            .SheetNames[0]
+            uploadedWorkbook.SheetNames[0]
         ];
-
 
     const rows =
         XLSX.utils.sheet_to_json(
             sheet,
             {
-                header:1
+                header:1,
+                defval:""
             }
         );
 
-
     selectedData = [];
 
-
     for (
-        let r=1;
-        r<rows.length;
+        let r = 1;
+        r < rows.length;
         r++
     ) {
 
         const value =
-            parseFloat(
-                rows[r][column]
-            );
+            Number(rows[r][column]);
 
-
-        if (!isNaN(value)) {
+        if (
+            Number.isFinite(value)
+        ) {
 
             selectedData.push(value);
 
         }
 
     }
-
 
     if (
         selectedData.length < 2
@@ -1837,6 +1972,10 @@ function useSelectedColumn() {
 
     }
 
+    setCurrentData(
+        selectedData,
+        "Excel/CSV Column"
+    );
 
     const mean =
         selectedData.reduce(
@@ -1845,17 +1984,13 @@ function useSelectedColumn() {
         ) /
         selectedData.length;
 
-
     const sd =
         standardDeviation(
             selectedData
         );
 
-
     document
-        .getElementById(
-            "uploadedStats"
-        )
+        .getElementById("uploadedStats")
         .innerHTML =
 
         "<div class='statsGrid'>" +
@@ -1877,59 +2012,21 @@ function useSelectedColumn() {
 
         statCard(
             "Minimum",
-            Math.min(
-                ...selectedData
-            )
-            .toFixed(4)
+            Math.min(...selectedData).toFixed(4)
         ) +
 
         statCard(
             "Maximum",
-            Math.max(
-                ...selectedData
-            )
-            .toFixed(4)
+            Math.max(...selectedData).toFixed(4)
         ) +
 
-        "</div>" +
-
-        "<br>" +
-
-        "<button onclick='analyzeUploadedGraph()'>" +
-        "Graph This Column" +
-        "</button>";
+        "</div>";
 
 }
 
 
 /* =====================================================
-   GRAPH UPLOADED DATA
-===================================================== */
-
-function analyzeUploadedGraph() {
-
-    document
-        .getElementById(
-            "graphData"
-        )
-        .value =
-        selectedData.join(",");
-
-
-    document
-        .querySelector(
-            ".tabButton:nth-child(2)"
-        )
-        .click();
-
-
-    createGraph();
-
-}
-
-
-/* =====================================================
-   CLEAR DATA
+   CLEAR UPLOADED DATA
 ===================================================== */
 
 function clearUploadedData() {
@@ -1939,65 +2036,69 @@ function clearUploadedData() {
     selectedData = [];
 
     document
-        .getElementById(
-            "fileInput"
-        )
+        .getElementById("fileInput")
         .value = "";
 
+    document
+        .getElementById("columnSelect")
+        .innerHTML =
+        "<option value=''>" +
+        "Upload a file first" +
+        "</option>";
 
     document
-        .getElementById(
-            "fileResult"
-        )
+        .getElementById("fileResult")
         .innerHTML =
         "No file loaded.";
+
+    document
+        .getElementById("uploadedStats")
+        .innerHTML = "";
 
 }
 
 
 /* =====================================================
-   GENERAL GRAPH
+   GRAPH
 ===================================================== */
 
 function createGraph() {
 
-    const data =
-        parseNumbers(
-            document
-            .getElementById(
-                "graphData"
-            )
-            .value
-        );
-
-
-    if (data.length < 2) {
+    if (
+        currentData.length < 2
+    ) {
 
         alert(
-            "Please enter at least two values."
+            "Please select a dataset first."
         );
 
         return;
 
     }
 
+    const data =
+        currentData;
 
     const type =
         document
-        .getElementById(
-            "graphType"
-        )
+        .getElementById("graphType")
         .value;
-
 
     if (mainChart) {
 
         mainChart.destroy();
 
+        mainChart = null;
+
     }
 
+    document
+        .getElementById("graphInfo")
+        .innerHTML = "";
 
-    if (type === "histogram") {
+    if (
+        type === "histogram"
+    ) {
 
         createHistogram(data);
 
@@ -2047,98 +2148,92 @@ function createHistogram(data) {
     const min =
         Math.min(...data);
 
-
     const max =
         Math.max(...data);
 
+    if (min === max) {
+
+        document
+            .getElementById("graphInfo")
+            .innerHTML =
+
+            "<div class='note'>" +
+            "All values are identical, so a histogram cannot show multiple classes." +
+            "</div>";
+
+        createBar(data);
+
+        return;
+
+    }
 
     const classes =
         Math.max(
             5,
             Math.ceil(
-                Math.sqrt(
-                    data.length
-                )
+                Math.sqrt(data.length)
             )
         );
 
+    const width =
+        (max - min) / classes;
 
-    let width =
-        (max-min)/classes;
-
-
-    if (width === 0) {
-
-        width = 1;
-
-    }
-
-
-    let counts =
+    const counts =
         new Array(classes)
         .fill(0);
 
-
-    let labels = [];
-
+    const labels = [];
 
     for (
-        let i=0;
-        i<classes;
+        let i = 0;
+        i < classes;
         i++
     ) {
 
-        let start =
-            min+i*width;
+        const start =
+            min + i * width;
 
-
-        let end =
-            start+width;
-
+        const end =
+            i === classes - 1
+            ? max
+            : min + (i + 1) * width;
 
         labels.push(
+            "[" +
             start.toFixed(2) +
-            " - " +
-            end.toFixed(2)
+            ", " +
+            end.toFixed(2) +
+            (i === classes - 1 ? "]" : ")")
         );
 
     }
-
 
     data.forEach(
         value => {
 
             let index =
                 Math.floor(
-                    (value-min)/
-                    width
+                    (value - min) / width
                 );
-
 
             if (
                 index >= classes
             ) {
 
                 index =
-                    classes-1;
+                    classes - 1;
 
             }
-
 
             counts[index]++;
 
         }
     );
 
-
     mainChart =
         new Chart(
-
             document
-            .getElementById(
-                "mainChart"
-            ),
-
+            .getElementById("mainChart"),
             {
 
                 type:"bar",
@@ -2167,18 +2262,47 @@ function createHistogram(data) {
 
                     maintainAspectRatio:false,
 
+                    plugins:{
+
+                        title:{
+
+                            display:true,
+
+                            text:"Histogram"
+
+                        }
+
+                    },
+
                     scales:{
 
-                        y:{
-
-                            beginAtZero:true,
+                        x:{
 
                             title:{
 
                                 display:true,
 
-                                text:
-                                "Frequency"
+                                text:"Class"
+
+                            }
+
+                        },
+
+                        y:{
+
+                            beginAtZero:true,
+
+                            ticks:{
+
+                                precision:0
+
+                            },
+
+                            title:{
+
+                                display:true,
+
+                                text:"Frequency"
 
                             }
 
@@ -2189,14 +2313,13 @@ function createHistogram(data) {
                 }
 
             }
-
         );
 
 }
 
 
 /* =====================================================
-   BOX PLOT
+   REAL BOX PLOT
 ===================================================== */
 
 function createBoxplot(data) {
@@ -2205,138 +2328,83 @@ function createBoxplot(data) {
         data
         .slice()
         .sort(
-            (a,b)=>a-b
+            (a,b) => a-b
         );
-
 
     const q1 =
-        percentile(
-            sorted,
-            25
-        );
-
+        percentile(sorted,25);
 
     const median =
-        percentile(
-            sorted,
-            50
-        );
-
+        percentile(sorted,50);
 
     const q3 =
-        percentile(
-            sorted,
-            75
-        );
-
+        percentile(sorted,75);
 
     const iqr =
-        q3-q1;
+        q3 - q1;
 
+    const lowerFence =
+        q1 - 1.5 * iqr;
 
-    const lower =
-        q1-1.5*iqr;
+    const upperFence =
+        q3 + 1.5 * iqr;
 
-
-    const upper =
-        q3+1.5*iqr;
-
-
-    const lowWhisker =
-        Math.min(
-            ...sorted.filter(
-                x => x >= lower
-            )
+    const nonOutliers =
+        sorted.filter(
+            x =>
+                x >= lowerFence &&
+                x <= upperFence
         );
-
-
-    const highWhisker =
-        Math.max(
-            ...sorted.filter(
-                x => x <= upper
-            )
-        );
-
 
     const outliers =
         sorted.filter(
             x =>
-                x < lower ||
-                x > upper
+                x < lowerFence ||
+                x > upperFence
         );
 
+    const lowWhisker =
+        Math.min(...nonOutliers);
+
+    const highWhisker =
+        Math.max(...nonOutliers);
 
     mainChart =
         new Chart(
-
             document
-            .getElementById(
-                "mainChart"
-            ),
-
+            .getElementById("mainChart"),
             {
 
-                type:"bar",
+                type:"boxplot",
 
                 data:{
 
                     labels:[
-                        "Five-Number Summary"
+                        "Data"
                     ],
 
-                    datasets:[
+                    datasets:[{
 
-                        {
+                        label:
+                        "Box-and-Whisker Plot",
 
-                            label:"Minimum",
+                        data:[{
 
-                            data:[
-                                lowWhisker
-                            ]
+                            min:lowWhisker,
 
-                        },
+                            q1:q1,
 
-                        {
+                            median:median,
 
-                            label:"Q1",
+                            q3:q3,
 
-                            data:[
-                                q1
-                            ]
+                            max:highWhisker,
 
-                        },
+                            outliers:outliers
 
-                        {
+                        }]
 
-                            label:"Median",
-
-                            data:[
-                                median
-                            ]
-
-                        },
-
-                        {
-
-                            label:"Q3",
-
-                            data:[
-                                q3
-                            ]
-
-                        },
-
-                        {
-
-                            label:"Maximum",
-
-                            data:[
-                                highWhisker
-                            ]
-
-                        }
-
-                    ]
+                    }]
 
                 },
 
@@ -2353,7 +2421,23 @@ function createBoxplot(data) {
                             display:true,
 
                             text:
-                            "Box-and-Whisker Summary"
+                            "Box-and-Whisker Plot"
+
+                        }
+
+                    },
+
+                    scales:{
+
+                        y:{
+
+                            title:{
+
+                                display:true,
+
+                                text:"Value"
+
+                            }
 
                         }
 
@@ -2362,50 +2446,43 @@ function createBoxplot(data) {
                 }
 
             }
-
         );
-
 
     document
-        .getElementById(
-            "graphs"
-        )
-        .insertAdjacentHTML(
-            "beforeend",
+        .getElementById("graphInfo")
+        .innerHTML =
 
-            "<div class='result'>" +
+        "<div class='result'>" +
 
-            "<strong>Five-Number Summary</strong>" +
+        "<strong>Five-Number Summary</strong>" +
 
-            "<br>Minimum: " +
-            lowWhisker.toFixed(4) +
+        "<br>Minimum: " +
+        lowWhisker.toFixed(4) +
 
-            "<br>Q1: " +
-            q1.toFixed(4) +
+        "<br>Q1: " +
+        q1.toFixed(4) +
 
-            "<br>Median: " +
-            median.toFixed(4) +
+        "<br>Median: " +
+        median.toFixed(4) +
 
-            "<br>Q3: " +
-            q3.toFixed(4) +
+        "<br>Q3: " +
+        q3.toFixed(4) +
 
-            "<br>Maximum: " +
-            highWhisker.toFixed(4) +
+        "<br>Maximum: " +
+        highWhisker.toFixed(4) +
 
-            "<br>IQR: " +
-            iqr.toFixed(4) +
+        "<br>IQR: " +
+        iqr.toFixed(4) +
 
-            "<br><br><strong>Outliers:</strong> " +
+        "<br><br><strong>Outliers:</strong> " +
 
-            (
-                outliers.length ?
-                outliers.join(", ") :
-                "None"
-            ) +
+        (
+            outliers.length
+            ? outliers.join(", ")
+            : "None"
+        ) +
 
-            "</div>"
-
-        );
+        "</div>";
 
 }
 
@@ -2418,54 +2495,47 @@ function createDotplot(data) {
 
     const frequencies = {};
 
-
     data.forEach(
         x => {
 
-            frequencies[x] =
-                (frequencies[x] || 0)+1;
+            const key =
+                formatNumber(x);
+
+            frequencies[key] =
+                (frequencies[key] || 0) + 1;
 
         }
     );
-
 
     const points = [];
 
+    Object.keys(frequencies)
+        .forEach(
+            x => {
 
-    Object.keys(
-        frequencies
-    ).forEach(
-        x => {
+                for (
+                    let i = 1;
+                    i <= frequencies[x];
+                    i++
+                ) {
 
-            for (
-                let i=1;
-                i<=frequencies[x];
-                i++
-            ) {
+                    points.push({
 
-                points.push({
+                        x:parseFloat(x),
 
-                    x:
-                    parseFloat(x),
+                        y:i
 
-                    y:i
+                    });
 
-                });
+                }
 
             }
-
-        }
-    );
-
+        );
 
     mainChart =
         new Chart(
-
             document
-            .getElementById(
-                "mainChart"
-            ),
-
+            .getElementById("mainChart"),
             {
 
                 type:"scatter",
@@ -2511,7 +2581,11 @@ function createDotplot(data) {
                             beginAtZero:true,
 
                             ticks:{
-                                stepSize:1
+
+                                stepSize:1,
+
+                                precision:0
+
                             },
 
                             title:{
@@ -2529,7 +2603,6 @@ function createDotplot(data) {
                 }
 
             }
-
         );
 
 }
@@ -2543,25 +2616,22 @@ function createBar(data) {
 
     const frequencies = {};
 
-
     data.forEach(
         x => {
 
-            frequencies[x] =
-                (frequencies[x] || 0)+1;
+            const key =
+                formatNumber(x);
+
+            frequencies[key] =
+                (frequencies[key] || 0) + 1;
 
         }
     );
 
-
     mainChart =
         new Chart(
-
             document
-            .getElementById(
-                "mainChart"
-            ),
-
+            .getElementById("mainChart"),
             {
 
                 type:"bar",
@@ -2569,18 +2639,14 @@ function createBar(data) {
                 data:{
 
                     labels:
-                    Object.keys(
-                        frequencies
-                    ),
+                    Object.keys(frequencies),
 
                     datasets:[{
 
                         label:"Frequency",
 
                         data:
-                        Object.values(
-                            frequencies
-                        )
+                        Object.values(frequencies)
 
                     }]
 
@@ -2596,7 +2662,11 @@ function createBar(data) {
 
                         y:{
 
-                            beginAtZero:true
+                            beginAtZero:true,
+
+                            ticks:{
+                                precision:0
+                            }
 
                         }
 
@@ -2605,39 +2675,35 @@ function createBar(data) {
                 }
 
             }
-
         );
 
 }
 
 
 /* =====================================================
-   PIE
+   PIE CHART
 ===================================================== */
 
 function createPie(data) {
 
     const frequencies = {};
 
-
     data.forEach(
         x => {
 
-            frequencies[x] =
-                (frequencies[x] || 0)+1;
+            const key =
+                formatNumber(x);
+
+            frequencies[key] =
+                (frequencies[key] || 0) + 1;
 
         }
     );
 
-
     mainChart =
         new Chart(
-
             document
-            .getElementById(
-                "mainChart"
-            ),
-
+            .getElementById("mainChart"),
             {
 
                 type:"pie",
@@ -2645,16 +2711,12 @@ function createPie(data) {
                 data:{
 
                     labels:
-                    Object.keys(
-                        frequencies
-                    ),
+                    Object.keys(frequencies),
 
                     datasets:[{
 
                         data:
-                        Object.values(
-                            frequencies
-                        )
+                        Object.values(frequencies)
 
                     }]
 
@@ -2669,69 +2731,72 @@ function createPie(data) {
                 }
 
             }
-
         );
 
 }
 
 
 /* =====================================================
-   GROUPED FREQUENCY TABLE
+   FREQUENCY TABLE
 ===================================================== */
 
 function createGroupedTable() {
 
-    const data =
-        parseNumbers(
-            document
-            .getElementById(
-                "frequencyData"
-            ).value
-        );
-
-
-    if (data.length < 2) {
+    if (
+        currentData.length < 2
+    ) {
 
         alert(
-            "Please enter at least two values."
+            "Please select a dataset first."
         );
 
         return;
 
     }
 
-
-    const min =
-        Math.min(...data);
-
-
-    const max =
-        Math.max(...data);
-
-
-    const range =
-        max-min;
-
-
-    const classes =
-        parseInt(
-            document
-            .getElementById(
-                "numClasses"
-            ).value
+    const data =
+        currentData
+        .slice()
+        .sort(
+            (a,b) => a-b
         );
 
+    const min =
+        data[0];
 
-    let width;
+    const max =
+        data[data.length - 1];
 
+    const range =
+        max - min;
+
+    let classes =
+        parseInt(
+            document
+            .getElementById("numClasses")
+            .value,
+            10
+        );
+
+    if (
+        !Number.isInteger(classes) ||
+        classes < 2
+    ) {
+
+        alert(
+            "Number of classes must be an integer of at least 2."
+        );
+
+        return;
+
+    }
 
     const method =
         document
-        .getElementById(
-            "widthMethod"
-        )
+        .getElementById("widthMethod")
         .value;
 
+    let width;
 
     if (
         method === "manual"
@@ -2740,47 +2805,143 @@ function createGroupedTable() {
         width =
             parseFloat(
                 document
-                .getElementById(
-                    "manualWidth"
-                ).value
+                .getElementById("manualWidth")
+                .value
             );
+
+        if (
+            !Number.isFinite(width) ||
+            width <= 0
+        ) {
+
+            alert(
+                "Please enter a valid positive class width."
+            );
+
+            return;
+
+        }
 
     }
 
     else {
 
-        width =
-            Math.ceil(
-                range/classes
-            );
+        if (range === 0) {
+
+            width = 1;
+
+        }
+
+        else {
+
+            width =
+                Math.ceil(
+                    range / classes
+                );
+
+        }
 
     }
-
-
-    if (
-        !width ||
-        width <= 0
-    ) {
-
-        alert(
-            "Please enter a valid class width."
-        );
-
-        return;
-
-    }
-
 
     let lower =
         Math.floor(min);
 
+    if (
+        lower > min
+    ) {
+
+        lower = min;
+
+    }
+
+    const rows = [];
 
     let cumulative = 0;
 
-    let table = "";
+    let classNumber = 1;
 
+    while (
+        lower < max ||
+        classNumber <= classes
+    ) {
 
-    table +=
+        const upper =
+            lower + width;
+
+        const isLastClass =
+            upper >= max;
+
+        const frequency =
+            data.filter(
+                x => {
+
+                    if (isLastClass) {
+
+                        return (
+                            x >= lower &&
+                            x <= upper
+                        );
+
+                    }
+
+                    return (
+                        x >= lower &&
+                        x < upper
+                    );
+
+                }
+            ).length;
+
+        cumulative += frequency;
+
+        const relative =
+            frequency / data.length;
+
+        const cumulativeRelative =
+            cumulative / data.length;
+
+        rows.push({
+
+            number:classNumber,
+
+            lower:lower,
+
+            upper:upper,
+
+            frequency:frequency,
+
+            relative:relative,
+
+            cumulative:cumulative,
+
+            cumulativeRelative:cumulativeRelative
+
+        });
+
+        lower =
+            upper;
+
+        classNumber++;
+
+        if (
+            isLastClass
+        ) {
+
+            break;
+
+        }
+
+        if (
+            classNumber > 1000
+        ) {
+
+            break;
+
+        }
+
+    }
+
+    let table =
 
         "<table>" +
 
@@ -2798,96 +2959,60 @@ function createGroupedTable() {
 
         "</tr>";
 
+    rows.forEach(
+        row => {
 
-    for (
-        let i=0;
-        i<classes;
-        i++
-    ) {
+            const leftBracket =
+                "[";
 
-        const upper =
-            lower+width;
+            const rightBracket =
+                row.upper >= max
+                ? "]"
+                : ")";
 
+            table +=
 
-        let frequency =
-            data.filter(
-                x =>
-                    x >= lower &&
-                    x < upper
-            ).length;
+                "<tr>" +
 
+                "<td>" +
 
-        if (
-            i === classes-1
-        ) {
+                leftBracket +
 
-            frequency =
-                data.filter(
-                    x =>
-                        x >= lower &&
-                        x <= upper
-                ).length;
+                formatNumber(row.lower) +
+
+                ", " +
+
+                formatNumber(row.upper) +
+
+                rightBracket +
+
+                "</td>" +
+
+                "<td>" +
+                row.frequency +
+                "</td>" +
+
+                "<td>" +
+                row.relative.toFixed(4) +
+                "</td>" +
+
+                "<td>" +
+                row.cumulative +
+                "</td>" +
+
+                "<td>" +
+                row.cumulativeRelative.toFixed(4) +
+                "</td>" +
+
+                "</tr>";
 
         }
-
-
-        cumulative += frequency;
-
-
-        const relative =
-            frequency/data.length;
-
-
-        const cumulativeRelative =
-            cumulative/data.length;
-
-
-        table +=
-
-            "<tr>" +
-
-            "<td>" +
-
-            lower.toFixed(2) +
-
-            " – " +
-
-            upper.toFixed(2) +
-
-            "</td>" +
-
-            "<td>" +
-            frequency +
-            "</td>" +
-
-            "<td>" +
-            relative.toFixed(4) +
-            "</td>" +
-
-            "<td>" +
-            cumulative +
-            "</td>" +
-
-            "<td>" +
-            cumulativeRelative
-            .toFixed(4) +
-            "</td>" +
-
-            "</tr>";
-
-
-        lower += width;
-
-    }
-
+    );
 
     table += "</table>";
 
-
     document
-        .getElementById(
-            "frequencyCalculations"
-        )
+        .getElementById("frequencyCalculations")
         .innerHTML =
 
         "<div class='result'>" +
@@ -2896,27 +3021,24 @@ function createGroupedTable() {
         data.length +
 
         "<br><strong>Minimum:</strong> " +
-        min +
+        formatNumber(min) +
 
         "<br><strong>Maximum:</strong> " +
-        max +
+        formatNumber(max) +
 
         "<br><strong>Range:</strong> " +
-        range +
-
-        "<br><strong>Number of classes:</strong> " +
-        classes +
+        formatNumber(range) +
 
         "<br><strong>Class width:</strong> " +
-        width +
+        formatNumber(width) +
+
+        "<br><strong>Number of classes used:</strong> " +
+        rows.length +
 
         "</div>";
 
-
     document
-        .getElementById(
-            "frequencyTable"
-        )
+        .getElementById("frequencyTable")
         .innerHTML =
         table;
 
@@ -2929,41 +3051,34 @@ function createGroupedTable() {
 
 function calculateStatistics() {
 
-    const data =
-        parseNumbers(
-            document
-            .getElementById(
-                "statisticsData"
-            ).value
-        );
-
-
-    if (data.length < 2) {
+    if (
+        currentData.length < 2
+    ) {
 
         alert(
-            "Please enter at least two values."
+            "Please select a dataset first."
         );
 
         return;
 
     }
 
+    const data =
+        currentData;
 
     const sorted =
         data
         .slice()
         .sort(
-            (a,b)=>a-b
+            (a,b) => a-b
         );
-
 
     const mean =
         data.reduce(
-            (a,b)=>a+b,
+            (a,b) => a+b,
             0
         ) /
         data.length;
-
 
     const median =
         percentile(
@@ -2971,13 +3086,11 @@ function calculateStatistics() {
             50
         );
 
-
     const q1 =
         percentile(
             sorted,
             25
         );
-
 
     const q3 =
         percentile(
@@ -2985,35 +3098,27 @@ function calculateStatistics() {
             75
         );
 
-
     const iqr =
-        q3-q1;
-
+        q3 - q1;
 
     const sd =
         standardDeviation(
             data
         );
 
-
     const variance =
-        sd*sd;
-
+        sd * sd;
 
     const min =
         sorted[0];
 
-
     const max =
         sorted[
-            sorted.length-1
+            sorted.length - 1
         ];
 
-
     document
-        .getElementById(
-            "statisticsOutput"
-        )
+        .getElementById("statisticsOutput")
         .innerHTML =
 
         "<div class='statsGrid'>" +
@@ -3034,12 +3139,12 @@ function calculateStatistics() {
         ) +
 
         statCard(
-            "Standard Deviation",
+            "Sample SD",
             sd.toFixed(4)
         ) +
 
         statCard(
-            "Variance",
+            "Sample Variance",
             variance.toFixed(4)
         ) +
 
@@ -3084,33 +3189,24 @@ function calculateStatistics() {
 
 function findOutliers() {
 
-    const data =
-        parseNumbers(
-            document
-            .getElementById(
-                "outlierData"
-            ).value
-        );
-
-
-    if (data.length < 4) {
+    if (
+        currentData.length < 4
+    ) {
 
         alert(
-            "Please enter at least four values."
+            "Please select at least four values."
         );
 
         return;
 
     }
 
-
     const sorted =
-        data
+        currentData
         .slice()
         .sort(
-            (a,b)=>a-b
+            (a,b) => a-b
         );
-
 
     const q1 =
         percentile(
@@ -3118,25 +3214,20 @@ function findOutliers() {
             25
         );
 
-
     const q3 =
         percentile(
             sorted,
             75
         );
 
-
     const iqr =
-        q3-q1;
-
+        q3 - q1;
 
     const lower =
-        q1-1.5*iqr;
-
+        q1 - 1.5 * iqr;
 
     const upper =
-        q3+1.5*iqr;
-
+        q3 + 1.5 * iqr;
 
     const outliers =
         sorted.filter(
@@ -3145,11 +3236,8 @@ function findOutliers() {
                 x > upper
         );
 
-
     document
-        .getElementById(
-            "outlierOutput"
-        )
+        .getElementById("outlierOutput")
         .innerHTML =
 
         "<div class='result'>" +
@@ -3172,9 +3260,9 @@ function findOutliers() {
         "<br><br><strong>Outliers:</strong> " +
 
         (
-            outliers.length ?
-            outliers.join(", ") :
-            "No outliers detected."
+            outliers.length
+            ? outliers.join(", ")
+            : "No outliers detected."
         ) +
 
         "</div>";
@@ -3191,20 +3279,16 @@ function calculateRegression() {
     const x =
         parseNumbers(
             document
-            .getElementById(
-                "xData"
-            ).value
+            .getElementById("xData")
+            .value
         );
-
 
     const y =
         parseNumbers(
             document
-            .getElementById(
-                "yData"
-            ).value
+            .getElementById("yData")
+            .value
         );
-
 
     if (
         x.length !== y.length ||
@@ -3212,65 +3296,69 @@ function calculateRegression() {
     ) {
 
         alert(
-            "X and Y must contain the same number of values."
+            "X and Y must contain the same number of values, with at least two pairs."
         );
 
         return;
 
     }
 
-
-    const n = x.length;
-
+    const n =
+        x.length;
 
     const xbar =
         x.reduce(
-            (a,b)=>a+b,
+            (a,b) => a+b,
             0
-        )/n;
-
+        ) / n;
 
     const ybar =
         y.reduce(
-            (a,b)=>a+b,
+            (a,b) => a+b,
             0
-        )/n;
+        ) / n;
 
+    let numerator = 0;
 
-    let numerator=0;
-
-    let denominator=0;
-
+    let denominator = 0;
 
     for (
-        let i=0;
-        i<n;
+        let i = 0;
+        i < n;
         i++
     ) {
 
         numerator +=
-            (x[i]-xbar)*
-            (y[i]-ybar);
-
+            (x[i] - xbar) *
+            (y[i] - ybar);
 
         denominator +=
             Math.pow(
-                x[i]-xbar,
+                x[i] - xbar,
                 2
             );
 
     }
 
+    if (
+        denominator === 0
+    ) {
+
+        alert(
+            "Linear regression cannot be calculated because all X-values are the same."
+        );
+
+        return;
+
+    }
 
     const slope =
-        numerator/
+        numerator /
         denominator;
 
-
     const intercept =
-        ybar-
-        slope*xbar;
-
+        ybar -
+        slope * xbar;
 
     const r =
         correlation(
@@ -3278,43 +3366,47 @@ function calculateRegression() {
             y
         );
 
+    if (
+        !Number.isFinite(r)
+    ) {
+
+        alert(
+            "Correlation cannot be calculated because all Y-values are the same."
+        );
+
+        return;
+
+    }
 
     const r2 =
-        r*r;
+        r * r;
 
+    const predictions = [];
 
-    let predictions=[];
-
-    let residuals=[];
-
+    const residuals = [];
 
     for (
-        let i=0;
-        i<n;
+        let i = 0;
+        i < n;
         i++
     ) {
 
         const predicted =
-            intercept+
-            slope*x[i];
-
+            intercept +
+            slope * x[i];
 
         predictions.push(
             predicted
         );
 
-
         residuals.push(
-            y[i]-predicted
+            y[i] - predicted
         );
 
     }
 
-
     document
-        .getElementById(
-            "regressionOutput"
-        )
+        .getElementById("regressionOutput")
         .innerHTML =
 
         "<div class='result'>" +
@@ -3366,7 +3458,6 @@ function calculateRegression() {
 
         "</div>";
 
-
     drawScatter(
         x,
         y,
@@ -3374,14 +3465,13 @@ function calculateRegression() {
         intercept
     );
 
-
     drawResiduals(
         x,
         residuals
     );
 
-
     let table =
+
         "<table>" +
 
         "<tr>" +
@@ -3396,10 +3486,9 @@ function calculateRegression() {
 
         "</tr>";
 
-
     for (
-        let i=0;
-        i<n;
+        let i = 0;
+        i < n;
         i++
     ) {
 
@@ -3427,14 +3516,10 @@ function calculateRegression() {
 
     }
 
-
     table += "</table>";
 
-
     document
-        .getElementById(
-            "regressionTable"
-        )
+        .getElementById("regressionTable")
         .innerHTML =
         table;
 
@@ -3458,7 +3543,6 @@ function drawScatter(
 
     }
 
-
     const points =
         x.map(
             (value,i) => ({
@@ -3470,23 +3554,16 @@ function drawScatter(
             })
         );
 
-
     const minX =
         Math.min(...x);
-
 
     const maxX =
         Math.max(...x);
 
-
     scatterChart =
         new Chart(
-
             document
-            .getElementById(
-                "scatterChart"
-            ),
-
+            .getElementById("scatterChart"),
             {
 
                 type:"scatter",
@@ -3519,8 +3596,8 @@ function drawScatter(
                                     x:minX,
 
                                     y:
-                                    intercept+
-                                    slope*minX
+                                    intercept +
+                                    slope * minX
 
                                 },
 
@@ -3529,8 +3606,8 @@ function drawScatter(
                                     x:maxX,
 
                                     y:
-                                    intercept+
-                                    slope*maxX
+                                    intercept +
+                                    slope * maxX
 
                                 }
 
@@ -3550,12 +3627,24 @@ function drawScatter(
 
                     responsive:true,
 
-                    maintainAspectRatio:false
+                    maintainAspectRatio:false,
+
+                    plugins:{
+
+                        title:{
+
+                            display:true,
+
+                            text:
+                            "Scatterplot with Regression Line"
+
+                        }
+
+                    }
 
                 }
 
             }
-
         );
 
 }
@@ -3576,10 +3665,9 @@ function drawResiduals(
 
     }
 
-
     const points =
         x.map(
-            (value,i)=>({
+            (value,i) => ({
 
                 x:value,
 
@@ -3588,23 +3676,16 @@ function drawResiduals(
             })
         );
 
-
     const minX =
         Math.min(...x);
-
 
     const maxX =
         Math.max(...x);
 
-
     residualChart =
         new Chart(
-
             document
-            .getElementById(
-                "residualChart"
-            ),
-
+            .getElementById("residualChart"),
             {
 
                 type:"scatter",
@@ -3645,9 +3726,7 @@ function drawResiduals(
 
                             pointRadius:0,
 
-                            borderDash:[
-                                6,6
-                            ]
+                            borderDash:[6,6]
 
                         }
 
@@ -3659,66 +3738,110 @@ function drawResiduals(
 
                     responsive:true,
 
-                    maintainAspectRatio:false
+                    maintainAspectRatio:false,
+
+                    plugins:{
+
+                        title:{
+
+                            display:true,
+
+                            text:"Residual Plot"
+
+                        }
+
+                    }
 
                 }
 
             }
-
         );
 
 }
 
 
 /* =====================================================
-   NORMAL DISTRIBUTION
+   NORMAL DISTRIBUTION VALIDATION
 ===================================================== */
 
-function normalLeft() {
+function getNormalInputs() {
 
     const mean =
         parseFloat(
             document
-            .getElementById(
-                "normalMean"
-            ).value
+            .getElementById("normalMean")
+            .value
         );
-
 
     const sd =
         parseFloat(
             document
-            .getElementById(
-                "normalSD"
-            ).value
+            .getElementById("normalSD")
+            .value
         );
-
-
-    const x =
-        parseFloat(
-            document
-            .getElementById(
-                "normalX"
-            ).value
-        );
-
 
     if (
+        !Number.isFinite(mean) ||
+        !Number.isFinite(sd) ||
         sd <= 0
     ) {
 
         alert(
-            "Standard deviation must be positive."
+            "Mean must be a number and standard deviation must be positive."
+        );
+
+        return null;
+
+    }
+
+    return {
+        mean:mean,
+        sd:sd
+    };
+
+}
+
+
+/* =====================================================
+   NORMAL LEFT
+===================================================== */
+
+function normalLeft() {
+
+    const inputs =
+        getNormalInputs();
+
+    if (!inputs) {
+        return;
+    }
+
+    const x =
+        parseFloat(
+            document
+            .getElementById("normalX")
+            .value
+        );
+
+    if (
+        !Number.isFinite(x)
+    ) {
+
+        alert(
+            "Please enter a valid X value."
         );
 
         return;
 
     }
 
+    const mean =
+        inputs.mean;
+
+    const sd =
+        inputs.sd;
 
     const z =
-        (x-mean)/sd;
-
+        (x - mean) / sd;
 
     const probability =
         jStat.normal.cdf(
@@ -3727,11 +3850,8 @@ function normalLeft() {
             sd
         );
 
-
     document
-        .getElementById(
-            "normalOutput"
-        )
+        .getElementById("normalOutput")
         .innerHTML =
 
         "<strong>z-score:</strong> " +
@@ -3745,76 +3865,88 @@ function normalLeft() {
         "<br><br>" +
 
         "<strong>Percent:</strong> " +
-        (probability*100)
-        .toFixed(4) +
+        (probability * 100).toFixed(4) +
         "%";
-
 
     drawNormal(
         mean,
         sd,
-        x
+        {
+            type:"left",
+            x:x
+        }
     );
 
 }
 
 
+/* =====================================================
+   NORMAL BETWEEN
+===================================================== */
+
 function normalBetween() {
 
-    const mean =
-        parseFloat(
-            document
-            .getElementById(
-                "normalMean"
-            ).value
-        );
+    const inputs =
+        getNormalInputs();
 
-
-    const sd =
-        parseFloat(
-            document
-            .getElementById(
-                "normalSD"
-            ).value
-        );
-
+    if (!inputs) {
+        return;
+    }
 
     const low =
         parseFloat(
             document
-            .getElementById(
-                "normalLow"
-            ).value
+            .getElementById("normalLow")
+            .value
         );
-
 
     const high =
         parseFloat(
             document
-            .getElementById(
-                "normalHigh"
-            ).value
+            .getElementById("normalHigh")
+            .value
         );
 
+    if (
+        !Number.isFinite(low) ||
+        !Number.isFinite(high)
+    ) {
+
+        alert(
+            "Please enter valid X values."
+        );
+
+        return;
+
+    }
+
+    if (
+        high <= low
+    ) {
+
+        alert(
+            "The upper X value must be greater than the lower X value."
+        );
+
+        return;
+
+    }
 
     const probability =
         jStat.normal.cdf(
             high,
-            mean,
-            sd
+            inputs.mean,
+            inputs.sd
         )
         -
         jStat.normal.cdf(
             low,
-            mean,
-            sd
+            inputs.mean,
+            inputs.sd
         );
 
-
     document
-        .getElementById(
-            "normalOutput"
-        )
+        .getElementById("normalOutput")
         .innerHTML =
 
         "<strong>P(" +
@@ -3829,63 +3961,57 @@ function normalBetween() {
 
         "<strong>Percent:</strong> " +
 
-        (probability*100)
+        (probability * 100)
         .toFixed(4) +
 
         "%";
 
-
     drawNormal(
-        mean,
-        sd,
-        null
+        inputs.mean,
+        inputs.sd,
+        {
+            type:"between",
+            low:low,
+            high:high
+        }
     );
 
 }
 
 
+/* =====================================================
+   INVERSE NORMAL
+===================================================== */
+
 function inverseNormal() {
 
-    const mean =
-        parseFloat(
-            document
-            .getElementById(
-                "normalMean"
-            ).value
-        );
+    const inputs =
+        getNormalInputs();
 
-
-    const sd =
-        parseFloat(
-            document
-            .getElementById(
-                "normalSD"
-            ).value
-        );
-
+    if (!inputs) {
+        return;
+    }
 
     const area =
         parseFloat(
             document
-            .getElementById(
-                "normalArea"
-            ).value
+            .getElementById("normalArea")
+            .value
         );
 
-
     if (
+        !Number.isFinite(area) ||
         area <= 0 ||
         area >= 1
     ) {
 
         alert(
-            "Area must be between 0 and 1."
+            "Area must be greater than 0 and less than 1."
         );
 
         return;
 
     }
-
 
     const z =
         jStat.normal.inv(
@@ -3894,16 +4020,12 @@ function inverseNormal() {
             1
         );
 
-
     const x =
-        mean+
-        z*sd;
-
+        inputs.mean +
+        z * inputs.sd;
 
     document
-        .getElementById(
-            "normalOutput"
-        )
+        .getElementById("normalOutput")
         .innerHTML =
 
         "<strong>z-score:</strong> " +
@@ -3914,17 +4036,26 @@ function inverseNormal() {
         "<strong>X:</strong> " +
         x.toFixed(5);
 
+    drawNormal(
+        inputs.mean,
+        inputs.sd,
+        {
+            type:"inverse",
+            x:x
+        }
+    );
+
 }
 
 
 /* =====================================================
-   NORMAL GRAPH
+   NORMAL DISTRIBUTION GRAPH
 ===================================================== */
 
 function drawNormal(
     mean,
     sd,
-    markX
+    shading
 ) {
 
     if (normalChart) {
@@ -3933,54 +4064,172 @@ function drawNormal(
 
     }
 
+    const labels = [];
 
-    const labels=[];
+    const density = [];
 
-    const values=[];
-
+    const shaded = [];
 
     const start =
-        mean-4*sd;
-
+        mean - 4 * sd;
 
     const end =
-        mean+4*sd;
+        mean + 4 * sd;
 
+    const numberOfPoints = 250;
 
     const step =
-        (end-start)/100;
-
+        (end - start) /
+        numberOfPoints;
 
     for (
-        let x=start;
-        x<=end;
-        x+=step
+        let i = 0;
+        i <= numberOfPoints;
+        i++
     ) {
 
+        const x =
+            start + i * step;
+
         labels.push(
-            x.toFixed(2)
+            x
         );
 
-
-        values.push(
+        const y =
             jStat.normal.pdf(
                 x,
                 mean,
                 sd
-            )
-        );
+            );
+
+        density.push(y);
+
+        let shade = null;
+
+        if (
+            shading &&
+            shading.type === "left"
+        ) {
+
+            if (
+                x <= shading.x
+            ) {
+
+                shade = y;
+
+            }
+
+        }
+
+        else if (
+            shading &&
+            shading.type === "between"
+        ) {
+
+            if (
+                x >= shading.low &&
+                x <= shading.high
+            ) {
+
+                shade = y;
+
+            }
+
+        }
+
+        shaded.push(shade);
 
     }
 
+    const datasets = [
+
+        {
+
+            label:"Normal Distribution",
+
+            data:density,
+
+            borderWidth:2,
+
+            fill:false,
+
+            pointRadius:0,
+
+            tension:0.2
+
+        }
+
+    ];
+
+    if (
+        shading &&
+        (
+            shading.type === "left" ||
+            shading.type === "between"
+        )
+    ) {
+
+        datasets.push({
+
+            label:"Area",
+
+            data:shaded,
+
+            fill:"origin",
+
+            pointRadius:0,
+
+            borderWidth:0,
+
+            tension:0.2
+
+        });
+
+    }
+
+    if (
+        shading &&
+        (
+            shading.type === "left" ||
+            shading.type === "inverse"
+        )
+    ) {
+
+        const markX =
+            shading.x;
+
+        const markY =
+            jStat.normal.pdf(
+                markX,
+                mean,
+                sd
+            );
+
+        datasets.push({
+
+            label:"X",
+
+            data:[
+
+                {
+                    x:markX,
+                    y:markY
+                }
+
+            ],
+
+            type:"scatter",
+
+            pointRadius:6
+
+        });
+
+    }
 
     normalChart =
         new Chart(
-
             document
-            .getElementById(
-                "normalChart"
-            ),
-
+            .getElementById("normalChart"),
             {
 
                 type:"line",
@@ -3989,20 +4238,7 @@ function drawNormal(
 
                     labels:labels,
 
-                    datasets:[{
-
-                        label:
-                        "Normal Distribution",
-
-                        data:values,
-
-                        fill:true,
-
-                        pointRadius:0,
-
-                        tension:.2
-
-                    }]
+                    datasets:datasets
 
                 },
 
@@ -4012,9 +4248,38 @@ function drawNormal(
 
                     maintainAspectRatio:false,
 
+                    interaction:{
+
+                        intersect:false,
+
+                        mode:"index"
+
+                    },
+
+                    plugins:{
+
+                        title:{
+
+                            display:true,
+
+                            text:
+                            "Normal Distribution"
+
+                        },
+
+                        legend:{
+
+                            display:true
+
+                        }
+
+                    },
+
                     scales:{
 
                         x:{
+
+                            type:"linear",
 
                             title:{
 
@@ -4022,11 +4287,27 @@ function drawNormal(
 
                                 text:"X"
 
+                            },
+
+                            ticks:{
+
+                                maxTicksLimit:10,
+
+                                callback:
+                                function(value) {
+
+                                    return Number(value)
+                                        .toFixed(1);
+
+                                }
+
                             }
 
                         },
 
                         y:{
+
+                            beginAtZero:true,
 
                             title:{
 
@@ -4043,57 +4324,111 @@ function drawNormal(
                 }
 
             }
-
         );
 
 }
 
 
 /* =====================================================
-   BINOMIAL
+   BINOMIAL VALIDATION
 ===================================================== */
 
-function binomialExact() {
+function getBinomialInputs() {
 
     const n =
         parseInt(
             document
-            .getElementById(
-                "binomN"
-            ).value
+            .getElementById("binomN")
+            .value,
+            10
         );
-
 
     const p =
         parseFloat(
             document
-            .getElementById(
-                "binomP"
-            ).value
+            .getElementById("binomP")
+            .value
         );
 
+    if (
+        !Number.isInteger(n) ||
+        n < 1
+    ) {
+
+        alert(
+            "n must be a positive integer."
+        );
+
+        return null;
+
+    }
+
+    if (
+        !Number.isFinite(p) ||
+        p < 0 ||
+        p > 1
+    ) {
+
+        alert(
+            "Probability p must be between 0 and 1."
+        );
+
+        return null;
+
+    }
+
+    return {
+        n:n,
+        p:p
+    };
+
+}
+
+
+/* =====================================================
+   BINOMIAL EXACT
+===================================================== */
+
+function binomialExact() {
+
+    const inputs =
+        getBinomialInputs();
+
+    if (!inputs) {
+        return;
+    }
 
     const x =
         parseInt(
             document
-            .getElementById(
-                "binomX"
-            ).value
+            .getElementById("binomX")
+            .value,
+            10
         );
 
+    if (
+        !Number.isInteger(x) ||
+        x < 0 ||
+        x > inputs.n
+    ) {
+
+        alert(
+            "x must be an integer from 0 through n."
+        );
+
+        return;
+
+    }
 
     const probability =
         binomialPMF(
-            n,
-            p,
+            inputs.n,
+            inputs.p,
             x
         );
 
-
     document
-        .getElementById(
-            "binomialOutput"
-        )
+        .getElementById("binomialOutput")
         .innerHTML =
 
         "<strong>P(X = " +
@@ -4106,207 +4441,241 @@ function binomialExact() {
 
         "Percent = " +
 
-        (probability*100)
+        (probability * 100)
         .toFixed(4) +
 
         "%";
 
-
     drawBinomial(
-        n,
-        p
+        inputs.n,
+        inputs.p
     );
 
 }
 
 
+/* =====================================================
+   BINOMIAL AT MOST
+===================================================== */
+
 function binomialAtMost() {
 
-    const n =
-        parseInt(
-            document
-            .getElementById(
-                "binomN"
-            ).value
-        );
+    const inputs =
+        getBinomialInputs();
 
-
-    const p =
-        parseFloat(
-            document
-            .getElementById(
-                "binomP"
-            ).value
-        );
-
+    if (!inputs) {
+        return;
+    }
 
     const x =
         parseInt(
             document
-            .getElementById(
-                "binomX"
-            ).value
+            .getElementById("binomX")
+            .value,
+            10
         );
 
+    if (
+        !Number.isInteger(x) ||
+        x < 0 ||
+        x > inputs.n
+    ) {
 
-    let probability=0;
+        alert(
+            "x must be an integer from 0 through n."
+        );
 
+        return;
+
+    }
+
+    let probability = 0;
 
     for (
-        let i=0;
-        i<=x;
+        let i = 0;
+        i <= x;
         i++
     ) {
 
         probability +=
             binomialPMF(
-                n,
-                p,
+                inputs.n,
+                inputs.p,
                 i
             );
 
     }
 
-
     document
-        .getElementById(
-            "binomialOutput"
-        )
+        .getElementById("binomialOutput")
         .innerHTML =
 
         "<strong>P(X ≤ " +
         x +
         ") = </strong>" +
 
-        probability.toFixed(8);
+        probability.toFixed(8) +
+
+        "<br><br>" +
+
+        "Percent = " +
+
+        (probability * 100)
+        .toFixed(4) +
+
+        "%";
+
+    drawBinomial(
+        inputs.n,
+        inputs.p
+    );
 
 }
 
 
+/* =====================================================
+   BINOMIAL AT LEAST
+===================================================== */
+
 function binomialAtLeast() {
 
-    const n =
-        parseInt(
-            document
-            .getElementById(
-                "binomN"
-            ).value
-        );
+    const inputs =
+        getBinomialInputs();
 
-
-    const p =
-        parseFloat(
-            document
-            .getElementById(
-                "binomP"
-            ).value
-        );
-
+    if (!inputs) {
+        return;
+    }
 
     const x =
         parseInt(
             document
-            .getElementById(
-                "binomX"
-            ).value
+            .getElementById("binomX")
+            .value,
+            10
         );
 
+    if (
+        !Number.isInteger(x) ||
+        x < 0 ||
+        x > inputs.n
+    ) {
 
-    let probability=0;
+        alert(
+            "x must be an integer from 0 through n."
+        );
 
+        return;
+
+    }
+
+    let probability = 0;
 
     for (
-        let i=x;
-        i<=n;
+        let i = x;
+        i <= inputs.n;
         i++
     ) {
 
         probability +=
             binomialPMF(
-                n,
-                p,
+                inputs.n,
+                inputs.p,
                 i
             );
 
     }
 
-
     document
-        .getElementById(
-            "binomialOutput"
-        )
+        .getElementById("binomialOutput")
         .innerHTML =
 
         "<strong>P(X ≥ " +
         x +
         ") = </strong>" +
 
-        probability.toFixed(8);
+        probability.toFixed(8) +
+
+        "<br><br>" +
+
+        "Percent = " +
+
+        (probability * 100)
+        .toFixed(4) +
+
+        "%";
+
+    drawBinomial(
+        inputs.n,
+        inputs.p
+    );
 
 }
 
 
+/* =====================================================
+   BINOMIAL BETWEEN
+===================================================== */
+
 function binomialBetween() {
 
-    const n =
-        parseInt(
-            document
-            .getElementById(
-                "binomN"
-            ).value
-        );
+    const inputs =
+        getBinomialInputs();
 
-
-    const p =
-        parseFloat(
-            document
-            .getElementById(
-                "binomP"
-            ).value
-        );
-
+    if (!inputs) {
+        return;
+    }
 
     const low =
         parseInt(
             document
-            .getElementById(
-                "binomLow"
-            ).value
+            .getElementById("binomLow")
+            .value,
+            10
         );
-
 
     const high =
         parseInt(
             document
-            .getElementById(
-                "binomHigh"
-            ).value
+            .getElementById("binomHigh")
+            .value,
+            10
         );
 
+    if (
+        !Number.isInteger(low) ||
+        !Number.isInteger(high) ||
+        low < 0 ||
+        high > inputs.n ||
+        high < low
+    ) {
 
-    let probability=0;
+        alert(
+            "Enter valid integer values with 0 ≤ lower x ≤ upper x ≤ n."
+        );
 
+        return;
+
+    }
+
+    let probability = 0;
 
     for (
-        let i=low;
-        i<=high;
+        let i = low;
+        i <= high;
         i++
     ) {
 
         probability +=
             binomialPMF(
-                n,
-                p,
+                inputs.n,
+                inputs.p,
                 i
             );
 
     }
 
-
     document
-        .getElementById(
-            "binomialOutput"
-        )
+        .getElementById("binomialOutput")
         .innerHTML =
 
         "<strong>P(" +
@@ -4315,7 +4684,21 @@ function binomialBetween() {
         high +
         ") = </strong>" +
 
-        probability.toFixed(8);
+        probability.toFixed(8) +
+
+        "<br><br>" +
+
+        "Percent = " +
+
+        (probability * 100)
+        .toFixed(4) +
+
+        "%";
+
+    drawBinomial(
+        inputs.n,
+        inputs.p
+    );
 
 }
 
@@ -4331,14 +4714,13 @@ function binomialPMF(
 ) {
 
     if (
-        x<0 ||
-        x>n
+        x < 0 ||
+        x > n
     ) {
 
         return 0;
 
     }
-
 
     return (
 
@@ -4369,14 +4751,13 @@ function combination(
 ) {
 
     if (
-        r<0 ||
-        r>n
+        r < 0 ||
+        r > n
     ) {
 
         return 0;
 
     }
-
 
     r =
         Math.min(
@@ -4384,23 +4765,20 @@ function combination(
             n-r
         );
 
-
-    let result=1;
-
+    let result = 1;
 
     for (
-        let i=1;
-        i<=r;
+        let i = 1;
+        i <= r;
         i++
     ) {
 
         result =
-            result*
-            (n-r+i)/
+            result *
+            (n-r+i) /
             i;
 
     }
-
 
     return result;
 
@@ -4422,15 +4800,13 @@ function drawBinomial(
 
     }
 
+    const labels = [];
 
-    const labels=[];
-
-    const probabilities=[];
-
+    const probabilities = [];
 
     for (
-        let x=0;
-        x<=n;
+        let x = 0;
+        x <= n;
         x++
     ) {
 
@@ -4446,15 +4822,10 @@ function drawBinomial(
 
     }
 
-
     binomialChart =
         new Chart(
-
             document
-            .getElementById(
-                "binomialChart"
-            ),
-
+            .getElementById("binomialChart"),
             {
 
                 type:"bar",
@@ -4481,6 +4852,19 @@ function drawBinomial(
 
                     maintainAspectRatio:false,
 
+                    plugins:{
+
+                        title:{
+
+                            display:true,
+
+                            text:
+                            "Binomial Probability Distribution"
+
+                        }
+
+                    },
+
                     scales:{
 
                         x:{
@@ -4504,8 +4888,7 @@ function drawBinomial(
 
                                 display:true,
 
-                                text:
-                                "Probability"
+                                text:"Probability"
 
                             }
 
@@ -4516,14 +4899,13 @@ function drawBinomial(
                 }
 
             }
-
         );
 
 }
 
 
 /* =====================================================
-   HELPER FUNCTIONS
+   PERCENTILE
 ===================================================== */
 
 function percentile(
@@ -4532,17 +4914,14 @@ function percentile(
 ) {
 
     const index =
-        (percent/100)*
-        (sorted.length-1);
-
+        (percent / 100) *
+        (sorted.length - 1);
 
     const lower =
         Math.floor(index);
 
-
     const upper =
         Math.ceil(index);
-
 
     if (
         lower === upper
@@ -4551,7 +4930,6 @@ function percentile(
         return sorted[lower];
 
     }
-
 
     return (
 
@@ -4563,7 +4941,7 @@ function percentile(
         ) *
 
         (
-            index-lower
+            index - lower
         )
 
     );
@@ -4571,37 +4949,51 @@ function percentile(
 }
 
 
+/* =====================================================
+   STANDARD DEVIATION
+===================================================== */
+
 function standardDeviation(
     data
 ) {
 
+    if (
+        data.length < 2
+    ) {
+
+        return NaN;
+
+    }
+
     const mean =
         data.reduce(
-            (a,b)=>a+b,
+            (a,b) => a+b,
             0
         ) /
         data.length;
 
-
     const sum =
         data.reduce(
             (total,x) =>
-            total+
+            total +
             Math.pow(
-                x-mean,
+                x - mean,
                 2
             ),
             0
         );
 
-
     return Math.sqrt(
-        sum/
-        (data.length-1)
+        sum /
+        (data.length - 1)
     );
 
 }
 
+
+/* =====================================================
+   CORRELATION
+===================================================== */
 
 function correlation(
     x,
@@ -4610,44 +5002,39 @@ function correlation(
 
     const xm =
         x.reduce(
-            (a,b)=>a+b,
+            (a,b) => a+b,
             0
         ) /
         x.length;
 
-
     const ym =
         y.reduce(
-            (a,b)=>a+b,
+            (a,b) => a+b,
             0
         ) /
         y.length;
 
+    let numerator = 0;
 
-    let numerator=0;
+    let sx = 0;
 
-    let sx=0;
-
-    let sy=0;
-
+    let sy = 0;
 
     for (
-        let i=0;
-        i<x.length;
+        let i = 0;
+        i < x.length;
         i++
     ) {
 
         numerator +=
-            (x[i]-xm)*
+            (x[i]-xm) *
             (y[i]-ym);
-
 
         sx +=
             Math.pow(
                 x[i]-xm,
                 2
             );
-
 
         sy +=
             Math.pow(
@@ -4657,16 +5044,28 @@ function correlation(
 
     }
 
+    if (
+        sx === 0 ||
+        sy === 0
+    ) {
+
+        return NaN;
+
+    }
 
     return (
-        numerator/
+        numerator /
         Math.sqrt(
-            sx*sy
+            sx * sy
         )
     );
 
 }
 
+
+/* =====================================================
+   STAT CARD
+===================================================== */
 
 function statCard(
     label,
@@ -4693,22 +5092,68 @@ function statCard(
 
 
 /* =====================================================
-   EXAMPLE DATA
+   GRAPH EXAMPLE
 ===================================================== */
 
 function loadGraphExample() {
 
-    document
-        .getElementById(
-            "graphData"
-        )
-        .value =
+    const data = [
 
-        "12,15,18,14,20,17,19,15,16,18,21,13,17,16,20";
+        12,15,18,14,20,
+        17,19,15,16,18,
+        21,13,17,16,20
+
+    ];
+
+    document
+        .getElementById("typedData")
+        .value =
+        data.join(", ");
+
+    setCurrentData(
+        data,
+        "Example Data"
+    );
+
+    document
+        .getElementById("typedDataResult")
+        .innerHTML =
+
+        "<div class='success'>" +
+
+        "Example dataset loaded."
+
+        +
+
+        "</div>";
+
+    createGraph();
+
+}
+
+
+/* =====================================================
+   REGRESSION EXAMPLE
+===================================================== */
+
+function loadRegressionExample() {
+
+    document
+        .getElementById("xData")
+        .value =
+        "1,2,3,4,5";
+
+    document
+        .getElementById("yData")
+        .value =
+        "2,4,5,4,7";
+
+    calculateRegression();
 
 }
 
 </script>
+
 
 </body>
 
