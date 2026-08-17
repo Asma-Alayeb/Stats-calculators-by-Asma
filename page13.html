@@ -100,7 +100,7 @@ nav a:hover {
 main {
     max-width: 1100px;
     margin: auto;
-    padding: 105px 15px 70px;
+    padding: 105px 15px 90px;
 }
 
 .card {
@@ -374,16 +374,25 @@ tr:nth-child(even) {
 footer {
     background-color: #6a0dad;
     color: white;
-    padding: 2px;
+    padding: 4px 10px;
     text-align: center;
     font-size: 12px;
+
     position: fixed;
     bottom: 0;
+    left: 0;
+    right: 0;
+
     width: 100%;
+    margin: 0;
+
     border-top: 5px solid #b8860b;
+    z-index: 1000;
 }
 
-
+footer p {
+    margin: 0;
+}
 /* =====================================================
    MOBILE
 ===================================================== */
@@ -1410,15 +1419,16 @@ Results will appear here.
 
 <footer>
 
-<p>
-&copy; 2026 Asma S. Alayeb | MAT 1260 Statistics
-</p>
+<footer>
+    <p>&copy; <span id="currentYear"></span> Asma S. Alayeb</p>
+</footer>
 
 </footer>
 
 
 <script>
-
+document.getElementById("currentYear").textContent =
+    new Date().getFullYear();
 /* =====================================================
    GLOBAL VARIABLES
 ===================================================== */
