@@ -1,800 +1,1355 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Data & Graphs | Asma's Statistics Calculators</title>
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Data Explorer & Regression</title>
+
+<link rel="stylesheet" href="style.css">
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
 
-* {
-    box-sizing: border-box;
-}
+/* =========================================
+   PAGE STYLE
+========================================= */
 
 body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
     margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    background: #f5f3f8;
-    color: #333;
-}
-
-/* =========================
-   NAVIGATION
-========================= */
-
-.navbar {
-    background: #4b2e83;
-    padding: 12px 20px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-}
-
-.nav-container {
-    max-width: 1100px;
-    margin: auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-}
-
-.logo {
-    color: white;
-    font-size: 18px;
-    font-weight: bold;
-    text-decoration: none;
-}
-
-.nav-links {
-    display: flex;
-    gap: 5px;
-    flex-wrap: wrap;
-}
-
-.nav-links a {
-    color: white;
-    text-decoration: none;
-    padding: 7px 10px;
-    border-radius: 5px;
-    font-size: 13px;
-}
-
-.nav-links a:hover {
-    background: #6a4c9c;
-}
-
-.nav-links a.active {
-    background: #d4af37;
-    color: #222;
-    font-weight: bold;
+    padding: 0;
 }
 
 
-/* =========================
-   MAIN CONTAINER
-========================= */
-
-.container {
-    max-width: 1100px;
-    margin: 30px auto;
-    padding: 0 20px;
-}
-
-
-/* =========================
+/* =========================================
    HEADER
-========================= */
+========================================= */
 
-.header {
-    background: #4b2e83;
-    color: white;
-    padding: 28px;
-    border-radius: 12px 12px 0 0;
+header {
+
+    background-color: #6a0dad;
+
+    color: #fff;
+
+    padding: 10px 0;
+
     text-align: center;
+
+    position: fixed;
+
+    width: 100%;
+
+    top: 0;
+
+    left: 0;
+
+    z-index: 1000;
+
+    border-bottom: 5px solid #b8860b;
 }
 
-.header h1 {
-    margin: 0 0 8px;
-    font-size: 28px;
-}
 
-.header p {
+header h1 {
+
     margin: 0;
-    font-size: 15px;
+
+    font-size: 24px;
 }
 
 
-/* =========================
-   CARDS
-========================= */
+/* =========================================
+   NAVIGATION
+========================================= */
 
-.card {
-    background: white;
-    padding: 25px;
-    margin-bottom: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+nav {
+
+    background-color: #800080;
+
+    padding: 10px;
+
+    text-align: center;
+
+    position: fixed;
+
+    width: 100%;
+
+    top: 50px;
+
+    left: 0;
+
+    z-index: 999;
+
+    border-top: 5px solid #b8860b;
 }
 
-.instructions {
-    background: #f1ecf8;
-    border-left: 5px solid #4b2e83;
-    padding: 15px;
-    margin-bottom: 18px;
-    border-radius: 5px;
-    line-height: 1.6;
+
+nav ul {
+
+    list-style: none;
+
+    padding: 0;
+
+    margin: 0;
 }
 
-label {
-    display: block;
+
+nav ul li {
+
+    display: inline;
+
+    margin-right: 15px;
+}
+
+
+nav a {
+
+    color: #fff;
+
+    text-decoration: none;
+
     font-weight: bold;
-    margin-bottom: 8px;
-    color: #4b2e83;
+
+    font-size: 16px;
 }
+
+
+nav a:hover {
+
+    text-decoration: underline;
+}
+
+
+/* =========================================
+   MAIN
+========================================= */
+
+main {
+
+    padding: 15px;
+
+    max-width: 1000px;
+
+    margin: 0 auto;
+
+    padding-top: 95px;
+
+    padding-bottom: 60px;
+}
+
+
+section {
+
+    margin-bottom: 12px;
+}
+
+
+.calculator {
+
+    padding: 20px;
+
+    background-color: #fff;
+
+    border-radius: 8px;
+
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+
+h2 {
+
+    margin-top: 0;
+
+    font-size: 22px;
+
+    color: #4b0082;
+}
+
+
+h3 {
+
+    color: #6a0dad;
+}
+
+
+p {
+
+    margin-bottom: 10px;
+
+    font-size: 16px;
+}
+
+
+/* =========================================
+   INPUTS
+========================================= */
+
+input[type="text"],
+input[type="number"],
+textarea,
+select {
+
+    padding: 8px;
+
+    font-size: 16px;
+
+    width: 100%;
+
+    max-width: 400px;
+
+    border-radius: 4px;
+
+    border: 1px solid #ccc;
+}
+
 
 textarea {
-    width: 100%;
+
     min-height: 180px;
-    padding: 15px;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    font-size: 16px;
+
     resize: vertical;
-    font-family: Arial, Helvetica, sans-serif;
-}
 
-textarea:focus {
-    outline: none;
-    border-color: #4b2e83;
+    font-family: Arial, sans-serif;
 }
 
 
-/* =========================
+/* =========================================
    BUTTONS
-========================= */
-
-.buttons {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-top: 15px;
-}
+========================================= */
 
 button {
+
+    padding: 10px 15px;
+
+    background-color: #6a0dad;
+
+    color: white;
+
     border: none;
-    padding: 12px 20px;
-    border-radius: 7px;
-    font-size: 15px;
-    font-weight: bold;
+
+    border-radius: 4px;
+
     cursor: pointer;
+
+    font-size: 16px;
+
+    margin: 5px 5px 5px 0;
 }
 
-.primary {
-    background: #4b2e83;
+
+button:hover {
+
+    background-color: #800080;
+}
+
+
+.goldButton {
+
+    background-color: #b8860b;
+}
+
+
+.goldButton:hover {
+
+    background-color: #8f6c08;
+}
+
+
+/* =========================================
+   TABS
+========================================= */
+
+.tabs {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 5px;
+
+    margin-bottom: 15px;
+}
+
+
+.tabButton {
+
+    background-color: #800080;
+
+    border-radius: 5px 5px 0 0;
+
+    margin: 0;
+
+    padding: 11px 16px;
+
+    font-weight: bold;
+}
+
+
+.tabButton.active {
+
+    background-color: #b8860b;
+
     color: white;
 }
 
-.primary:hover {
-    background: #392263;
-}
 
-.secondary {
-    background: #d4af37;
-    color: #222;
-}
+.tabContent {
 
-.secondary:hover {
-    background: #b99624;
-}
-
-.clear {
-    background: #eeeeee;
-    color: #333;
-}
-
-.clear:hover {
-    background: #dddddd;
+    display: none;
 }
 
 
-/* =========================
-   STATUS
-========================= */
+.tabContent.active {
 
-.status {
-    margin-top: 15px;
+    display: block;
+}
+
+
+/* =========================================
+   INSTRUCTIONS
+========================================= */
+
+.instructions {
+
+    background-color: #f3eafa;
+
+    border-left: 5px solid #6a0dad;
+
     padding: 12px;
-    border-radius: 7px;
-    display: none;
-}
 
-.success {
-    background: #eaf6ea;
-    color: #27632a;
-}
+    margin-bottom: 15px;
 
-.error {
-    background: #fdeaea;
-    color: #9b2226;
+    border-radius: 4px;
 }
 
 
-/* =========================
-   DATA TYPE
-========================= */
+.note {
 
-.data-type {
-    display: inline-block;
-    background: #d4af37;
-    color: #222;
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 13px;
-    font-weight: bold;
+    background-color: #fff8dc;
+
+    border-left: 5px solid #b8860b;
+
+    padding: 12px;
+
+    margin: 12px 0;
+
+    border-radius: 4px;
 }
 
 
-/* =========================
-   SUMMARY STATISTICS
-========================= */
+/* =========================================
+   RESULTS
+========================================= */
 
-.summary-grid {
+.result {
+
+    background-color: #f3eafa;
+
+    border-left: 5px solid #6a0dad;
+
+    padding: 12px;
+
+    margin-top: 10px;
+
+    border-radius: 4px;
+
+    font-size: 16px;
+}
+
+
+.result strong {
+
+    color: #4b0082;
+}
+
+
+/* =========================================
+   STATISTICS CARDS
+========================================= */
+
+.statsGrid {
+
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
-    gap: 12px;
+
+    grid-template-columns:
+        repeat(auto-fit, minmax(150px, 1fr));
+
+    gap: 10px;
+
     margin-top: 15px;
 }
 
-.stat-box {
-    background: #f5f3f8;
-    border-radius: 8px;
+
+.statCard {
+
+    background-color: #f3eafa;
+
     padding: 15px;
+
     text-align: center;
+
+    border-radius: 6px;
 }
 
-.stat-label {
+
+.statCard .label {
+
     font-size: 13px;
-    color: #666;
-    margin-bottom: 6px;
+
+    color: #555;
 }
 
-.stat-value {
-    font-size: 21px;
+
+.statCard .value {
+
+    font-size: 20px;
+
     font-weight: bold;
-    color: #4b2e83;
+
+    color: #6a0dad;
+
+    margin-top: 5px;
 }
 
 
-/* =========================
-   GRAPH SECTIONS
-========================= */
+/* =========================================
+   CHARTS
+========================================= */
 
-.graph-title {
-    color: #4b2e83;
-    margin-top: 0;
-    margin-bottom: 6px;
-}
+.chartBox {
 
-.chart-container {
     position: relative;
+
     width: 100%;
-    height: 420px;
-    margin-top: 20px;
+
+    height: 450px;
+
+    margin-top: 15px;
 }
 
 
-/* =========================
-   HIDDEN
-========================= */
+.chartBox.small {
 
-.hidden {
-    display: none;
+    height: 350px;
 }
 
 
-/* =========================
-   FOOTER
-========================= */
+/* =========================================
+   TABLE
+========================================= */
 
-.footer {
+.tableContainer {
+
+    overflow-x: auto;
+
+    margin-top: 15px;
+}
+
+
+table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    background-color: white;
+}
+
+
+th {
+
+    background-color: #6a0dad;
+
+    color: white;
+
+    padding: 9px;
+
     text-align: center;
-    font-size: 13px;
-    color: #777;
-    padding: 25px;
 }
 
-.footer a {
-    color: #4b2e83;
+
+td {
+
+    border: 1px solid #ddd;
+
+    padding: 8px;
+
+    text-align: center;
+}
+
+
+tr:nth-child(even) {
+
+    background-color: #f6f2fa;
+}
+
+
+/* =========================================
+   EQUATION
+========================================= */
+
+.equation {
+
+    font-size: 22px;
+
     font-weight: bold;
-    text-decoration: none;
+
+    color: #6a0dad;
+
+    background-color: #f3eafa;
+
+    padding: 15px;
+
+    border-radius: 6px;
+
+    text-align: center;
+
+    margin: 15px 0;
 }
 
 
-/* =========================
+/* =========================================
+   FOOTER
+========================================= */
+
+footer {
+
+    background-color: #6a0dad;
+
+    color: #fff;
+
+    padding: 2px;
+
+    text-align: center;
+
+    font-size: 12px;
+
+    position: fixed;
+
+    width: 100%;
+
+    bottom: 0;
+
+    border-top: 5px solid #b8860b;
+}
+
+
+/* =========================================
    MOBILE
-========================= */
+========================================= */
 
 @media (max-width: 700px) {
 
-    .nav-container {
-        flex-direction: column;
-        gap: 10px;
+    nav ul li {
+
+        margin-right: 7px;
     }
 
-    .nav-links {
-        justify-content: center;
+    nav a {
+
+        font-size: 13px;
     }
 
-    .nav-links a {
-        font-size: 12px;
-        padding: 6px 8px;
+    header h1 {
+
+        font-size: 20px;
     }
 
-    .header h1 {
-        font-size: 22px;
+    .chartBox {
+
+        height: 350px;
     }
 
-    .card {
-        padding: 18px;
-    }
+    .tabButton {
 
-    .chart-container {
-        height: 320px;
+        font-size: 13px;
+
+        padding: 9px 10px;
     }
 
 }
 
 </style>
+
 </head>
 
 
 <body>
 
 
-<!-- =========================
-     NAVIGATION
-========================= -->
+<header>
 
-<nav class="navbar">
+<h1>
+Data Explorer & Regression
+</h1>
 
-    <div class="nav-container">
+</header>
 
-        <a href="index.html" class="logo">
-            Asma's Statistics Calculators
-        </a>
 
-        <div class="nav-links">
+<nav>
 
-            <a href="index.html">Home</a>
+<ul>
 
-            <a href="page2.html">2</a>
-            <a href="page3.html">3</a>
-            <a href="page4.html">4</a>
-            <a href="page5.html">5</a>
-            <a href="page6.html">6</a>
-            <a href="page7.html">7</a>
-            <a href="page8.html">8</a>
-            <a href="page9.html">9</a>
-            <a href="page10.html">10</a>
-            <a href="page11.html">11</a>
-            <a href="page12.html">12</a>
+<li>
+<a href="index.html">Home</a>
+</li>
 
-            <a href="page13.html" class="active">13</a>
+<li>
+<a href="page13.html">Data Explorer</a>
+</li>
 
-        </div>
-
-    </div>
+</ul>
 
 </nav>
 
 
-<!-- =========================
-     MAIN CONTENT
-========================= -->
+<main>
 
-<div class="container">
 
+<!-- =====================================
+     MAIN CALCULATOR
+===================================== -->
 
-    <!-- HEADER -->
+<section class="calculator">
 
-    <div class="header">
 
-        <h1>Data & Graphs</h1>
+<div class="tabs">
 
-        <p>
-            Enter your data and create appropriate statistical graphs.
-        </p>
+<button
+class="tabButton active"
+onclick="openTab(event,'dataTab')">
 
-    </div>
+Data & Graphs
 
+</button>
 
-    <!-- =========================
-         DATA INPUT
-    ========================= -->
 
-    <div class="card">
+<button
+class="tabButton"
+onclick="openTab(event,'regressionTab')">
 
-        <div class="instructions">
+Regression & Correlation
 
-            <strong>How to use this tool:</strong>
+</button>
 
-            <br>
 
-            Enter your data below. You can enter one observation per line
-            or paste a comma-separated list.
+<button
+class="tabButton"
+onclick="openTab(event,'residualTab')">
 
-            <br><br>
+Residual Plot
 
-            <strong>Quantitative example:</strong>
+</button>
 
-            <br>
 
-            12, 15, 18, 14, 20, 17, 19, 15
+<button
+class="tabButton"
+onclick="openTab(event,'summaryTab')">
 
-            <br><br>
+Statistics Summary
 
-            <strong>Categorical example:</strong>
+</button>
 
-            <br>
 
-            Apple, Banana, Apple, Orange, Banana, Apple
+<button
+class="tabButton"
+onclick="openTab(event,'frequencyTab')">
 
-        </div>
+Frequency Table
 
-
-        <label for="dataInput">
-            Enter Your Data
-        </label>
-
-
-        <textarea
-            id="dataInput"
-            placeholder="Enter your data here..."
-        ></textarea>
-
-
-        <div class="buttons">
-
-            <button
-                class="primary"
-                onclick="analyzeData()">
-
-                Analyze Data
-
-            </button>
-
-
-            <button
-                class="secondary"
-                onclick="loadNumericalExample()">
-
-                Numerical Example
-
-            </button>
-
-
-            <button
-                class="secondary"
-                onclick="loadCategoricalExample()">
-
-                Categorical Example
-
-            </button>
-
-
-            <button
-                class="clear"
-                onclick="clearData()">
-
-                Clear
-
-            </button>
-
-        </div>
-
-
-        <div
-            id="status"
-            class="status">
-        </div>
-
-    </div>
-
-
-    <!-- =========================
-         DATA TYPE
-    ========================= -->
-
-    <div
-        id="typeCard"
-        class="card hidden">
-
-        <h2 class="graph-title">
-            Data Type
-        </h2>
-
-        <p>
-
-            Your data was identified as:
-
-            <span
-                id="dataType"
-                class="data-type">
-            </span>
-
-        </p>
-
-    </div>
-
-
-    <!-- =========================
-         SUMMARY STATISTICS
-    ========================= -->
-
-    <div
-        id="summaryCard"
-        class="card hidden">
-
-        <h2 class="graph-title">
-            Summary Statistics
-        </h2>
-
-        <div
-            id="summaryGrid"
-            class="summary-grid">
-        </div>
-
-    </div>
-
-
-    <!-- =========================
-         BAR CHART
-    ========================= -->
-
-    <div
-        id="barCard"
-        class="card hidden">
-
-        <h2 class="graph-title">
-            Bar Chart
-        </h2>
-
-        <p>
-            A bar chart displays the frequency of each category.
-            The bars are separated because the categories are distinct.
-        </p>
-
-        <div class="chart-container">
-
-            <canvas id="barChart"></canvas>
-
-        </div>
-
-    </div>
-
-
-    <!-- =========================
-         PIE CHART
-    ========================= -->
-
-    <div
-        id="pieCard"
-        class="card hidden">
-
-        <h2 class="graph-title">
-            Pie Chart
-        </h2>
-
-        <p>
-            A pie chart shows the relative frequency of each category.
-        </p>
-
-        <div class="chart-container">
-
-            <canvas id="pieChart"></canvas>
-
-        </div>
-
-    </div>
-
-
-    <!-- =========================
-         HISTOGRAM
-    ========================= -->
-
-    <div
-        id="histogramCard"
-        class="card hidden">
-
-        <h2 class="graph-title">
-            Histogram
-        </h2>
-
-        <p>
-            A histogram displays the distribution of quantitative data.
-            The bars touch because the intervals represent continuous
-            numerical values.
-        </p>
-
-        <div class="chart-container">
-
-            <canvas id="histogramChart"></canvas>
-
-        </div>
-
-    </div>
-
-
-    <!-- =========================
-         FIVE NUMBER SUMMARY
-    ========================= -->
-
-    <div
-        id="boxCard"
-        class="card hidden">
-
-        <h2 class="graph-title">
-            Five-Number Summary
-        </h2>
-
-        <p>
-            The five-number summary describes the center and spread
-            of quantitative data.
-        </p>
-
-        <div
-            id="fiveNumberSummary"
-            class="summary-grid">
-        </div>
-
-    </div>
-
-
-    <!-- FOOTER -->
-
-    <div class="footer">
-
-        <a href="index.html">
-            ← Back to Statistics Calculators Home
-        </a>
-
-        <br><br>
-
-        Asma's Statistics Calculators
-
-    </div>
+</button>
 
 </div>
+
+
+
+<!-- =====================================
+     DATA TAB
+===================================== -->
+
+<div
+id="dataTab"
+class="tabContent active">
+
+
+<h2>
+Data & Graphs
+</h2>
+
+
+<div class="instructions">
+
+<strong>Enter quantitative data:</strong>
+
+<br>
+
+Enter one number per line or separate values
+with commas.
+
+<br><br>
+
+<strong>Example:</strong>
+
+<br>
+
+12, 15, 18, 14, 20, 17, 19, 15
+
+<br><br>
+
+<strong>For categorical data:</strong>
+
+<br>
+
+Apple, Banana, Apple, Orange, Banana
+
+</div>
+
+
+<p>
+
+<label>
+Data:
+</label>
+
+<textarea
+id="generalData"
+placeholder="Enter your data here..."></textarea>
+
+</p>
+
+
+<button onclick="analyzeGeneralData()">
+
+Analyze Data
+
+</button>
+
+
+<button
+class="goldButton"
+onclick="loadGeneralExample()">
+
+Load Example
+
+</button>
+
+
+<div
+id="generalResults"
+class="result">
+
+Enter data and click
+<strong>Analyze Data</strong>.
+
+</div>
+
+
+<div class="chartBox">
+
+<canvas id="generalChart"></canvas>
+
+</div>
+
+
+</div>
+
+
+
+<!-- =====================================
+     REGRESSION TAB
+===================================== -->
+
+<div
+id="regressionTab"
+class="tabContent">
+
+
+<h2>
+Linear Regression & Correlation
+</h2>
+
+
+<div class="instructions">
+
+Enter paired quantitative data.
+
+Each X value must correspond to the Y value
+on the same line.
+
+<br><br>
+
+<strong>Example:</strong>
+
+<br>
+
+X: 1, 2, 3, 4, 5
+
+<br>
+
+Y: 2, 4, 5, 4, 7
+
+</div>
+
+
+<p>
+
+<label>
+X Values (Explanatory Variable):
+</label>
+
+<textarea
+id="xData"
+placeholder="Example:
+1
+2
+3
+4
+5"></textarea>
+
+</p>
+
+
+<p>
+
+<label>
+Y Values (Response Variable):
+</label>
+
+<textarea
+id="yData"
+placeholder="Example:
+2
+4
+5
+4
+7"></textarea>
+
+</p>
+
+
+<button
+onclick="calculateRegression()">
+
+Calculate Regression
+
+</button>
+
+
+<button
+class="goldButton"
+onclick="loadRegressionExample()">
+
+Load Example
+
+</button>
+
+
+<button
+onclick="downloadRegressionCSV()">
+
+Download Results
+
+</button>
+
+
+<div id="regressionResults">
+
+<div class="result">
+
+Enter X and Y values to calculate
+the regression equation and correlation.
+
+</div>
+
+</div>
+
+
+<div class="equation"
+id="regressionEquation">
+
+Regression Equation
+
+</div>
+
+
+<div class="chartBox">
+
+<canvas id="scatterChart"></canvas>
+
+</div>
+
+
+</div>
+
+
+
+<!-- =====================================
+     RESIDUAL TAB
+===================================== -->
+
+<div
+id="residualTab"
+class="tabContent">
+
+
+<h2>
+Residual Plot
+</h2>
+
+
+<div class="instructions">
+
+A residual is the difference between an observed
+Y-value and its predicted Y-value.
+
+<br><br>
+
+<strong>
+Residual = Observed Y − Predicted Y
+</strong>
+
+<br><br>
+
+A good linear model generally has residuals
+scattered randomly around zero.
+
+</div>
+
+
+<div
+id="residualResults"
+class="result">
+
+Calculate a regression first to create
+the residual plot.
+
+</div>
+
+
+<div class="chartBox">
+
+<canvas id="residualChart"></canvas>
+
+</div>
+
+
+<div
+id="residualTable"
+class="tableContainer">
+
+</div>
+
+
+</div>
+
+
+
+<!-- =====================================
+     SUMMARY TAB
+===================================== -->
+
+<div
+id="summaryTab"
+class="tabContent">
+
+
+<h2>
+Statistics Summary
+</h2>
+
+
+<div class="instructions">
+
+Enter quantitative data to calculate common
+descriptive statistics.
+
+</div>
+
+
+<textarea
+id="summaryData"
+placeholder="Enter quantitative data..."></textarea>
+
+
+<br>
+
+
+<button onclick="calculateSummary()">
+
+Calculate Statistics
+
+</button>
+
+
+<div
+id="summaryCards"
+class="statsGrid">
+
+</div>
+
+
+<div
+id="fiveNumber"
+class="statsGrid">
+
+</div>
+
+
+</div>
+
+
+
+<!-- =====================================
+     FREQUENCY TAB
+===================================== -->
+
+<div
+id="frequencyTab"
+class="tabContent">
+
+
+<h2>
+Frequency Table
+</h2>
+
+
+<div class="instructions">
+
+Enter categorical or quantitative data.
+The calculator will count the frequency of
+each value.
+
+</div>
+
+
+<textarea
+id="frequencyData"
+placeholder="Apple
+Banana
+Apple
+Orange
+Banana"></textarea>
+
+
+<br>
+
+
+<button onclick="createFrequencyTable()">
+
+Create Frequency Table
+
+</button>
+
+
+<div
+id="frequencyOutput"
+class="tableContainer">
+
+</div>
+
+
+</div>
+
+
+</section>
+
+
+</main>
+
+
+
+<footer>
+
+<p>
+&copy;2024 Asma S. Alayeb
+</p>
+
+</footer>
 
 
 
 <script>
 
 
-/* =========================
+/* =========================================
+   TAB SYSTEM
+========================================= */
+
+function openTab(evt, tabName) {
+
+    var tabContent =
+        document.getElementsByClassName(
+            "tabContent"
+        );
+
+    for (
+        var i = 0;
+        i < tabContent.length;
+        i++
+    ) {
+
+        tabContent[i]
+            .classList
+            .remove("active");
+
+    }
+
+
+    var tabButtons =
+        document.getElementsByClassName(
+            "tabButton"
+        );
+
+    for (
+        var i = 0;
+        i < tabButtons.length;
+        i++
+    ) {
+
+        tabButtons[i]
+            .classList
+            .remove("active");
+
+    }
+
+
+    document
+        .getElementById(tabName)
+        .classList
+        .add("active");
+
+
+    evt.currentTarget
+        .classList
+        .add("active");
+
+}
+
+
+
+/* =========================================
    CHART VARIABLES
-========================= */
+========================================= */
 
-let barChart = null;
+var generalChart = null;
 
-let pieChart = null;
+var scatterChart = null;
 
-let histogramChart = null;
+var residualChart = null;
+
+var regressionData = null;
 
 
 
-/* =========================
-   ANALYZE DATA
-========================= */
+/* =========================================
+   PARSE DATA
+========================================= */
 
-function analyzeData() {
+function parseData(text) {
 
-    const input =
-        document.getElementById("dataInput")
+    return text
+        .split(/[\s,;]+/)
+        .map(function(value) {
+
+            return parseFloat(value);
+
+        })
+        .filter(function(value) {
+
+            return !isNaN(value);
+
+        });
+
+}
+
+
+
+/* =========================================
+   GENERAL DATA
+========================================= */
+
+function analyzeGeneralData() {
+
+    var text =
+        document
+        .getElementById("generalData")
         .value
         .trim();
 
 
-    if (!input) {
+    if (!text) {
 
-        showStatus(
-            "Please enter some data first.",
-            "error"
-        );
+        alert("Please enter data.");
 
         return;
+
     }
 
 
-    let data =
-        input
-        .split(/[\n,]+/)
-        .map(x => x.trim())
-        .filter(x => x !== "");
+    var raw =
+        text
+        .split(/[\n,;]+/)
+        .map(function(x) {
+
+            return x.trim();
+
+        })
+        .filter(function(x) {
+
+            return x !== "";
+
+        });
 
 
-    if (data.length < 2) {
+    if (raw.length < 2) {
 
-        showStatus(
-            "Please enter at least two observations.",
-            "error"
+        alert(
+            "Please enter at least two observations."
         );
 
         return;
+
     }
 
 
-    const numericData =
-        data.map(Number);
+    var numeric =
+        raw.map(Number);
 
 
-    const isNumeric =
-        numericData.every(
-            x => !isNaN(x)
-        );
+    var isNumeric =
+        numeric.every(function(x) {
 
+            return !isNaN(x);
 
-    document
-        .getElementById("typeCard")
-        .classList
-        .remove("hidden");
+        });
 
 
     if (isNumeric) {
 
+        var data = numeric;
+
+        var mean =
+            data.reduce(
+                function(a,b) {
+                    return a+b;
+                },
+                0
+            ) / data.length;
+
+
+        var sorted =
+            data.slice().sort(
+                function(a,b) {
+                    return a-b;
+                }
+            );
+
+
+        var median =
+            getMedian(sorted);
+
+
+        var min =
+            sorted[0];
+
+
+        var max =
+            sorted[
+                sorted.length-1
+            ];
+
+
+        var range =
+            max-min;
+
+
+        var sd =
+            getSD(data);
+
+
         document
-            .getElementById("dataType")
-            .textContent =
-            "Quantitative (Numerical)";
+            .getElementById(
+                "generalResults"
+            )
+            .innerHTML =
+
+            "<strong>Quantitative Data</strong>" +
+            "<br><br>" +
+
+            "n = " + data.length +
+            "<br>" +
+
+            "Mean = " + mean.toFixed(4) +
+            "<br>" +
+
+            "Median = " +
+            median.toFixed(4) +
+            "<br>" +
+
+            "Minimum = " +
+            min.toFixed(4) +
+            "<br>" +
+
+            "Maximum = " +
+            max.toFixed(4) +
+            "<br>" +
+
+            "Range = " +
+            range.toFixed(4) +
+            "<br>" +
+
+            "Standard Deviation = " +
+            sd.toFixed(4);
 
 
-        hideCategoricalGraphs();
-
-
-        createSummary(
-            numericData
-        );
-
-
-        createHistogram(
-            numericData
-        );
-
-
-        createFiveNumberSummary(
-            numericData
-        );
-
-
-        showStatus(
-            "Your quantitative data has been analyzed.",
-            "success"
-        );
+        drawHistogram(data);
 
     }
 
     else {
 
+        var frequencies = {};
+
+        raw.forEach(function(value) {
+
+            if (
+                frequencies[value]
+            ) {
+
+                frequencies[value]++;
+
+            }
+
+            else {
+
+                frequencies[value] = 1;
+
+            }
+
+        });
+
+
         document
-            .getElementById("dataType")
-            .textContent =
-            "Categorical";
+            .getElementById(
+                "generalResults"
+            )
+            .innerHTML =
+
+            "<strong>Categorical Data</strong>" +
+            "<br><br>" +
+
+            "Number of observations: " +
+            raw.length;
 
 
-        hideNumericalGraphs();
-
-
-        createBarChart(data);
-
-
-        createPieChart(data);
-
-
-        showStatus(
-            "Your categorical data has been analyzed.",
-            "success"
+        drawCategoricalChart(
+            frequencies
         );
 
     }
@@ -803,421 +1358,101 @@ function analyzeData() {
 
 
 
-/* =========================
-   SUMMARY STATISTICS
-========================= */
+/* =========================================
+   HISTOGRAM
+========================================= */
 
-function createSummary(data) {
+function drawHistogram(data) {
 
-    document
-        .getElementById("summaryCard")
-        .classList
-        .remove("hidden");
+    if (generalChart) {
 
-
-    const sorted =
-        [...data]
-        .sort(
-            (a,b) => a-b
-        );
-
-
-    const n =
-        data.length;
-
-
-    const mean =
-        data.reduce(
-            (sum,x) => sum+x,
-            0
-        ) / n;
-
-
-    const median =
-        getMedian(sorted);
-
-
-    const min =
-        sorted[0];
-
-
-    const max =
-        sorted[n-1];
-
-
-    const range =
-        max-min;
-
-
-    let standardDeviation = 0;
-
-
-    if (n > 1) {
-
-        const variance =
-            data.reduce(
-                (sum,x) =>
-                    sum +
-                    Math.pow(
-                        x-mean,
-                        2
-                    ),
-                0
-            ) / (n-1);
-
-
-        standardDeviation =
-            Math.sqrt(variance);
+        generalChart.destroy();
 
     }
 
 
-    document
-        .getElementById("summaryGrid")
-        .innerHTML = `
-
-        <div class="stat-box">
-
-            <div class="stat-label">
-                Count
-            </div>
-
-            <div class="stat-value">
-                ${n}
-            </div>
-
-        </div>
+    var sorted =
+        data.slice().sort(
+            function(a,b) {
+                return a-b;
+            }
+        );
 
 
-        <div class="stat-box">
+    var min = sorted[0];
 
-            <div class="stat-label">
-                Mean
-            </div>
-
-            <div class="stat-value">
-                ${format(mean)}
-            </div>
-
-        </div>
-
-
-        <div class="stat-box">
-
-            <div class="stat-label">
-                Median
-            </div>
-
-            <div class="stat-value">
-                ${format(median)}
-            </div>
-
-        </div>
-
-
-        <div class="stat-box">
-
-            <div class="stat-label">
-                Minimum
-            </div>
-
-            <div class="stat-value">
-                ${format(min)}
-            </div>
-
-        </div>
-
-
-        <div class="stat-box">
-
-            <div class="stat-label">
-                Maximum
-            </div>
-
-            <div class="stat-value">
-                ${format(max)}
-            </div>
-
-        </div>
-
-
-        <div class="stat-box">
-
-            <div class="stat-label">
-                Range
-            </div>
-
-            <div class="stat-value">
-                ${format(range)}
-            </div>
-
-        </div>
-
-
-        <div class="stat-box">
-
-            <div class="stat-label">
-                Standard Deviation
-            </div>
-
-            <div class="stat-value">
-                ${format(standardDeviation)}
-            </div>
-
-        </div>
-
-    `;
-
-}
-
-
-
-/* =========================
-   MEDIAN
-========================= */
-
-function getMedian(sorted) {
-
-    const n =
-        sorted.length;
-
-
-    if (n % 2 === 1) {
-
-        return sorted[
-            Math.floor(n/2)
+    var max =
+        sorted[
+            sorted.length-1
         ];
 
-    }
 
-
-    return (
-        sorted[n/2 - 1] +
-        sorted[n/2]
-    ) / 2;
-
-}
-
-
-
-/* =========================
-   FIVE NUMBER SUMMARY
-========================= */
-
-function createFiveNumberSummary(data) {
-
-    document
-        .getElementById("boxCard")
-        .classList
-        .remove("hidden");
-
-
-    const sorted =
-        [...data]
-        .sort(
-            (a,b) => a-b
-        );
-
-
-    const median =
-        getMedian(sorted);
-
-
-    const lower =
-        sorted.slice(
-            0,
-            Math.floor(
-                sorted.length/2
+    var bins =
+        Math.max(
+            5,
+            Math.min(
+                12,
+                Math.ceil(
+                    Math.sqrt(
+                        data.length
+                    )
+                )
             )
         );
 
 
-    const upper =
-        sorted.slice(
-            Math.ceil(
-                sorted.length/2
-            )
-        );
+    var width =
+        (max-min) / bins;
 
 
-    const q1 =
-        lower.length
-        ? getMedian(lower)
-        : sorted[0];
+    if (width === 0) {
 
-
-    const q3 =
-        upper.length
-        ? getMedian(upper)
-        : sorted[sorted.length-1];
-
-
-    document
-        .getElementById(
-            "fiveNumberSummary"
-        )
-        .innerHTML = `
-
-        <div class="stat-box">
-
-            <div class="stat-label">
-                Minimum
-            </div>
-
-            <div class="stat-value">
-                ${format(sorted[0])}
-            </div>
-
-        </div>
-
-
-        <div class="stat-box">
-
-            <div class="stat-label">
-                Q1
-            </div>
-
-            <div class="stat-value">
-                ${format(q1)}
-            </div>
-
-        </div>
-
-
-        <div class="stat-box">
-
-            <div class="stat-label">
-                Median
-            </div>
-
-            <div class="stat-value">
-                ${format(median)}
-            </div>
-
-        </div>
-
-
-        <div class="stat-box">
-
-            <div class="stat-label">
-                Q3
-            </div>
-
-            <div class="stat-value">
-                ${format(q3)}
-            </div>
-
-        </div>
-
-
-        <div class="stat-box">
-
-            <div class="stat-label">
-                Maximum
-            </div>
-
-            <div class="stat-value">
-                ${format(
-                    sorted[
-                        sorted.length-1
-                    ]
-                )}
-            </div>
-
-        </div>
-
-    `;
-
-}
-
-
-
-/* =========================
-   HISTOGRAM
-========================= */
-
-function createHistogram(data) {
-
-    document
-        .getElementById("histogramCard")
-        .classList
-        .remove("hidden");
-
-
-    if (histogramChart) {
-
-        histogramChart.destroy();
+        width = 1;
 
     }
 
 
-    const min =
-        Math.min(...data);
+    var counts =
+        new Array(bins).fill(0);
 
 
-    const max =
-        Math.max(...data);
-
-
-    let bins =
-        Math.ceil(
-            Math.sqrt(
-                data.length
-            )
-        );
-
-
-    if (bins < 5)
-        bins = 5;
-
-
-    if (bins > 12)
-        bins = 12;
-
-
-    const width =
-        (max-min) / bins || 1;
-
-
-    const counts =
-        new Array(bins)
-        .fill(0);
-
-
-    const labels = [];
+    var labels = [];
 
 
     for (
-        let i=0;
+        var i=0;
         i<bins;
         i++
     ) {
 
-        const start =
+        var start =
             min + i*width;
 
 
-        const end =
+        var end =
             start + width;
 
 
         labels.push(
-            `${format(start)}–${format(end)}`
+            start.toFixed(2) +
+            " – " +
+            end.toFixed(2)
         );
 
     }
 
 
-    data.forEach(value => {
+    data.forEach(function(value) {
 
-        let index =
+        var index =
             Math.floor(
-                (value-min) /
-                width
+                (value-min)/width
             );
 
 
-        if (index >= bins) {
+        if (
+            index >= bins
+        ) {
 
             index =
                 bins-1;
@@ -1230,11 +1465,12 @@ function createHistogram(data) {
     });
 
 
-    histogramChart =
+    generalChart =
         new Chart(
 
-            document.getElementById(
-                "histogramChart"
+            document
+            .getElementById(
+                "generalChart"
             ),
 
             {
@@ -1249,21 +1485,18 @@ function createHistogram(data) {
 
                     datasets: [{
 
-                        label: "Frequency",
+                        label:
+                            "Frequency",
 
-                        data: counts,
+                        data:
+                            counts,
 
 
-                        /* 
-                           These settings make
-                           histogram bars touch.
-                        */
+                        /* Histogram bars touch */
 
                         categoryPercentage: 1.0,
 
-                        barPercentage: 1.0,
-
-                        borderWidth: 1
+                        barPercentage: 1.0
 
                     }]
 
@@ -1288,10 +1521,7 @@ function createHistogram(data) {
                                 text:
                                     "Data Values"
 
-                            },
-
-
-                            offset: false
+                            }
 
                         },
 
@@ -1300,20 +1530,12 @@ function createHistogram(data) {
 
                             beginAtZero: true,
 
-
                             title: {
 
                                 display: true,
 
                                 text:
                                     "Frequency"
-
-                            },
-
-
-                            ticks: {
-
-                                stepSize: 1
 
                             }
 
@@ -1342,68 +1564,27 @@ function createHistogram(data) {
 
 
 
-/* =========================
-   FREQUENCY TABLE
-========================= */
+/* =========================================
+   CATEGORICAL CHART
+========================================= */
 
-function createFrequencyTable(data) {
+function drawCategoricalChart(
+    frequencies
+) {
 
-    const frequencies = {};
+    if (generalChart) {
 
-
-    data.forEach(value => {
-
-        if (
-            frequencies[value]
-        ) {
-
-            frequencies[value]++;
-
-        }
-
-        else {
-
-            frequencies[value] = 1;
-
-        }
-
-    });
-
-
-    return frequencies;
-
-}
-
-
-
-/* =========================
-   BAR CHART
-========================= */
-
-function createBarChart(data) {
-
-    document
-        .getElementById("barCard")
-        .classList
-        .remove("hidden");
-
-
-    if (barChart) {
-
-        barChart.destroy();
+        generalChart.destroy();
 
     }
 
 
-    const frequencies =
-        createFrequencyTable(data);
-
-
-    barChart =
+    generalChart =
         new Chart(
 
-            document.getElementById(
-                "barChart"
+            document
+            .getElementById(
+                "generalChart"
             ),
 
             {
@@ -1424,19 +1605,10 @@ function createBarChart(data) {
                         label:
                             "Frequency",
 
-
                         data:
                             Object.values(
                                 frequencies
-                            ),
-
-
-                        categoryPercentage:
-                            0.8,
-
-
-                        barPercentage:
-                            0.9
+                            )
 
                     }]
 
@@ -1456,13 +1628,11 @@ function createBarChart(data) {
 
                             beginAtZero: true,
 
-
                             ticks: {
 
                                 stepSize: 1
 
                             },
-
 
                             title: {
 
@@ -1470,20 +1640,6 @@ function createBarChart(data) {
 
                                 text:
                                     "Frequency"
-
-                            }
-
-                        },
-
-
-                        x: {
-
-                            title: {
-
-                                display: true,
-
-                                text:
-                                    "Category"
 
                             }
 
@@ -1501,57 +1657,411 @@ function createBarChart(data) {
 
 
 
-/* =========================
-   PIE CHART
-========================= */
+/* =========================================
+   REGRESSION
+========================================= */
 
-function createPieChart(data) {
+function calculateRegression() {
 
-    document
-        .getElementById("pieCard")
-        .classList
-        .remove("hidden");
+    var x =
+        parseData(
+            document
+            .getElementById("xData")
+            .value
+        );
 
 
-    if (pieChart) {
+    var y =
+        parseData(
+            document
+            .getElementById("yData")
+            .value
+        );
 
-        pieChart.destroy();
+
+    if (
+        x.length < 2 ||
+        y.length < 2
+    ) {
+
+        alert(
+            "Please enter at least two pairs of values."
+        );
+
+        return;
 
     }
 
 
-    const frequencies =
-        createFrequencyTable(data);
+    if (
+        x.length !== y.length
+    ) {
+
+        alert(
+            "X and Y must contain the same number of values."
+        );
+
+        return;
+
+    }
 
 
-    pieChart =
+    var n = x.length;
+
+
+    var xMean =
+        x.reduce(
+            function(a,b) {
+                return a+b;
+            },
+            0
+        ) / n;
+
+
+    var yMean =
+        y.reduce(
+            function(a,b) {
+                return a+b;
+            },
+            0
+        ) / n;
+
+
+    var numerator = 0;
+
+    var denominator = 0;
+
+
+    for (
+        var i=0;
+        i<n;
+        i++
+    ) {
+
+        numerator +=
+            (x[i]-xMean) *
+            (y[i]-yMean);
+
+
+        denominator +=
+            Math.pow(
+                x[i]-xMean,
+                2
+            );
+
+    }
+
+
+    if (denominator === 0) {
+
+        alert(
+            "The X values must have variation."
+        );
+
+        return;
+
+    }
+
+
+    var slope =
+        numerator /
+        denominator;
+
+
+    var intercept =
+        yMean -
+        slope*xMean;
+
+
+    var rNumerator = 0;
+
+    var rX = 0;
+
+    var rY = 0;
+
+
+    for (
+        var i=0;
+        i<n;
+        i++
+    ) {
+
+        rNumerator +=
+            (x[i]-xMean) *
+            (y[i]-yMean);
+
+
+        rX +=
+            Math.pow(
+                x[i]-xMean,
+                2
+            );
+
+
+        rY +=
+            Math.pow(
+                y[i]-yMean,
+                2
+            );
+
+    }
+
+
+    var r =
+        rNumerator /
+        Math.sqrt(
+            rX*rY
+        );
+
+
+    var rSquared =
+        r*r;
+
+
+    var predictions = [];
+
+    var residuals = [];
+
+
+    for (
+        var i=0;
+        i<n;
+        i++
+    ) {
+
+        var predicted =
+            intercept +
+            slope*x[i];
+
+
+        var residual =
+            y[i] -
+            predicted;
+
+
+        predictions.push(
+            predicted
+        );
+
+
+        residuals.push(
+            residual
+        );
+
+    }
+
+
+    regressionData = {
+
+        x: x,
+
+        y: y,
+
+        predictions:
+            predictions,
+
+        residuals:
+            residuals,
+
+        slope:
+            slope,
+
+        intercept:
+            intercept,
+
+        r:
+            r,
+
+        rSquared:
+            rSquared
+
+    };
+
+
+    document
+        .getElementById(
+            "regressionResults"
+        )
+        .innerHTML =
+
+        "<div class='statsGrid'>" +
+
+        "<div class='statCard'>" +
+        "<div class='label'>Correlation (r)</div>" +
+        "<div class='value'>" +
+        r.toFixed(4) +
+        "</div></div>" +
+
+        "<div class='statCard'>" +
+        "<div class='label'>R²</div>" +
+        "<div class='value'>" +
+        rSquared.toFixed(4) +
+        "</div></div>" +
+
+        "<div class='statCard'>" +
+        "<div class='label'>Slope</div>" +
+        "<div class='value'>" +
+        slope.toFixed(4) +
+        "</div></div>" +
+
+        "<div class='statCard'>" +
+        "<div class='label'>Y-Intercept</div>" +
+        "<div class='value'>" +
+        intercept.toFixed(4) +
+        "</div></div>" +
+
+        "</div>";
+
+
+    document
+        .getElementById(
+            "regressionEquation"
+        )
+        .innerHTML =
+
+        "ŷ = " +
+        slope.toFixed(4) +
+        "x " +
+        (intercept >= 0 ? "+ " : "- ") +
+        Math.abs(intercept)
+        .toFixed(4);
+
+
+    drawScatterplot();
+
+    drawResidualPlot();
+
+    createRegressionTable();
+
+}
+
+
+
+/* =========================================
+   SCATTERPLOT + REGRESSION LINE
+========================================= */
+
+function drawScatterplot() {
+
+    if (scatterChart) {
+
+        scatterChart.destroy();
+
+    }
+
+
+    var data =
+        regressionData;
+
+
+    var points = [];
+
+
+    for (
+        var i=0;
+        i<data.x.length;
+        i++
+    ) {
+
+        points.push({
+
+            x:
+                data.x[i],
+
+            y:
+                data.y[i]
+
+        });
+
+    }
+
+
+    var minX =
+        Math.min(
+            ...data.x
+        );
+
+
+    var maxX =
+        Math.max(
+            ...data.x
+        );
+
+
+    var linePoints = [
+
+        {
+
+            x: minX,
+
+            y:
+                data.intercept +
+                data.slope*minX
+
+        },
+
+        {
+
+            x: maxX,
+
+            y:
+                data.intercept +
+                data.slope*maxX
+
+        }
+
+    ];
+
+
+    scatterChart =
         new Chart(
 
-            document.getElementById(
-                "pieChart"
+            document
+            .getElementById(
+                "scatterChart"
             ),
 
             {
 
-                type: "pie",
+                type: "scatter",
 
 
                 data: {
 
-                    labels:
-                        Object.keys(
-                            frequencies
-                        ),
+                    datasets: [
+
+                        {
+
+                            label:
+                                "Data",
+
+                            data:
+                                points,
+
+                            pointRadius: 5
+
+                        },
 
 
-                    datasets: [{
+                        {
 
-                        data:
-                            Object.values(
-                                frequencies
-                            )
+                            label:
+                                "Regression Line",
 
-                    }]
+                            data:
+                                linePoints,
+
+                            type: "line",
+
+                            fill: false,
+
+                            pointRadius: 0,
+
+                            tension: 0
+
+                        }
+
+                    ]
 
                 },
 
@@ -1563,11 +2073,36 @@ function createPieChart(data) {
                     maintainAspectRatio: false,
 
 
-                    plugins: {
+                    scales: {
 
-                        legend: {
+                        x: {
 
-                            position: "right"
+                            type: "linear",
+
+                            position: "bottom",
+
+                            title: {
+
+                                display: true,
+
+                                text:
+                                    "X"
+
+                            }
+
+                        },
+
+
+                        y: {
+
+                            title: {
+
+                                display: true,
+
+                                text:
+                                    "Y"
+
+                            }
 
                         }
 
@@ -1583,17 +2118,701 @@ function createPieChart(data) {
 
 
 
-/* =========================
-   NUMERICAL EXAMPLE
-========================= */
+/* =========================================
+   RESIDUAL PLOT
+========================================= */
 
-function loadNumericalExample() {
+function drawResidualPlot() {
+
+    if (residualChart) {
+
+        residualChart.destroy();
+
+    }
+
+
+    if (!regressionData) {
+
+        return;
+
+    }
+
+
+    var points = [];
+
+
+    for (
+        var i=0;
+        i<
+        regressionData.x.length;
+        i++
+    ) {
+
+        points.push({
+
+            x:
+                regressionData.x[i],
+
+            y:
+                regressionData.residuals[i]
+
+        });
+
+    }
+
+
+    var minX =
+        Math.min(
+            ...regressionData.x
+        );
+
+
+    var maxX =
+        Math.max(
+            ...regressionData.x
+        );
+
+
+    residualChart =
+        new Chart(
+
+            document
+            .getElementById(
+                "residualChart"
+            ),
+
+            {
+
+                type: "scatter",
+
+
+                data: {
+
+                    datasets: [
+
+                        {
+
+                            label:
+                                "Residuals",
+
+                            data:
+                                points,
+
+                            pointRadius: 5
+
+                        },
+
+
+                        {
+
+                            label:
+                                "Zero Line",
+
+                            data: [
+
+                                {
+                                    x:minX,
+                                    y:0
+                                },
+
+                                {
+                                    x:maxX,
+                                    y:0
+                                }
+
+                            ],
+
+                            type:
+                                "line",
+
+                            pointRadius: 0,
+
+                            borderDash:
+                                [6,6],
+
+                            fill:false
+
+                        }
+
+                    ]
+
+                },
+
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+
+                    scales: {
+
+                        x: {
+
+                            type:
+                                "linear",
+
+                            position:
+                                "bottom",
+
+                            title: {
+
+                                display: true,
+
+                                text:
+                                    "X"
+
+                            }
+
+                        },
+
+
+                        y: {
+
+                            title: {
+
+                                display: true,
+
+                                text:
+                                    "Residual"
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        );
+
 
     document
         .getElementById(
-            "dataInput"
+            "residualResults"
+        )
+        .innerHTML =
+
+        "<strong>Residual Analysis</strong>" +
+
+        "<br><br>" +
+
+        "Residuals are calculated as " +
+
+        "<strong>Observed Y − Predicted Y</strong>." +
+
+        "<br><br>" +
+
+        "Look for a random pattern around zero. " +
+
+        "A clear curve or funnel-shaped pattern " +
+
+        "may indicate that a linear model is not appropriate.";
+
+}
+
+
+
+/* =========================================
+   REGRESSION TABLE
+========================================= */
+
+function createRegressionTable() {
+
+    var html =
+
+        "<table>" +
+
+        "<tr>" +
+
+        "<th>X</th>" +
+
+        "<th>Observed Y</th>" +
+
+        "<th>Predicted Y</th>" +
+
+        "<th>Residual</th>" +
+
+        "</tr>";
+
+
+    for (
+        var i=0;
+        i<regressionData.x.length;
+        i++
+    ) {
+
+        html +=
+
+            "<tr>" +
+
+            "<td>" +
+            regressionData.x[i]
+            .toFixed(4) +
+            "</td>" +
+
+            "<td>" +
+            regressionData.y[i]
+            .toFixed(4) +
+            "</td>" +
+
+            "<td>" +
+            regressionData.predictions[i]
+            .toFixed(4) +
+            "</td>" +
+
+            "<td>" +
+            regressionData.residuals[i]
+            .toFixed(4) +
+            "</td>" +
+
+            "</tr>";
+
+    }
+
+
+    html += "</table>";
+
+
+    document
+        .getElementById(
+            "residualTable"
+        )
+        .innerHTML = html;
+
+}
+
+
+
+/* =========================================
+   SUMMARY STATISTICS
+========================================= */
+
+function calculateSummary() {
+
+    var data =
+        parseData(
+            document
+            .getElementById(
+                "summaryData"
+            )
+            .value
+        );
+
+
+    if (data.length < 2) {
+
+        alert(
+            "Please enter at least two numerical values."
+        );
+
+        return;
+
+    }
+
+
+    var sorted =
+        data.slice().sort(
+            function(a,b) {
+                return a-b;
+            }
+        );
+
+
+    var mean =
+        data.reduce(
+            function(a,b) {
+                return a+b;
+            },
+            0
+        ) / data.length;
+
+
+    var median =
+        getMedian(sorted);
+
+
+    var min =
+        sorted[0];
+
+
+    var max =
+        sorted[
+            sorted.length-1
+        ];
+
+
+    var range =
+        max-min;
+
+
+    var sd =
+        getSD(data);
+
+
+    var q1 =
+        getMedian(
+            sorted.slice(
+                0,
+                Math.floor(
+                    sorted.length/2
+                )
+            )
+        );
+
+
+    var q3 =
+        getMedian(
+            sorted.slice(
+                Math.ceil(
+                    sorted.length/2
+                )
+            )
+        );
+
+
+    document
+        .getElementById(
+            "summaryCards"
+        )
+        .innerHTML =
+
+        makeStatCard(
+            "n",
+            data.length
+        ) +
+
+        makeStatCard(
+            "Mean",
+            mean.toFixed(4)
+        ) +
+
+        makeStatCard(
+            "Median",
+            median.toFixed(4)
+        ) +
+
+        makeStatCard(
+            "Standard Deviation",
+            sd.toFixed(4)
+        ) +
+
+        makeStatCard(
+            "Minimum",
+            min.toFixed(4)
+        ) +
+
+        makeStatCard(
+            "Maximum",
+            max.toFixed(4)
+        ) +
+
+        makeStatCard(
+            "Range",
+            range.toFixed(4)
+        );
+
+
+    document
+        .getElementById(
+            "fiveNumber"
+        )
+        .innerHTML =
+
+        "<h3 style='grid-column:1/-1;'>Five-Number Summary</h3>" +
+
+        makeStatCard(
+            "Minimum",
+            min.toFixed(4)
+        ) +
+
+        makeStatCard(
+            "Q1",
+            q1.toFixed(4)
+        ) +
+
+        makeStatCard(
+            "Median",
+            median.toFixed(4)
+        ) +
+
+        makeStatCard(
+            "Q3",
+            q3.toFixed(4)
+        ) +
+
+        makeStatCard(
+            "Maximum",
+            max.toFixed(4)
+        );
+
+}
+
+
+
+/* =========================================
+   STAT CARD
+========================================= */
+
+function makeStatCard(
+    label,
+    value
+) {
+
+    return (
+
+        "<div class='statCard'>" +
+
+        "<div class='label'>" +
+        label +
+        "</div>" +
+
+        "<div class='value'>" +
+        value +
+        "</div>" +
+
+        "</div>"
+
+    );
+
+}
+
+
+
+/* =========================================
+   MEDIAN
+========================================= */
+
+function getMedian(sorted) {
+
+    var n =
+        sorted.length;
+
+
+    if (
+        n % 2 === 1
+    ) {
+
+        return sorted[
+            Math.floor(n/2)
+        ];
+
+    }
+
+
+    return (
+
+        sorted[
+            n/2-1
+        ]
+
+        +
+
+        sorted[
+            n/2
+        ]
+
+    ) / 2;
+
+}
+
+
+
+/* =========================================
+   STANDARD DEVIATION
+========================================= */
+
+function getSD(data) {
+
+    var mean =
+        data.reduce(
+            function(a,b) {
+                return a+b;
+            },
+            0
+        ) / data.length;
+
+
+    var sum = 0;
+
+
+    data.forEach(
+        function(x) {
+
+            sum +=
+                Math.pow(
+                    x-mean,
+                    2
+                );
+
+        }
+    );
+
+
+    return Math.sqrt(
+        sum /
+        (data.length-1)
+    );
+
+}
+
+
+
+/* =========================================
+   FREQUENCY TABLE
+========================================= */
+
+function createFrequencyTable() {
+
+    var text =
+        document
+        .getElementById(
+            "frequencyData"
+        )
+        .value;
+
+
+    var data =
+        text
+        .split(/[\n,;]+/)
+        .map(function(x) {
+
+            return x.trim();
+
+        })
+        .filter(function(x) {
+
+            return x !== "";
+
+        });
+
+
+    if (data.length === 0) {
+
+        alert(
+            "Please enter some data."
+        );
+
+        return;
+
+    }
+
+
+    var frequencies = {};
+
+
+    data.forEach(
+        function(value) {
+
+            if (
+                frequencies[value]
+            ) {
+
+                frequencies[value]++;
+
+            }
+
+            else {
+
+                frequencies[value] = 1;
+
+            }
+
+        }
+    );
+
+
+    var total =
+        data.length;
+
+
+    var html =
+
+        "<table>" +
+
+        "<tr>" +
+
+        "<th>Value / Category</th>" +
+
+        "<th>Frequency</th>" +
+
+        "<th>Relative Frequency</th>" +
+
+        "<th>Percent</th>" +
+
+        "</tr>";
+
+
+    Object.keys(
+        frequencies
+    ).forEach(
+        function(value) {
+
+            var frequency =
+                frequencies[value];
+
+
+            var relative =
+                frequency /
+                total;
+
+
+            html +=
+
+                "<tr>" +
+
+                "<td>" +
+                value +
+                "</td>" +
+
+                "<td>" +
+                frequency +
+                "</td>" +
+
+                "<td>" +
+                relative.toFixed(4) +
+                "</td>" +
+
+                "<td>" +
+                (relative*100)
+                .toFixed(2) +
+                "%</td>" +
+
+                "</tr>";
+
+        }
+    );
+
+
+    html += "</table>";
+
+
+    document
+        .getElementById(
+            "frequencyOutput"
+        )
+        .innerHTML =
+        html;
+
+}
+
+
+
+/* =========================================
+   LOAD EXAMPLES
+========================================= */
+
+function loadGeneralExample() {
+
+    document
+        .getElementById(
+            "generalData"
         )
         .value =
+
 `12
 15
 18
@@ -1610,222 +2829,138 @@ function loadNumericalExample() {
 16
 20`;
 
-
-    analyzeData();
-
 }
 
 
-
-/* =========================
-   CATEGORICAL EXAMPLE
-========================= */
-
-function loadCategoricalExample() {
+function loadRegressionExample() {
 
     document
         .getElementById(
-            "dataInput"
+            "xData"
         )
         .value =
-`Apple
-Banana
-Apple
-Orange
-Banana
-Apple
-Orange
-Apple
-Banana
-Orange
-Apple
-Banana`;
+
+`1
+2
+3
+4
+5
+6
+7
+8
+9
+10`;
 
 
-    analyzeData();
+    document
+        .getElementById(
+            "yData"
+        )
+        .value =
+
+`2
+4
+5
+4
+7
+8
+9
+10
+11
+13`;
+
+
+    calculateRegression();
 
 }
 
 
 
-/* =========================
-   CLEAR DATA
-========================= */
+/* =========================================
+   DOWNLOAD REGRESSION CSV
+========================================= */
 
-function clearData() {
+function downloadRegressionCSV() {
 
-    document
-        .getElementById(
-            "dataInput"
-        )
-        .value = "";
+    if (!regressionData) {
 
+        alert(
+            "Please calculate a regression first."
+        );
 
-    document
-        .getElementById(
-            "status"
-        )
-        .style.display =
-        "none";
+        return;
+
+    }
 
 
-    document
-        .querySelectorAll(
-            ".card"
-        )
-        .forEach(
-            (card,index) => {
+    var csv =
+        "X,Observed Y,Predicted Y,Residual\n";
 
-                if (index > 0) {
 
-                    card.classList
-                        .add("hidden");
+    for (
+        var i=0;
+        i<regressionData.x.length;
+        i++
+    ) {
 
-                }
+        csv +=
 
+            regressionData.x[i] +
+            "," +
+
+            regressionData.y[i] +
+            "," +
+
+            regressionData.predictions[i] +
+            "," +
+
+            regressionData.residuals[i] +
+
+            "\n";
+
+    }
+
+
+    var blob =
+        new Blob(
+            [csv],
+            {
+                type:
+                    "text/csv"
             }
         );
 
 
-    if (barChart) {
-
-        barChart.destroy();
-
-        barChart = null;
-
-    }
-
-
-    if (pieChart) {
-
-        pieChart.destroy();
-
-        pieChart = null;
-
-    }
-
-
-    if (histogramChart) {
-
-        histogramChart.destroy();
-
-        histogramChart = null;
-
-    }
-
-}
-
-
-
-/* =========================
-   HIDE CATEGORICAL GRAPHS
-========================= */
-
-function hideCategoricalGraphs() {
-
-    document
-        .getElementById(
-            "barCard"
-        )
-        .classList
-        .add("hidden");
-
-
-    document
-        .getElementById(
-            "pieCard"
-        )
-        .classList
-        .add("hidden");
-
-}
-
-
-
-/* =========================
-   HIDE NUMERICAL GRAPHS
-========================= */
-
-function hideNumericalGraphs() {
-
-    document
-        .getElementById(
-            "summaryCard"
-        )
-        .classList
-        .add("hidden");
-
-
-    document
-        .getElementById(
-            "histogramCard"
-        )
-        .classList
-        .add("hidden");
-
-
-    document
-        .getElementById(
-            "boxCard"
-        )
-        .classList
-        .add("hidden");
-
-}
-
-
-
-/* =========================
-   STATUS MESSAGE
-========================= */
-
-function showStatus(
-    message,
-    type
-) {
-
-    const status =
-        document.getElementById(
-            "status"
+    var url =
+        URL.createObjectURL(
+            blob
         );
 
 
-    status.textContent =
-        message;
+    var a =
+        document.createElement(
+            "a"
+        );
 
 
-    status.className =
-        "status " + type;
+    a.href = url;
+
+    a.download =
+        "regression_results.csv";
 
 
-    status.style.display =
-        "block";
-
-}
+    a.click();
 
 
-
-/* =========================
-   FORMAT NUMBERS
-========================= */
-
-function format(value) {
-
-    if (
-        Number.isInteger(value)
-    ) {
-
-        return value.toString();
-
-    }
-
-
-    return Number(value)
-        .toFixed(2);
+    URL.revokeObjectURL(
+        url
+    );
 
 }
 
 </script>
 
+
 </body>
+
 </html>
